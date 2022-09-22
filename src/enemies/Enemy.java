@@ -17,7 +17,7 @@ public class Enemy {
     private float speed;
     private int value;
     private int progress;
-    private boolean active = true;
+    public boolean active = true;
     private Square square;
     public int x;
     public int y;

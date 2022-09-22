@@ -1,9 +1,15 @@
 package main;
 
-import enemies.EnemyHandler;
+import enemies.EnemyManager;
 import enemies.Pathfinding;
+import ui.Button;
+import ui.ButtonManager;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static main.FieldParameters.*;
 
@@ -15,11 +21,16 @@ public class Game implements Runnable {
     private final int UPS_SET = 60;
     public static int gameSpeed = 1;
     public static boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
-    private EnemyHandler enemyHandler;
+    private ButtonManager buttonManager;
+    private EnemyManager enemyManager;
+
+    private BufferedImage backgroundImg;
 
     public Game() {
+        loadBackgroundImg();
+        buttonManager = new ButtonManager();
         Pathfinding.buildDistanceField();
-        enemyHandler = new EnemyHandler();
+        enemyManager = new EnemyManager();
         gamePanel = new GamePanel(this);
         new GameWindow(gamePanel);
         gamePanel.requestFocusInWindow();
@@ -33,11 +44,13 @@ public class Game implements Runnable {
 
     public void update() {
         //gamePanel.updateGame();
-        enemyHandler.update();
+        enemyManager.update();
     }
 
     public void render(Graphics g) {
-        enemyHandler.draw(g);
+        g.drawImage(backgroundImg, 0, 0, null);
+        buttonManager.draw(g);
+        enemyManager.draw(g);
     }
 
     @Override
@@ -69,5 +82,18 @@ public class Game implements Runnable {
                 deltaU--;
             }
         }
+    }
+
+    private void loadBackgroundImg() {
+        InputStream is = getClass().getResourceAsStream("/background.png");
+        try {
+            backgroundImg = ImageIO.read(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ButtonManager getButtonManager() {
+        return buttonManager;
     }
 }

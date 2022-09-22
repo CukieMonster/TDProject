@@ -1,5 +1,7 @@
 package main;
 
+import inputs.MouseInputs;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,12 +12,16 @@ import java.io.InputStream;
 public class GamePanel extends JPanel {
 
     private BufferedImage img;
+    private MouseInputs mouseInputs;
     private Game game;
 
     public GamePanel(Game game) {
+        mouseInputs = new MouseInputs(this);
+        this.game = game;
         importImg();
         setPanelSize();
-        this.game = game;
+        addMouseListener(mouseInputs);
+        addMouseMotionListener(mouseInputs);
     }
 
     private void importImg() {
@@ -29,6 +35,7 @@ public class GamePanel extends JPanel {
 
     private void setPanelSize() {
         setPreferredSize(new Dimension(1920, 1080));
+        //setPreferredSize(new Dimension(1280, 720));
     }
 
     public void updateGame() {
@@ -41,5 +48,9 @@ public class GamePanel extends JPanel {
 
         //g.drawImage(img, 100, 100, null);
 
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

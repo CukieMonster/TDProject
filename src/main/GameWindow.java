@@ -1,5 +1,7 @@
 package main;
 
+import ui.ButtonManager;
+
 import javax.swing.*;
 
 public class GameWindow extends JFrame {
