@@ -1,5 +1,6 @@
 package enemies;
 
+import main.Game;
 import main.Square;
 
 import java.util.LinkedList;
@@ -9,19 +10,24 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static main.FieldParameters.*;
 
-public final class Pathfinding {
+public class Pathfinding {
 
-    public static int[][] distanceField = new int[X_FIELDS][Y_FIELDS];
-    private static List<Square> shortestPath = new LinkedList<>();
-    private static int shortestPathLength;
-    private static final int blockedField = X_FIELDS * Y_FIELDS;
-    private static Square dest = new Square(24, 8);
+    public int[][] distanceField = new int[X_FIELDS][Y_FIELDS];
+    private List<Square> shortestPath = new LinkedList<>();
+    private int shortestPathLength;
+    private final int blockedField = X_FIELDS * Y_FIELDS;
+    private Square dest = new Square(24, 8);
+    private Game game;
 
-    public static boolean buildDistanceField() {
+    public Pathfinding(Game g) {
+        game = g;
+    }
+
+    public boolean buildDistanceField() {
         int[][] newField = new int[X_FIELDS][Y_FIELDS];
         for (int x = 0; x < X_FIELDS; x++) {
             for (int y = 0; y < Y_FIELDS; y++) {
-                if (main.Game.collisionMap[x][y] == true) {
+                if (game.collisionMap[x][y] == true) {
                     newField[x][y] = blockedField;
                 }
             }

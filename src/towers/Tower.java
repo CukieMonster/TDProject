@@ -2,7 +2,10 @@ package towers;
 
 import enemies.Enemy;
 import enemies.EnemyManager;
+import main.Game;
+import main.Square;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import static main.FieldParameters.FIELD_SIZE;
@@ -12,6 +15,7 @@ public class Tower {
 
     private EnemyManager enemyManager;
 
+    public BufferedImage img;
     private List<Enemy> enemiesInRange;
     public int towerType;
     private int damage;
@@ -19,12 +23,15 @@ public class Tower {
     private int range;
     private int radius;
     private int cost;
-    private int x;
-    private int y;
+    public Square square;
+    public int x;
+    public int y;
 
     private int lastShot;
+    public boolean active = false;
+    public boolean visible = false;
 
-    public Tower(int towerType, int x, int y) {
+    public Tower(int towerType, int x, int y, BufferedImage img) {
         this.towerType = towerType;
         damage = DAMAGE[towerType];
         attackSpeed = ATTACK_SPEED[towerType];
@@ -33,6 +40,37 @@ public class Tower {
         cost = COST[towerType];
         this.x = x;
         this.y = y;
+        this.img = img;
+    }
+
+    public void update(int u) {
+        attemptShot(u);
+    }
+
+    private void attemptShot(int u) {
+        if (lastShot + attackSpeed * Game.UPS_SET <= u) {
+            if (findTarget()) {
+                lastShot = u;
+            }
+        }
+    }
+
+    private boolean findTarget() {
+        if (enemiesInRange.isEmpty()) {
+            return false;
+        }
+        Enemy furthest = enemiesInRange.get(0);
+        for (Enemy e : enemiesInRange) {
+            if (e.distanceToTarget < furthest.distanceToTarget) {
+                furthest = e;
+            }
+        }
+        shoot(furthest);
+        return true;
+    }
+
+    private void shoot(Enemy e) {
+        //homingMissile
     }
 
     private void getEnemiesInRange() {

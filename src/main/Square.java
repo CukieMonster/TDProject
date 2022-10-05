@@ -49,13 +49,13 @@ public class Square {
     }
 
     public static Square positionToSquare(int x, int y) {
-        int squareX = x / FIELD_SIZE;
-        int squareY = y / FIELD_SIZE;
+        int squareX = -1 + x / FIELD_SIZE;
+        int squareY = -1 + y / FIELD_SIZE;
         Square square = new Square(squareX, squareY);
         return square;
     }
 
     public int[] squareToPosition() {
-        return new int[] {x * FIELD_SIZE, y * FIELD_SIZE};
+        return new int[] {(1 + x) * FIELD_SIZE, (1 + y) * FIELD_SIZE};
     }
 }

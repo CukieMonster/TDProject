@@ -27,6 +27,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         gamePanel.getGame().getButtonManager().mouseReleased(e);
+        gamePanel.getGame().getTowerManager().mouseReleased(e);
     }
 
     @Override
@@ -47,5 +48,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     @Override
     public void mouseMoved(MouseEvent e) {
         gamePanel.getGame().getButtonManager().mouseMoved(e);
+        gamePanel.getGame().getTowerManager().mouseMoved(e);
     }
 }

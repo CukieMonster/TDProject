@@ -1,5 +1,6 @@
 package enemies;
 
+import main.Game;
 import main.Square;
 
 import javax.imageio.ImageIO;
@@ -28,10 +29,12 @@ public class EnemyManager {
     private int currentRound = 1;
     //public List<Enemy> firstList = new LinkedList<>();
     //public List<Item> droppedItems = new LinkedList<>();
+    private Game game;
 
     private Random random = new Random();
 
-    public EnemyManager() {
+    public EnemyManager(Game g) {
+        game = g;
         importImg();
         spawnEnemy();
     }
@@ -67,7 +70,7 @@ public class EnemyManager {
             //firstList.add(new Enemy(spawn, enemyType));
             while (true) {
                 if (enemies[enemyIndex] == null || !enemies[enemyIndex].active) {
-                    enemies[enemyIndex] = new Enemy(spawn, enemyType);
+                    enemies[enemyIndex] = new Enemy(spawn, enemyType, game.getPathfinding());
                     break;
                 }
             }

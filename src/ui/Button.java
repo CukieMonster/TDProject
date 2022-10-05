@@ -14,12 +14,13 @@ public class Button {
     public BufferedImage img;
     private boolean mouseOver, mousePressed;
     private Rectangle bounds;
+    public boolean active = false;
 
     public Button(Buttons b, int xPos, int yPos) {
         button = b;
         this.xPos = xPos;
         this.yPos = yPos;
-        loadImg();
+        //loadImg();
         initBounds();
     }
 
@@ -54,10 +55,6 @@ public class Button {
 
     public Rectangle getBounds() {
         return bounds;
-    }
-
-    public void buttonAction() {
-        System.out.println("button pressed");
     }
 
     public void resetBools() {

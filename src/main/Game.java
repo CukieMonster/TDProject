@@ -2,6 +2,7 @@ package main;
 
 import enemies.EnemyManager;
 import enemies.Pathfinding;
+import towers.TowerManager;
 import ui.Button;
 import ui.ButtonManager;
 
@@ -18,19 +19,25 @@ public class Game implements Runnable {
     private GamePanel gamePanel;
     private Thread gameThread;
     private final int FPS_SET = 60;
-    private final int UPS_SET = 60;
+    public static final int UPS_SET = 60;
+    public int updates;
     public static int gameSpeed = 1;
-    public static boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
+    private int money = Integer.MAX_VALUE;
+    public boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
     private ButtonManager buttonManager;
     private EnemyManager enemyManager;
+    private TowerManager towerManager;
+    private Pathfinding pathfinding;
 
     private BufferedImage backgroundImg;
 
     public Game() {
         loadBackgroundImg();
-        buttonManager = new ButtonManager();
-        Pathfinding.buildDistanceField();
-        enemyManager = new EnemyManager();
+        buttonManager = new ButtonManager(this);
+        pathfinding = new Pathfinding(this);
+        pathfinding.buildDistanceField();
+        enemyManager = new EnemyManager(this);
+        towerManager = new TowerManager(this);
         gamePanel = new GamePanel(this);
         new GameWindow(gamePanel);
         gamePanel.requestFocusInWindow();
@@ -42,15 +49,17 @@ public class Game implements Runnable {
         gameThread.start();
     }
 
-    public void update() {
+    public void update(int u) {
         //gamePanel.updateGame();
         enemyManager.update();
+        towerManager.update(u);
     }
 
     public void render(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, null);
         buttonManager.draw(g);
         enemyManager.draw(g);
+        towerManager.draw(g);
     }
 
     @Override
@@ -59,7 +68,7 @@ public class Game implements Runnable {
         double timePerUpdate = 1000000000.0 / UPS_SET;
         long previousTime = System.nanoTime();
         int frames = 0;
-        int updates = 0;
+        //int updates = 0;
         double deltaF = 0;
         double deltaU = 0;
 
@@ -77,11 +86,15 @@ public class Game implements Runnable {
             }
 
             if (deltaU >= 1) {
-                update();
+                update(updates);
                 updates++;
                 deltaU--;
             }
         }
+    }
+
+    public void adjustMoney(int value) {
+        money += value;
     }
 
     private void loadBackgroundImg() {
@@ -95,5 +108,13 @@ public class Game implements Runnable {
 
     public ButtonManager getButtonManager() {
         return buttonManager;
+    }
+
+    public TowerManager getTowerManager() {
+        return towerManager;
+    }
+
+    public Pathfinding getPathfinding() {
+        return pathfinding;
     }
 }
