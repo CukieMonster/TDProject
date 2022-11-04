@@ -10,7 +10,7 @@ public final class FieldParameters {
 
     public static final int FIELD_SIZE = 64;
 
-    public static final int X_OFFSET = 4;
-    public static final int Y_OFFSET = 4;
+    public static final int X_OFFSET = 60;
+    public static final int Y_OFFSET = 60;
 
 }

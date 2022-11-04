@@ -1,26 +1,32 @@
 package main;
 
-import static main.FieldParameters.FIELD_SIZE;
+import javax.vecmath.Vector2d;
+
+import static main.FieldParameters.*;
 
 public class Square {
 
+    //public Vector2d position;
     public int x;
     public int y;
 
     public Square(int xPos, int yPos) {
         x = xPos;
         y = yPos;
+        //x = xPos;
+        //y = yPos;
     }
 
-    public static Square[] getNeighbors(int x, int y) {
+    //public static Square[] getNeighbors(int x, int y) {
+    public static Square[] getNeighbors(Vector2d position) {
         Square[] neighbors = new Square[2];
-        if (x % FIELD_SIZE == 0) {
-            neighbors[0] = positionToSquare(x, y);
-            if (neighbors[0].squareToPosition()[1] < y) {
+        if (position.x % FIELD_SIZE == X_OFFSET) {
+            neighbors[0] = positionToSquare(position);
+            if (neighbors[0].squareToPosition().y < position.y) {
                 neighbors[1] = new Square(neighbors[0].x, neighbors[0].y + 1);
                 return neighbors;
             }
-            else if (neighbors[0].squareToPosition()[1] > y) {
+            else if (neighbors[0].squareToPosition().y > position.y) {
                 neighbors[1] = new Square(neighbors[0].x, neighbors[0].y - 1);
                 return neighbors;
             }
@@ -29,13 +35,13 @@ public class Square {
                 throw new RuntimeException();
             }
         }
-        else if (y % FIELD_SIZE == 0) {
-            neighbors[0] = positionToSquare(x, y);
-            if (neighbors[0].squareToPosition()[0] < x) {
+        else if (position.y % FIELD_SIZE == Y_OFFSET) {
+            neighbors[0] = positionToSquare(position);
+            if (neighbors[0].squareToPosition().x < position.x) {
                 neighbors[1] = new Square(neighbors[0].x + 1, neighbors[0].y);
                 return neighbors;
             }
-            else if (neighbors[0].squareToPosition()[0] > x) {
+            else if (neighbors[0].squareToPosition().x > position.x) {
                 neighbors[1] = new Square(neighbors[0].x - 1, neighbors[0].y);
                 return neighbors;
             }
@@ -48,14 +54,15 @@ public class Square {
         throw new RuntimeException();
     }
 
-    public static Square positionToSquare(int x, int y) {
-        int squareX = -1 + x / FIELD_SIZE;
-        int squareY = -1 + y / FIELD_SIZE;
+    public static Square positionToSquare(Vector2d position) {
+        int squareX = (int) (position.x - X_OFFSET) / FIELD_SIZE;
+        int squareY = (int) (position.y - Y_OFFSET) / FIELD_SIZE;
         Square square = new Square(squareX, squareY);
         return square;
     }
 
-    public int[] squareToPosition() {
-        return new int[] {(1 + x) * FIELD_SIZE, (1 + y) * FIELD_SIZE};
+    public Vector2d squareToPosition() {
+        //return new int[] {(1 + x) * FIELD_SIZE, (1 + y) * FIELD_SIZE};
+        return new Vector2d(x * FIELD_SIZE + X_OFFSET, y * FIELD_SIZE + Y_OFFSET);
     }
 }

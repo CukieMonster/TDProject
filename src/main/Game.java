@@ -114,6 +114,10 @@ public class Game implements Runnable {
         return towerManager;
     }
 
+    public EnemyManager getEnemyManager() {
+        return enemyManager;
+    }
+
     public Pathfinding getPathfinding() {
         return pathfinding;
     }

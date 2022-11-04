@@ -95,7 +95,7 @@ public class EnemyManager {
     public void draw(Graphics g) {
         for (Enemy e : enemies) {
             if (e != null && e.active) {
-                g.drawImage(enemyImgs[0], e.x, e.y, null);
+                g.drawImage(enemyImgs[0], (int) e.position.x, (int) e.position.y, null);
             }
         }
     }
