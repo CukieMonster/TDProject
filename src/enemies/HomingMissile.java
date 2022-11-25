@@ -13,11 +13,12 @@ public class HomingMissile {
     public int damage;
     public float speed;
 
-    public HomingMissile(Vector2d pos, Enemy target, Tower t, float s) {
+    public HomingMissile(Vector2d pos, Enemy target, Tower t, float s, int d) {
         position = (Vector2d) pos.clone();
         this.target = target;
         origin = t;
         speed = s;
+        damage = d;
     }
 
     public void update() {
@@ -26,15 +27,17 @@ public class HomingMissile {
 
     private void move() {
         if (target == null) {
-            //destroy
+            //destroy missile
             origin.missiles.remove(this);
         }
         Vector2d direction = new Vector2d();// = Vector2d. target.position - position);
         direction.sub(target.position, position);
         //target reached (incl error)
-        System.err.println(direction.length());
-        if (direction.length() < 5) {
+        //System.err.println(direction.length());
+        if (direction.length() < 5 * Game.gameSpeed) {
             origin.missiles.remove(this);
+            //TODO: deal damage
+            target.damage(damage);
         }
         direction.normalize();
         direction.scale(speed * Game.gameSpeed);

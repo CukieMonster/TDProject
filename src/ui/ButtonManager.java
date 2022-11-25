@@ -1,6 +1,7 @@
 package ui;
 
 import main.Game;
+import main.GameObjectList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,30 +12,38 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
 
-enum Buttons {CANCEL_BUILDING, BUILD_TOWER_1}
+//enum Buttons {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORW_BUTTON, SKIP_BUTTON}
 
 public class ButtonManager {
 
-    private int buttonNr = 2;
+    private int buttonNr = 4;
     public Button[] buttons = new Button[buttonNr];
-    private Game game;
 
     public ButtonManager(Game g) {
-        game = g;
-        buttons[0] = new Button(Buttons.CANCEL_BUILDING, 1800, 900);
-        buttons[1] = new Button(Buttons.BUILD_TOWER_1, 1800, 100);
+        GameObjectList.buttonManager = this;
+        buttons[0] = new Button(BUTTONS.CANCEL_BUILDING, 1800, 900);
+        buttons[1] = new Button(BUTTONS.BUILD_TOWER_1, 1800, 100);
+        buttons[2] = new Button(BUTTONS.FAST_FORW_BUTTON, 1600, 900);
+        buttons[3] = new Button(BUTTONS.SKIP_BUTTON, 1800, 900);
         loadButtonImgs();
         buttons[1].active = true;
+        buttons[2].active = true;
     }
 
-    private void buttonAction(Buttons button) {
+    private void buttonAction(BUTTONS button) {
         switch (button) {
             case CANCEL_BUILDING:
-                game.getTowerManager().cancelBuild();
+                GameObjectList.game.getTowerManager().cancelBuild();
                 break;
             case BUILD_TOWER_1:
-                game.getTowerManager().enterBuildMode(0);
+                GameObjectList.game.getTowerManager().enterBuildMode(0);
                 break;
+            case FAST_FORW_BUTTON:
+                Game.changeGamespeed();
+                break;
+            case SKIP_BUTTON:
+                GameObjectList.enemyManager.spawnWave();
+                buttons[BUTTONS.SKIP_BUTTON.ordinal()].active = false;
         }
     }
 
@@ -48,7 +57,7 @@ public class ButtonManager {
 
     private void loadButtonImgs() {
         //button 0
-        InputStream is = getClass().getResourceAsStream("/cancel_button.png");
+        /*InputStream is = getClass().getResourceAsStream("/CANCEL_BUILDING.png");
         try {
             buttons[0].img = ImageIO.read(is);
         } catch (IOException e) {
@@ -60,6 +69,15 @@ public class ButtonManager {
             buttons[1].img = ImageIO.read(is);
         } catch (IOException e) {
             e.printStackTrace();
+        }*/
+        InputStream is;
+        for (BUTTONS b : BUTTONS.values()) {
+            is = getClass().getResourceAsStream("/" + b + ".png");
+            try {
+                buttons[b.ordinal()].img = ImageIO.read(is);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

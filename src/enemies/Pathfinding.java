@@ -1,6 +1,7 @@
 package enemies;
 
 import main.Game;
+import main.GameObjectList;
 import main.Square;
 
 import java.util.LinkedList;
@@ -17,17 +18,16 @@ public class Pathfinding {
     private int shortestPathLength;
     private final int blockedField = X_FIELDS * Y_FIELDS;
     private Square dest = new Square(24, 8);
-    private Game game;
 
     public Pathfinding(Game g) {
-        game = g;
+        GameObjectList.pathfinding = this;
     }
 
     public boolean buildDistanceField() {
         int[][] newField = new int[X_FIELDS][Y_FIELDS];
         for (int x = 0; x < X_FIELDS; x++) {
             for (int y = 0; y < Y_FIELDS; y++) {
-                if (game.collisionMap[x][y] == true) {
+                if (GameObjectList.game.collisionMap[x][y] == true) {
                     newField[x][y] = blockedField;
                 }
             }

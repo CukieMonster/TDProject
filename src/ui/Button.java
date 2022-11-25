@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 public class Button {
 
-    public Buttons button;
+    public BUTTONS button;
     public int xPos, yPos;
     private int xOffsetCenter;
     public BufferedImage img;
@@ -16,7 +16,7 @@ public class Button {
     private Rectangle bounds;
     public boolean active = false;
 
-    public Button(Buttons b, int xPos, int yPos) {
+    public Button(BUTTONS b, int xPos, int yPos) {
         button = b;
         this.xPos = xPos;
         this.yPos = yPos;
@@ -29,7 +29,7 @@ public class Button {
     }
 
     private void loadImg() {
-        InputStream is = getClass().getResourceAsStream("/cancel_button.png");
+        InputStream is = getClass().getResourceAsStream("/CANCEL_BUILDING.png");
         try {
             img = ImageIO.read(is);
         } catch (IOException e) {

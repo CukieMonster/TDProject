@@ -32,11 +32,12 @@ public class Game implements Runnable {
     private BufferedImage backgroundImg;
 
     public Game() {
+        GameObjectList.game = this;
         loadBackgroundImg();
         buttonManager = new ButtonManager(this);
         pathfinding = new Pathfinding(this);
         pathfinding.buildDistanceField();
-        enemyManager = new EnemyManager(this);
+        enemyManager = new EnemyManager();
         towerManager = new TowerManager(this);
         gamePanel = new GamePanel(this);
         new GameWindow(gamePanel);
@@ -95,6 +96,11 @@ public class Game implements Runnable {
 
     public void adjustMoney(int value) {
         money += value;
+    }
+
+    public static void changeGamespeed() {
+        if (gameSpeed == 1) gameSpeed = 2;
+        else if (gameSpeed == 2) gameSpeed = 1;
     }
 
     private void loadBackgroundImg() {

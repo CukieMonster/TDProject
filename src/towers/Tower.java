@@ -83,13 +83,13 @@ public class Tower {
 
     private void shoot(Enemy e) {
         //homingMissile
-        missiles.add(new HomingMissile(position, e, this, MISSILESPEED[towerType]));
+        missiles.add(new HomingMissile(position, e, this, MISSILESPEED[towerType], damage));
     }
 
     private void getEnemiesInRange() {
         enemiesInRange.clear();
         for (Enemy e : enemyManager.enemies) {
-            if (e != null && e.active) {
+            if (e != null) {
                 if (distanceToEnemy(e) < radius) {
                     enemiesInRange.add(e);
                 }
