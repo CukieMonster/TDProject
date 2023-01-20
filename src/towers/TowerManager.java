@@ -2,8 +2,10 @@ package towers;
 
 import enemies.Enemy;
 import enemies.HomingMissile;
+import enemies.Pathfinding;
 import main.Game;
 import main.Square;
+import ui.ButtonManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,19 +21,25 @@ import static towers.TowerParameters.COST;
 
 public class TowerManager {
 
-    private Game game;
+    private static TowerManager instance;
     private int maxTowers = 50;
     private BufferedImage[] towerImgs = new BufferedImage[3];
     private BufferedImage[] missileImgs = new BufferedImage[1];
-    public Tower[] towers = new Tower[maxTowers];
+    private Tower[] towers = new Tower[maxTowers];
     private int towerNr;
     private JButton cancelButton;
     private boolean buildMode = false;
 
-    public TowerManager(Game g) {
-        game = g;
+    private TowerManager() {
         loadTowerImgs();
         cancelButton = new JButton();
+    }
+
+    public static TowerManager getInstance() {
+        if (instance == null) {
+            instance = new TowerManager();
+        }
+        return instance;
     }
 
     public void update(int u) {
@@ -46,25 +54,25 @@ public class TowerManager {
         buildMode = true;
         //hide dropped items
         //hide time buttons
-        game.getButtonManager().setBuildButtons(false);
-        game.getButtonManager().setCancelButton(true);
-        towers[towerNr] = new Tower(towerType, towerImgs[towerType], game.getEnemyManager());
+        ButtonManager.getInstance().setBuildButtons(false);
+        ButtonManager.getInstance().setCancelButton(true);
+        towers[towerNr] = new Tower(towerType, towerImgs[towerType]);
     }
 
     public void cancelBuild() {
         //show dropped items
         //show time buttons
-        game.getButtonManager().setBuildButtons(true);
-        game.getButtonManager().setCancelButton(false);
+        ButtonManager.getInstance().setBuildButtons(true);
+        ButtonManager.getInstance().setCancelButton(false);
         towers[towerNr] = null;
         buildMode = false;
     }
 
     private void moveTower(Vector2d mousePos) {
-        towers[towerNr].square = Square.positionToSquare(mousePos);
-        if (checkSquare(towers[towerNr].square)) {
-            Vector2d pos = towers[towerNr].square.squareToPosition();
-            towers[towerNr].position = pos;
+        towers[towerNr].setSquare(Square.positionToSquare(mousePos));
+        if (checkSquare(towers[towerNr].getSquare())) {
+            Vector2d pos = towers[towerNr].getSquare().squareToPosition();
+            towers[towerNr].setPosition(pos);
             //towers[towerNr].position.x = pos[0];
             //towers[towerNr].position.y = pos[1];
             towers[towerNr].visible = true;
@@ -75,35 +83,35 @@ public class TowerManager {
 
     private void buildTower() {
         //TODO: check if tower can be placed, (no enemy in the way,) impossible path or enemy getting caugth
-        Square square = towers[towerNr].square;
+        Square square = towers[towerNr].getSquare();
         if (square == null) {
             return;
         }
         if (!checkSquare(square)) {
             return;
         }
-        game.collisionMap[square.x][square.y] = true;
-        if (game.getPathfinding().buildDistanceField() == false) {
+        Game.getInstance().getCollisionMap()[square.getX()][square.getY()] = true;
+        if (Pathfinding.getInstance().buildDistanceField() == false) {
             //Can't build tower here
-            game.collisionMap[square.x][square.y] = false;
+            Game.getInstance().getCollisionMap()[square.getX()][square.getY()] = false;
             return;
         }
-        game.adjustMoney(-COST[towers[towerNr].towerType]);
+        Game.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()]);
         towers[towerNr].active = true;
         //show dropped items
         //show time buttons
-        game.getButtonManager().setBuildButtons(true);
-        game.getButtonManager().setCancelButton(false);
+        ButtonManager.getInstance().setBuildButtons(true);
+        ButtonManager.getInstance().setCancelButton(false);
         buildMode = false;
         towerNr++;
     }
 
     boolean checkSquare(Square square) {
-        int x = square.x;
-        int y = square.y;
+        int x = square.getX();
+        int y = square.getY();
         if (x >= 0 && x < X_FIELDS && y >= 0 && y < Y_FIELDS)
         {
-            return !game.collisionMap[x][y];
+            return !Game.getInstance().getCollisionMap()[x][y];
         }
         return false;
     }
@@ -123,13 +131,13 @@ public class TowerManager {
 
     private void loadTowerImgs() {
         //tower 0
-        InputStream is = getClass().getResourceAsStream("/Tower_blue1.png");
+        InputStream is = getClass().getResourceAsStream("/towers/Tower_blue1.png");
         try {
             towerImgs[0] = ImageIO.read(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        is = getClass().getResourceAsStream("/HomingMissile.png");
+        is = getClass().getResourceAsStream("/towers/HomingMissile.png");
         try {
             missileImgs[0] = ImageIO.read(is);
         } catch (IOException e) {
@@ -140,10 +148,10 @@ public class TowerManager {
     public void draw(Graphics g) {
         for (Tower t : towers) {
             if (t != null && t.visible) {
-                g.drawImage(t.img, (int) t.position.x, (int) t.position.y, null);
+                g.drawImage(t.getImg(), (int) t.getPosition().x, (int) t.getPosition().y, null);
                 for (HomingMissile m : t.missiles) {
                     if (m != null) {
-                        g.drawImage(missileImgs[0], (int) m.position.x + FIELD_SIZE / 2 - missileImgs[0].getWidth() / 2, (int) m.position.y + FIELD_SIZE / 2 - missileImgs[0].getHeight() / 2, null);
+                        g.drawImage(missileImgs[0], (int) m.getPosition().x + FIELD_SIZE / 2 - missileImgs[0].getWidth() / 2, (int) m.getPosition().y + FIELD_SIZE / 2 - missileImgs[0].getHeight() / 2, null);
                     }
                 }
             }

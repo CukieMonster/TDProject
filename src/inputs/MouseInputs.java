@@ -1,6 +1,9 @@
 package inputs;
 
+import main.Game;
 import main.GamePanel;
+import towers.TowerManager;
+import ui.ButtonManager;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -8,10 +11,17 @@ import java.awt.event.MouseMotionListener;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
-    private GamePanel gamePanel;
+    private static MouseInputs instance;
 
-    public MouseInputs(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    private MouseInputs() {
+
+    }
+
+    public static MouseInputs getInstance() {
+        if (instance == null) {
+            instance = new MouseInputs();
+        }
+        return instance;
     }
 
     @Override
@@ -21,13 +31,13 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        gamePanel.getGame().getButtonManager().mousePressed(e);
+        ButtonManager.getInstance().mousePressed(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        gamePanel.getGame().getButtonManager().mouseReleased(e);
-        gamePanel.getGame().getTowerManager().mouseReleased(e);
+        ButtonManager.getInstance().mouseReleased(e);
+        TowerManager.getInstance().mouseReleased(e);
     }
 
     @Override
@@ -47,7 +57,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        gamePanel.getGame().getButtonManager().mouseMoved(e);
-        gamePanel.getGame().getTowerManager().mouseMoved(e);
+        ButtonManager.getInstance().mouseMoved(e);
+        TowerManager.getInstance().mouseMoved(e);
     }
 }

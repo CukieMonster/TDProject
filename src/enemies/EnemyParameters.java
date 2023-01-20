@@ -1,6 +1,10 @@
 package enemies;
 
 public final class EnemyParameters {
+
+    private EnemyParameters() {
+
+    }
     public static final int WAVE_GROWTH = 3;
     public static final int SPAWN_INTERVAL = 60;    //updates between enemy spawns
     public static final int WAVE_INTERVAL = 60 * 5; //updates between waves

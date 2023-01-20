@@ -4,8 +4,8 @@ import enemies.Enemy;
 import enemies.EnemyManager;
 import enemies.HomingMissile;
 import main.Game;
-import main.GamePanel;
 import main.Square;
+import ui.ButtonManager;
 
 import javax.vecmath.Vector2d;
 import java.awt.image.BufferedImage;
@@ -16,18 +16,16 @@ import static towers.TowerParameters.*;
 
 public class Tower {
 
-    private EnemyManager enemyManager;
-
-    public BufferedImage img;
+    private BufferedImage img;
     private List<Enemy> enemiesInRange = new LinkedList<>();
-    public int towerType;
+    private int towerType;
     private int damage;
     private float attackSpeed;
     private int range;
     private int radius;
     private int cost;
-    public Square square = new Square(-1, -1);
-    public Vector2d position = new Vector2d(0, 0);
+    private Square square = new Square(-1, -1);
+    private Vector2d position = new Vector2d(0, 0);
     //public int x;
     //public int y;
 
@@ -36,7 +34,7 @@ public class Tower {
     public boolean active = false;
     public boolean visible = false;
 
-    public Tower(int towerType, BufferedImage img, EnemyManager em) {
+    public Tower(int towerType, BufferedImage img) {
         this.towerType = towerType;
         damage = DAMAGE[towerType];
         attackSpeed = ATTACK_SPEED[towerType];
@@ -46,11 +44,10 @@ public class Tower {
         //this.x = x;
         //this.y = y;
         this.img = img;
-        enemyManager = em;
     }
 
     public void update(int u) {
-        getEnemiesInRange();
+        calculateEnemiesInRange();
         attemptShot(u);
         for (HomingMissile m : missiles) {
             if (m != null) {
@@ -60,7 +57,7 @@ public class Tower {
     }
 
     private void attemptShot(int u) {
-        if (lastShot + attackSpeed * Game.UPS_SET <= u) {
+        if (lastShot + attackSpeed * Game.getInstance().getUpsSet() <= u) {
             if (findTarget()) {
                 lastShot = u;
             }
@@ -73,7 +70,7 @@ public class Tower {
         }
         Enemy furthest = enemiesInRange.get(0);
         for (Enemy e : enemiesInRange) {
-            if (e.distanceToTarget < furthest.distanceToTarget) {
+            if (e.getDistanceToTarget() < furthest.getDistanceToTarget()) {
                 furthest = e;
             }
         }
@@ -86,9 +83,9 @@ public class Tower {
         missiles.add(new HomingMissile(position, e, this, MISSILESPEED[towerType], damage));
     }
 
-    private void getEnemiesInRange() {
+    private void calculateEnemiesInRange() {
         enemiesInRange.clear();
-        for (Enemy e : enemyManager.enemies) {
+        for (Enemy e : EnemyManager.getInstance().getEnemies()) {
             if (e != null) {
                 if (distanceToEnemy(e) < radius) {
                     enemiesInRange.add(e);
@@ -98,6 +95,31 @@ public class Tower {
     }
 
     private double distanceToEnemy(Enemy e) {
-        return Math.sqrt(Math.pow((position.x - e.position.x), 2) + Math.pow((position.y - e.position.y), 2));
+        return Math.sqrt(Math.pow((position.x - e.getPosition().x), 2) + Math.pow((position.y - e.getPosition().y), 2));
+    }
+
+    // Getters and setters
+    public BufferedImage getImg() {
+        return img;
+    }
+
+    public int getTowerType() {
+        return towerType;
+    }
+
+    public Square getSquare() {
+        return square;
+    }
+
+    public void setSquare(Square square) {
+        this.square = square;
+    }
+
+    public Vector2d getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2d position) {
+        this.position = position;
     }
 }

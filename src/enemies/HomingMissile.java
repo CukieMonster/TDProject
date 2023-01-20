@@ -5,13 +5,16 @@ import towers.Tower;
 
 import javax.vecmath.Vector2d;
 
+import static main.FieldParameters.ENEMY_RADIUS;
+import static main.FieldParameters.FIELD_SIZE;
+
 public class HomingMissile {
 
-    public Vector2d position;
-    public Enemy target;
+    private Vector2d position;
+    private Enemy target;
     private Tower origin;
-    public int damage;
-    public float speed;
+    private int damage;
+    private float speed;
 
     public HomingMissile(Vector2d pos, Enemy target, Tower t, float s, int d) {
         position = (Vector2d) pos.clone();
@@ -31,16 +34,20 @@ public class HomingMissile {
             origin.missiles.remove(this);
         }
         Vector2d direction = new Vector2d();// = Vector2d. target.position - position);
-        direction.sub(target.position, position);
+        direction.sub(target.getPosition(), position);
         //target reached (incl error)
         //System.err.println(direction.length());
-        if (direction.length() < 5 * Game.gameSpeed) {
+        if (direction.length() < ENEMY_RADIUS) { // * Game.getInstance().getGameSpeed()) {
             origin.missiles.remove(this);
-            //TODO: deal damage
             target.damage(damage);
         }
         direction.normalize();
-        direction.scale(speed * Game.gameSpeed);
+        direction.scale(speed * Game.getInstance().getGameSpeed());
         position.add(direction);
+    }
+
+    // Getters and setters
+    public Vector2d getPosition() {
+        return position;
     }
 }

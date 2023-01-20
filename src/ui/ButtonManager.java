@@ -1,13 +1,11 @@
 package ui;
 
+import enemies.EnemyManager;
 import main.Game;
-import main.GameObjectList;
+import towers.TowerManager;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,43 +14,50 @@ import java.io.InputStream;
 
 public class ButtonManager {
 
+    private static ButtonManager instance;
     private int buttonNr = 4;
-    public Button[] buttons = new Button[buttonNr];
+    private Button[] buttons = new Button[buttonNr];
 
-    public ButtonManager(Game g) {
-        GameObjectList.buttonManager = this;
+    private ButtonManager() {
         buttons[0] = new Button(BUTTONS.CANCEL_BUILDING, 1800, 900);
         buttons[1] = new Button(BUTTONS.BUILD_TOWER_1, 1800, 100);
         buttons[2] = new Button(BUTTONS.FAST_FORW_BUTTON, 1600, 900);
         buttons[3] = new Button(BUTTONS.SKIP_BUTTON, 1800, 900);
         loadButtonImgs();
-        buttons[1].active = true;
-        buttons[2].active = true;
+        buttons[1].setActive(true);
+        buttons[2].setActive(true);
+    }
+
+    public static ButtonManager getInstance() {
+        if (instance == null) {
+            instance = new ButtonManager();
+        }
+        return instance;
     }
 
     private void buttonAction(BUTTONS button) {
         switch (button) {
             case CANCEL_BUILDING:
-                GameObjectList.game.getTowerManager().cancelBuild();
+                TowerManager.getInstance().cancelBuild();
                 break;
             case BUILD_TOWER_1:
-                GameObjectList.game.getTowerManager().enterBuildMode(0);
+                TowerManager.getInstance().enterBuildMode(0);
                 break;
             case FAST_FORW_BUTTON:
-                Game.changeGamespeed();
+                Game.getInstance().changeGamespeed();
                 break;
             case SKIP_BUTTON:
-                GameObjectList.enemyManager.spawnWave();
-                buttons[BUTTONS.SKIP_BUTTON.ordinal()].active = false;
+                EnemyManager.getInstance().spawnWave();
+                buttons[BUTTONS.SKIP_BUTTON.ordinal()].setActive(false);
         }
     }
 
     public void setCancelButton(boolean b) {
-        buttons[0].active = b;
+        buttons[0].setActive(b);
     }
 
     public void setBuildButtons(boolean b) {
-        buttons[1].active = b;
+        buttons[1].setActive(b);
     }
 
     private void loadButtonImgs() {
@@ -72,9 +77,9 @@ public class ButtonManager {
         }*/
         InputStream is;
         for (BUTTONS b : BUTTONS.values()) {
-            is = getClass().getResourceAsStream("/" + b + ".png");
+            is = getClass().getResourceAsStream("/buttons/" + b + ".png");
             try {
-                buttons[b.ordinal()].img = ImageIO.read(is);
+                buttons[b.ordinal()].setImg(ImageIO.read(is));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -83,7 +88,7 @@ public class ButtonManager {
 
     public void mousePressed(MouseEvent e) {
         for (Button b : buttons) {
-            if (b.active) {
+            if (b.isActive()) {
                 if (isIn(e, b)) {
                     b.setMousePressed(true);
                 }
@@ -93,10 +98,10 @@ public class ButtonManager {
 
     public void mouseReleased(MouseEvent e) {
         for (Button b : buttons) {
-            if (b.active) {
+            if (b.isActive()) {
                 if (isIn(e, b)) {
                     if (b.isMousePressed()) {
-                        buttonAction(b.button);
+                        buttonAction(b.getButton());
                     }
                     break;
                 }
@@ -110,7 +115,7 @@ public class ButtonManager {
             b.setMouseOver(false);
         }
         for (Button b : buttons) {
-            if (b.active) {
+            if (b.isActive()) {
                 if (isIn(e, b)) {
                     b.setMouseOver(true);
                     break;
@@ -131,9 +136,14 @@ public class ButtonManager {
 
     public void draw(Graphics g) {
         for (Button b : buttons) {
-            if (b.active) {
-                g.drawImage(b.img, b.xPos, b.yPos, null);
+            if (b.isActive()) {
+                g.drawImage(b.getImg(), b.getxPos(), b.getyPos(), null);
             }
         }
+    }
+
+    // Getters and setters
+    public Button[] getButtons() {
+        return buttons;
     }
 }

@@ -1,9 +1,9 @@
 package enemies;
 
 import main.Game;
-import main.GameObjectList;
 import main.Square;
 import ui.BUTTONS;
+import ui.ButtonManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,19 +17,20 @@ import static enemies.EnemyParameters.*;
 
 public class EnemyManager {
 
+    private static EnemyManager instance;
     private BufferedImage[] enemyImgs = new BufferedImage[5];
     //private final static int maxWaveSize = 20;
     private Square spawn = new Square(0, 14);
-    public int waveNumber = 0;
-    public int waveLimit;
-    public int currentWaveProgress;
-    public int currentWaveSize;
+    private int waveNumber = 0;
+    private int waveLimit;
+    private int currentWaveProgress;
+    private int currentWaveSize;
     //public Enemy[] enemies = new Enemy[maxWaveSize];
-    public LinkedList<Enemy> enemies = new LinkedList<>();
+    private LinkedList<Enemy> enemies = new LinkedList<>();
     //private int enemyIndex = 0;
 
-    public boolean wavesFinished = false;
-    public boolean skip = false;
+    private boolean wavesFinished = false;
+    private boolean skip = false;
     private boolean spawning = false;
     private int spawnTime = 0;
     private int currentRound = 1;
@@ -38,22 +39,29 @@ public class EnemyManager {
 
     private Random random = new Random();
 
-    public EnemyManager() {
-        GameObjectList.enemyManager = this;
+    private EnemyManager() {
+        //GameObjectList.enemyManager = this;
         importImg();
         spawnWave();
     }
 
+    public static EnemyManager getInstance() {
+        if (instance == null) {
+            instance = new EnemyManager();
+        }
+        return instance;
+    }
+
     public void update(/*int u*/) {
         if (spawning) {
-            spawnTime -= Game.gameSpeed;
+            spawnTime -= Game.getInstance().getGameSpeed();
             if (spawnTime <= 0) {
                 spawnTime = SPAWN_INTERVAL;
                 spawnEnemy();
             }
         }
         else {
-            spawnTime -= Game.gameSpeed;
+            spawnTime -= Game.getInstance().getGameSpeed();
             if (spawnTime <= 0) {
                 spawnWave();
             }
@@ -61,7 +69,7 @@ public class EnemyManager {
 
         LinkedList<Enemy> toRemove = new LinkedList<>();
         for (Enemy e : enemies) {
-            if (e.active) e.update();
+            if (e.isActive()) e.update();
             else toRemove.add(e);
             /*if (e != null) {
                 e.update();
@@ -75,12 +83,12 @@ public class EnemyManager {
 
     public void waveCompleted() {
         spawning = false;
-        GameObjectList.buttonManager.buttons[BUTTONS.SKIP_BUTTON.ordinal()].active = true;
+        ButtonManager.getInstance().getButtons()[BUTTONS.SKIP_BUTTON.ordinal()].setActive(true);
         spawnTime = WAVE_INTERVAL;
     }
 
     public void spawnWave() {
-        GameObjectList.buttonManager.buttons[BUTTONS.SKIP_BUTTON.ordinal()].active = false;
+        ButtonManager.getInstance().getButtons()[BUTTONS.SKIP_BUTTON.ordinal()].setActive(false);
         waveNumber++;
         waveLimit = waveNumber * WAVE_GROWTH;
         currentWaveProgress = 0;
@@ -119,7 +127,7 @@ public class EnemyManager {
     }
 
     private void importImg() {
-        InputStream is = getClass().getResourceAsStream("/enemy_1.png");
+        InputStream is = getClass().getResourceAsStream("/enemies/enemy_1.png");
         try {
             enemyImgs[0] = ImageIO.read(is);
         } catch (IOException e) {
@@ -130,8 +138,13 @@ public class EnemyManager {
     public void draw(Graphics g) {
         for (Enemy e : enemies) {
             if (e != null) {
-                g.drawImage(enemyImgs[0], (int) e.position.x, (int) e.position.y, null);
+                g.drawImage(enemyImgs[0], (int) e.getPosition().x, (int) e.getPosition().y, null);
             }
         }
+    }
+
+    // Getters and setters
+    public LinkedList<Enemy> getEnemies() {
+        return enemies;
     }
 }

@@ -8,13 +8,13 @@ import java.io.InputStream;
 
 public class Button {
 
-    public BUTTONS button;
-    public int xPos, yPos;
+    private BUTTONS button;
+    private int xPos, yPos;
     private int xOffsetCenter;
-    public BufferedImage img;
+    private BufferedImage img;
     private boolean mouseOver, mousePressed;
     private Rectangle bounds;
-    public boolean active = false;
+    private boolean active = false;
 
     public Button(BUTTONS b, int xPos, int yPos) {
         button = b;
@@ -60,5 +60,34 @@ public class Button {
     public void resetBools() {
         mouseOver = false;
         mousePressed = false;
+    }
+
+    // Getters and setters
+    public BUTTONS getButton() {
+        return button;
+    }
+
+    public int getxPos() {
+        return xPos;
+    }
+
+    public int getyPos() {
+        return yPos;
+    }
+
+    public  BufferedImage getImg() {
+        return img;
+    }
+
+    public void setImg(BufferedImage img) {
+        this.img = img;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

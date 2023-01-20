@@ -1,28 +1,34 @@
 package enemies;
 
+import items.Item;
+import items.ItemParameters;
 import main.Game;
-import main.GameObjectList;
 import main.Square;
-import ui.BUTTONS;
+import main.Modifiers;
 
 import javax.vecmath.Vector2d;
+
+import java.util.Random;
 
 import static enemies.EnemyParameters.*;
 import static main.FieldParameters.*;
 
 public class Enemy {
 
-    public double distanceToTarget;
+    private double distanceToTarget;
 
     private int enemyType, maxHP, HP, value, progress, index;
     private float speed;
-    public boolean active = true;
+
+
+    private boolean active = true;
     private Square square;
-    public Vector2d position;
+    private Vector2d position;
     //public int x;
     //public int y;
     private boolean xAxisLocked = false;
     private boolean yAxisLocked = false;
+    private Random random = new Random();
 
     public Enemy(Square spawn, int enemyType) {
         this.enemyType = enemyType;
@@ -32,7 +38,7 @@ public class Enemy {
         value = VALUE[enemyType];
         progress = PROGRESS[enemyType];
         square = spawn;
-        distanceToTarget = GameObjectList.pathfinding.distanceField[square.x][square.y];
+        distanceToTarget = Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()];
         Vector2d pos = spawn.squareToPosition();
         position = pos;
     }
@@ -45,48 +51,67 @@ public class Enemy {
         HP -= amount;
         //TODO: healthbar
         if (HP <= 0) {
-            GameObjectList.game.adjustMoney(value);
+            Game.getInstance().adjustMoney(value);
             //GameObjectList.enemyManager.enemies.remove(this);
             active = false;
+
+            if (random.nextInt(100) < Modifiers.getDroprate() * progress) {
+                Item newItem;
+                int rar = random.nextInt(100);
+                if (rar < Modifiers.getLegendaryDroprate()) {
+                    newItem = new Item(5, ItemParameters.Rarity.Legendary);
+                }
+                else if (rar < Modifiers.getRareDroprate()) {
+                    newItem = new Item(5, ItemParameters.Rarity.Rare);
+                }
+                else {
+                    newItem = new Item(5, ItemParameters.Rarity.Common);
+                }
+                dropItem(newItem);
+            }
         }
+    }
+
+    void dropItem(Item newItem) {
+        Game.getInstance().getDroppedItems().add(newItem);
     }
 
     private void moveInDirection() {
         square = Square.positionToSquare(position);
         //enemy is in the center of a field
-        if (Math.abs(position.x % FIELD_SIZE - X_OFFSET) < (speed * Game.gameSpeed) && Math.abs(position.y % FIELD_SIZE - Y_OFFSET) < speed * Game.gameSpeed) {
+        if (Math.abs(position.x % FIELD_SIZE - X_OFFSET) < (speed * Game.getInstance().getGameSpeed()) && Math.abs(position.y % FIELD_SIZE - Y_OFFSET) < speed * Game.getInstance().getGameSpeed()) {
             xAxisLocked = yAxisLocked = false;
-            if (GameObjectList.pathfinding.distanceField[square.x][square.y] == 1) {
+            if (Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()] == 1) {
                 //base reached
                 active = false;
                 //GameObjectList.enemyManager.enemies.remove(this);
                 return;
             }
-            distanceToTarget = GameObjectList.pathfinding.distanceField[square.x][square.y];
+            distanceToTarget = Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()];
             //decide direction
-            if (square.x + 1 < X_FIELDS && GameObjectList.pathfinding.distanceField[square.x + 1][square.y] < GameObjectList.pathfinding.distanceField[square.x][square.y])
+            if (square.getX() + 1 < X_FIELDS && Pathfinding.getInstance().getDistanceField()[square.getX() + 1][square.getY()] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
-                position.y = square.y * FIELD_SIZE +Y_OFFSET;
+                position.y = square.getY() * FIELD_SIZE +Y_OFFSET;
                 yAxisLocked = true;
-                position.x += speed * Game.gameSpeed;
+                position.x += speed * Game.getInstance().getGameSpeed();
             }
-            else if (square.y + 1 < Y_FIELDS && GameObjectList.pathfinding.distanceField[square.x][square.y + 1] < GameObjectList.pathfinding.distanceField[square.x][square.y])
+            else if (square.getY() + 1 < Y_FIELDS && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() + 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
-                position.x = square.x * FIELD_SIZE + X_OFFSET;
+                position.x = square.getX() * FIELD_SIZE + X_OFFSET;
                 xAxisLocked = true;
-                position.y += speed * Game.gameSpeed;
+                position.y += speed * Game.getInstance().getGameSpeed();
             }
-            else if (square.y > 0 && GameObjectList.pathfinding.distanceField[square.x][square.y - 1] < GameObjectList.pathfinding.distanceField[square.x][square.y])
+            else if (square.getY() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() - 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
-                position.x = square.x * FIELD_SIZE + X_OFFSET;
+                position.x = square.getX() * FIELD_SIZE + X_OFFSET;
                 xAxisLocked = true;
-                position.y -= speed * Game.gameSpeed;
+                position.y -= speed * Game.getInstance().getGameSpeed();
             }
-            else if (square.x > 0 && GameObjectList.pathfinding.distanceField[square.x - 1][square.y] < GameObjectList.pathfinding.distanceField[square.x][square.y])
+            else if (square.getX() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX() - 1][square.getY()] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
-                position.y = square.y * FIELD_SIZE + Y_OFFSET;
+                position.y = square.getY() * FIELD_SIZE + Y_OFFSET;
                 yAxisLocked = true;
-                position.x -= speed * Game.gameSpeed;
+                position.x -= speed * Game.getInstance().getGameSpeed();
             }
         }
         //enemy is moving between two fields
@@ -96,19 +121,19 @@ public class Enemy {
 
             //decide direction
             if (!xAxisLocked) {
-                if (GameObjectList.pathfinding.distanceField[neighbors[0].x][neighbors[0].y] < GameObjectList.pathfinding.distanceField[neighbors[1].x][neighbors[1].y]) {
-                    position.x += (neighbors[0].x - neighbors[1].x) * speed * Game.gameSpeed;
+                if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
+                    position.x += (neighbors[0].getX() - neighbors[1].getX()) * speed * Game.getInstance().getGameSpeed();
                 }
-                else if (GameObjectList.pathfinding.distanceField[neighbors[0].x][neighbors[0].y] > GameObjectList.pathfinding.distanceField[neighbors[1].x][neighbors[1].y]) {
-                    position.x += (neighbors[1].x - neighbors[0].x) * speed * Game.gameSpeed;
+                else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
+                    position.x += (neighbors[1].getX() - neighbors[0].getX()) * speed * Game.getInstance().getGameSpeed();
                 }
             }
             if (!yAxisLocked) {
-                if (GameObjectList.pathfinding.distanceField[neighbors[0].x][neighbors[0].y] < GameObjectList.pathfinding.distanceField[neighbors[1].x][neighbors[1].y]) {
-                    position.y += (neighbors[0].y - neighbors[1].y) * speed * Game.gameSpeed;
+                if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
+                    position.y += (neighbors[0].getY() - neighbors[1].getY()) * speed * Game.getInstance().getGameSpeed();
                 }
-                else if (GameObjectList.pathfinding.distanceField[neighbors[0].x][neighbors[0].y] > GameObjectList.pathfinding.distanceField[neighbors[1].x][neighbors[1].y]) {
-                    position.y += (neighbors[1].y - neighbors[0].y) * speed * Game.gameSpeed;
+                else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
+                    position.y += (neighbors[1].getY() - neighbors[0].getY()) * speed * Game.getInstance().getGameSpeed();
                 }
             }
         }
@@ -119,16 +144,29 @@ public class Enemy {
 
         if (!xAxisLocked) {
             //System.err.printf("%d\n", GameObjectList.pathfinding.distanceField[neighbors[0].x][neighbors[0].y]);
-            distanceToTarget = GameObjectList.pathfinding.distanceField[neighbors[0].x][neighbors[0].y]
-                    * (Math.abs(neighbors[1].x * FIELD_SIZE - position.x) / (float)FIELD_SIZE)
-                    + GameObjectList.pathfinding.distanceField[neighbors[1].x][neighbors[1].y]
-                    * (Math.abs(neighbors[0].x * FIELD_SIZE - position.x) / (float)FIELD_SIZE);
+            distanceToTarget = Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()]
+                    * (Math.abs(neighbors[1].getX() * FIELD_SIZE - position.x) / (float)FIELD_SIZE)
+                    + Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]
+                    * (Math.abs(neighbors[0].getX() * FIELD_SIZE - position.x) / (float)FIELD_SIZE);
         }
         if (!yAxisLocked) {
-            distanceToTarget = GameObjectList.pathfinding.distanceField[neighbors[0].x][neighbors[0].y]
-                    * (Math.abs(neighbors[1].y * FIELD_SIZE - position.y) / (float)FIELD_SIZE)
-                    + GameObjectList.pathfinding.distanceField[neighbors[1].x][neighbors[1].y]
-                    * (Math.abs(neighbors[0].y * FIELD_SIZE - position.y) / (float)FIELD_SIZE);
+            distanceToTarget = Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()]
+                    * (Math.abs(neighbors[1].getY() * FIELD_SIZE - position.y) / (float)FIELD_SIZE)
+                    + Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]
+                    * (Math.abs(neighbors[0].getY() * FIELD_SIZE - position.y) / (float)FIELD_SIZE);
         }
+    }
+
+    // Setters and getters
+    public double getDistanceToTarget() {
+        return distanceToTarget;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public Vector2d getPosition() {
+        return position;
     }
 }

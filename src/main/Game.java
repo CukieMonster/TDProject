@@ -2,6 +2,7 @@ package main;
 
 import enemies.EnemyManager;
 import enemies.Pathfinding;
+import items.Item;
 import towers.TowerManager;
 import ui.Button;
 import ui.ButtonManager;
@@ -11,56 +12,60 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
 
 import static main.FieldParameters.*;
 
 public class Game implements Runnable {
 
-    private GamePanel gamePanel;
+    private static Game instance;
     private Thread gameThread;
     private final int FPS_SET = 60;
-    public static final int UPS_SET = 60;
-    public int updates;
-    public static int gameSpeed = 1;
+    private final int UPS_SET = 60;
+    private int updates;
+    private int gameSpeed = 1;
     private int money = Integer.MAX_VALUE;
-    public boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
-    private ButtonManager buttonManager;
-    private EnemyManager enemyManager;
-    private TowerManager towerManager;
-    private Pathfinding pathfinding;
+    private boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
+    private LinkedList<Item> droppedItems = new LinkedList<>();
 
     private BufferedImage backgroundImg;
 
-    public Game() {
-        GameObjectList.game = this;
+    private Game() {
         loadBackgroundImg();
-        buttonManager = new ButtonManager(this);
-        pathfinding = new Pathfinding(this);
-        pathfinding.buildDistanceField();
-        enemyManager = new EnemyManager();
-        towerManager = new TowerManager(this);
-        gamePanel = new GamePanel(this);
-        new GameWindow(gamePanel);
-        gamePanel.requestFocusInWindow();
-        startGameLoop();
+//        buttonManager = new ButtonManager(this);
+//        pathfinding = new Pathfinding(this);
+//        pathfinding.buildDistanceField();
+//        enemyManager = new EnemyManager();
+//        towerManager = new TowerManager(this);
+//        gamePanel = new GamePanel(this);
+        GameWindow.getInstance();
+        GamePanel.getInstance().requestFocusInWindow();
     }
 
-    private void startGameLoop() {
+    public static Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
+
+    public void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     public void update(int u) {
         //gamePanel.updateGame();
-        enemyManager.update();
-        towerManager.update(u);
+        EnemyManager.getInstance().update();
+        TowerManager.getInstance().update(u);
     }
 
     public void render(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, null);
-        buttonManager.draw(g);
-        enemyManager.draw(g);
-        towerManager.draw(g);
+        ButtonManager.getInstance().draw(g);
+        EnemyManager.getInstance().draw(g);
+        TowerManager.getInstance().draw(g);
+        drawDroppedItems(g);
     }
 
     @Override
@@ -81,7 +86,7 @@ public class Game implements Runnable {
             previousTime = currentTime;
 
             if (deltaF >= 1) {
-                gamePanel.repaint();
+                GamePanel.getInstance().repaint();
                 frames++;
                 deltaF--;
             }
@@ -98,9 +103,17 @@ public class Game implements Runnable {
         money += value;
     }
 
-    public static void changeGamespeed() {
+    public void changeGamespeed() {
         if (gameSpeed == 1) gameSpeed = 2;
         else if (gameSpeed == 2) gameSpeed = 1;
+    }
+
+    private void drawDroppedItems(Graphics g) {
+        for (Item i : droppedItems) {
+            if (i != null){
+                g.drawImage(i.getSprite(), 0, 0, null);
+            }
+        }
     }
 
     private void loadBackgroundImg() {
@@ -112,19 +125,20 @@ public class Game implements Runnable {
         }
     }
 
-    public ButtonManager getButtonManager() {
-        return buttonManager;
+    // Getters and setters
+    public int getUpsSet() {
+        return UPS_SET;
     }
 
-    public TowerManager getTowerManager() {
-        return towerManager;
+    public int getGameSpeed() {
+        return gameSpeed;
     }
 
-    public EnemyManager getEnemyManager() {
-        return enemyManager;
+    public boolean[][] getCollisionMap() {
+        return collisionMap;
     }
 
-    public Pathfinding getPathfinding() {
-        return pathfinding;
+    public LinkedList<Item> getDroppedItems() {
+        return droppedItems;
     }
 }

@@ -7,8 +7,8 @@ import static main.FieldParameters.*;
 public class Square {
 
     //public Vector2d position;
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
     public Square(int xPos, int yPos) {
         x = xPos;
@@ -66,5 +66,14 @@ public class Square {
     public Vector2d squareToPosition() {
         //return new int[] {(1 + x) * FIELD_SIZE, (1 + y) * FIELD_SIZE};
         return new Vector2d(x * FIELD_SIZE + X_OFFSET, y * FIELD_SIZE + Y_OFFSET);
+    }
+
+    // Getters and setters
+    public int getX() {
+        return x;
+    }
+    
+    public int getY() {
+        return y;
     }
 }

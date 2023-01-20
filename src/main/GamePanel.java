@@ -11,26 +11,20 @@ import java.io.InputStream;
 
 public class GamePanel extends JPanel {
 
+    private static GamePanel instance;
     private BufferedImage img;
-    private MouseInputs mouseInputs;
-    private Game game;
 
-    public GamePanel(Game game) {
-        mouseInputs = new MouseInputs(this);
-        this.game = game;
-        importImg();
+    private GamePanel() {
         setPanelSize();
-        addMouseListener(mouseInputs);
-        addMouseMotionListener(mouseInputs);
+        addMouseListener(MouseInputs.getInstance());
+        addMouseMotionListener(MouseInputs.getInstance());
     }
 
-    private void importImg() {
-        InputStream is = getClass().getResourceAsStream("/enemy_1.png");
-        try {
-            img = ImageIO.read(is);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static GamePanel getInstance() {
+        if (instance == null) {
+            instance = new GamePanel();
         }
+        return instance;
     }
 
     private void setPanelSize() {
@@ -42,15 +36,12 @@ public class GamePanel extends JPanel {
 
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        game.render(g);
+        Game.getInstance().render(g);
 
         //g.drawImage(img, 100, 100, null);
 
-    }
-
-    public Game getGame() {
-        return game;
     }
 }
