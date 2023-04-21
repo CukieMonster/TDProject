@@ -1,5 +1,6 @@
 package com.tdproject.enemies;
 
+import com.tdproject.gamestates.Playing;
 import com.tdproject.graphics.Sprite;
 import com.tdproject.items.Item;
 import com.tdproject.items.ItemParameters;
@@ -52,16 +53,16 @@ public class Enemy extends Sprite {
         HP -= amount;
         //TODO: healthbar
         if (HP <= 0) {
-            Game.getInstance().adjustMoney(value);
+            Playing.getInstance().adjustMoney(value);
             active = false;
 
-            if (random.nextInt(100) < Modifiers.getDroprate() * progress) {
+            if (random.nextInt(100) < Modifiers.getDropRate() * progress) {
                 Item newItem;
                 int rar = random.nextInt(100);
-                if (rar < Modifiers.getLegendaryDroprate()) {
+                if (rar < Modifiers.getLegendaryDropRate()) {
                     newItem = new Item(5, ItemParameters.Rarity.Legendary);
                 }
-                else if (rar < Modifiers.getRareDroprate()) {
+                else if (rar < Modifiers.getRareDropRate()) {
                     newItem = new Item(5, ItemParameters.Rarity.Rare);
                 }
                 else {
@@ -73,14 +74,13 @@ public class Enemy extends Sprite {
     }
 
     void dropItem(Item newItem) {
-        Game.getInstance().getDroppedItems().add(newItem);
+        Playing.getInstance().getDroppedItems().add(newItem);
     }
 
     private void moveInDirection() {
         square = Square.positionToSquare(position);
         //enemy is in the center of a field
-        if (Math.abs((position.x - X_OFFSET) % FIELD_SIZE) < (speed * Game.getInstance().getGameSpeed()) && Math.abs((position.y - Y_OFFSET) % FIELD_SIZE) < speed * Game.getInstance().getGameSpeed()) {
-            System.out.printf("x: %f, y: %f%n", position.x, position.y);
+        if (Math.abs((position.x - X_OFFSET) % FIELD_SIZE) < (speed * Playing.getInstance().getGameSpeed()) && Math.abs((position.y - Y_OFFSET) % FIELD_SIZE) < speed * Playing.getInstance().getGameSpeed()) {
             xAxisLocked = yAxisLocked = false;
             if (Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()] == 1) {
                 //base reached
@@ -93,55 +93,49 @@ public class Enemy extends Sprite {
             {
                 roundYValue();
                 yAxisLocked = true;
-                position.x += speed * Game.getInstance().getGameSpeed();
+                position.x += speed * Playing.getInstance().getGameSpeed();
             }
             else if (square.getY() + 1 < Y_FIELDS && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() + 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundXValue();
                 xAxisLocked = true;
-                position.y += speed * Game.getInstance().getGameSpeed();
+                position.y += speed * Playing.getInstance().getGameSpeed();
             }
             else if (square.getY() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() - 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundXValue();
                 xAxisLocked = true;
-                position.y -= speed * Game.getInstance().getGameSpeed();
+                position.y -= speed * Playing.getInstance().getGameSpeed();
             }
             else if (square.getX() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX() - 1][square.getY()] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundYValue();
                 yAxisLocked = true;
-                position.x -= speed * Game.getInstance().getGameSpeed();
+                position.x -= speed * Playing.getInstance().getGameSpeed();
             }
         }
         //enemy is moving between two fields
         else if (position.x % FIELD_SIZE != X_OFFSET || position.y % FIELD_SIZE != Y_OFFSET) {
             Square[] neighbors = Square.getNeighbors(position);
-            if (neighbors[0].getX() == 25 || neighbors[1].getX() == 25) {
-
-                System.out.printf("OutOfBoundsError: %s 1: X: %d; 2: X: %d; XPos: %f; Speed: %f; GameSpeed: %d%n", this, neighbors[0].getX(), neighbors[1].getX(), position.x, speed, Game.getInstance().getGameSpeed());
-            }
             distanceToTarget(neighbors);
-
             //decide direction
             if (!xAxisLocked) {
                 if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.x += (neighbors[0].getX() - neighbors[1].getX()) * speed * Game.getInstance().getGameSpeed();
+                    position.x += (neighbors[0].getX() - neighbors[1].getX()) * speed * Playing.getInstance().getGameSpeed();
                 }
                 else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.x += (neighbors[1].getX() - neighbors[0].getX()) * speed * Game.getInstance().getGameSpeed();
+                    position.x += (neighbors[1].getX() - neighbors[0].getX()) * speed * Playing.getInstance().getGameSpeed();
                 }
             }
             if (!yAxisLocked) {
                 if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.y += (neighbors[0].getY() - neighbors[1].getY()) * speed * Game.getInstance().getGameSpeed();
+                    position.y += (neighbors[0].getY() - neighbors[1].getY()) * speed * Playing.getInstance().getGameSpeed();
                 }
                 else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.y += (neighbors[1].getY() - neighbors[0].getY()) * speed * Game.getInstance().getGameSpeed();
+                    position.y += (neighbors[1].getY() - neighbors[0].getY()) * speed * Playing.getInstance().getGameSpeed();
                 }
             }
         }
-        System.out.println(this + " x: " + position.x + " y: " + position.y);
     }
 
     //calculates distanceToTarget in between fields

@@ -2,9 +2,13 @@ package com.tdproject.ui;
 
 import com.tdproject.graphics.Sprite;
 
+import java.util.function.Consumer;
+
 public class Button extends Sprite {
 
-    private Buttons button;
+    private final PlayingButtons.ButtonID button;
+    private Consumer action;
+    private int value;
     private int xPos, yPos;
     private int xOffsetCenter;
 //    private BufferedImage img;
@@ -12,13 +16,14 @@ public class Button extends Sprite {
     private Rectangle bounds;
     private boolean active = false;
 
-    public Button(Buttons b, int xPos, int yPos) {
+    public Button(PlayingButtons.ButtonID b) {
         button = b;
-        this.xPos = xPos;
-        this.yPos = yPos;
-        //loadImg();
+        action = PlayingButtons.action[button.ordinal()];
+        this.xPos = PlayingButtons.posistion[button.ordinal()][0];
+        this.yPos = PlayingButtons.posistion[button.ordinal()][1];
         initBounds();
-        loadSprite(Type.BUTTON, this.button.ordinal());
+        loadSprite(Type.BUTTON, button.ordinal());
+        active = PlayingButtons.defaultState[button.ordinal()];
     }
 
     private void initBounds() {
@@ -33,6 +38,10 @@ public class Button extends Sprite {
 //            e.printStackTrace();
 //        }
 //    }
+
+    public void activate() {
+        action.accept(null);
+    }
 
     public boolean isMouseOver() {
         return mouseOver;
@@ -60,9 +69,9 @@ public class Button extends Sprite {
     }
 
     // Getters and setters
-    public Buttons getButton() {
-        return button;
-    }
+//    public PlayingButtons getButton() {
+//        return button;
+//    }
 
     public int getxPos() {
         return xPos;

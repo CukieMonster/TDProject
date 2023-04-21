@@ -1,5 +1,7 @@
 package com.tdproject.inputs;
 
+import com.tdproject.gamestates.GameState;
+import com.tdproject.gamestates.Playing;
 import com.tdproject.towers.TowerManager;
 import com.tdproject.ui.ButtonManager;
 
@@ -34,8 +36,19 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        ButtonManager.getInstance().mouseReleased(new MyEvent(e));
-        TowerManager.getInstance().mouseReleased(new MyEvent(e));
+        switch (GameState.gameState) {
+            case MENU:
+                break;
+            case SETTINGS:
+                break;
+            case INVENTORY:
+                break;
+            case PLAYING:
+                Playing.getInstance().mouseReleased(e);
+                break;
+            case PAUSED:
+                break;
+        }
     }
 
     @Override
@@ -55,7 +68,18 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        ButtonManager.getInstance().mouseMoved(new MyEvent(e));
-        TowerManager.getInstance().mouseMoved(new MyEvent(e));
+        switch (GameState.gameState) {
+            case MENU:
+                break;
+            case SETTINGS:
+                break;
+            case INVENTORY:
+                break;
+            case PLAYING:
+                Playing.getInstance().mouseMoved(e);
+                break;
+            case PAUSED:
+                break;
+        }
     }
 }

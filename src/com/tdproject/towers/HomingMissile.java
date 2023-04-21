@@ -1,6 +1,7 @@
 package com.tdproject.towers;
 
 import com.tdproject.enemies.Enemy;
+import com.tdproject.gamestates.Playing;
 import com.tdproject.graphics.Sprite;
 import com.tdproject.main.Game;
 
@@ -43,7 +44,7 @@ public class HomingMissile extends Sprite {
             target.damage(damage);
         }
         direction.normalize();
-        direction.scale(speed * Game.getInstance().getGameSpeed());
+        direction.scale(speed * Playing.getInstance().getGameSpeed());
         position.add(direction);
     }
 

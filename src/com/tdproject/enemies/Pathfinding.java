@@ -1,5 +1,6 @@
 package com.tdproject.enemies;
 
+import com.tdproject.gamestates.Playing;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 
@@ -35,7 +36,7 @@ public class Pathfinding {
         int[][] newField = new int[X_FIELDS][Y_FIELDS];
         for (int x = 0; x < X_FIELDS; x++) {
             for (int y = 0; y < Y_FIELDS; y++) {
-                if (Game.getInstance().getCollisionMap()[x][y] == true) {
+                if (Playing.getInstance().getCollisionMap()[x][y] == true) {
                     newField[x][y] = blockedField;
                 }
             }

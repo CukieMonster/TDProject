@@ -1,6 +1,6 @@
 package com.tdproject.graphics;
 
-import com.tdproject.ui.Buttons;
+import com.tdproject.ui.PlayingButtons;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -39,7 +39,7 @@ public abstract class Sprite {
                     is = getClass().getResourceAsStream(paths[type.ordinal()]);
                     break;
                 case BUTTON:
-                    is = getClass().getResourceAsStream(paths[type.ordinal()] + Buttons.values()[id] + ".png");
+                    is = getClass().getResourceAsStream(paths[type.ordinal()] + PlayingButtons.ButtonID.values()[id] + ".png");
                     break;
                 case ITEM:
                     is = getClass().getResourceAsStream(paths[type.ordinal()] + "all_towers.png");

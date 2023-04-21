@@ -1,10 +1,12 @@
 package com.tdproject.towers;
 
 import com.tdproject.enemies.Pathfinding;
+import com.tdproject.gamestates.Playing;
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 import com.tdproject.ui.ButtonManager;
+import com.tdproject.ui.PlayingButtons;
 
 import javax.vecmath.Vector2d;
 
@@ -46,16 +48,20 @@ public class TowerManager {
         buildMode = true;
         //hide dropped main.tdproject.items
         //hide time buttons
-        ButtonManager.getInstance().setBuildButtons(false);
-        ButtonManager.getInstance().setCancelButton(true);
+//        ButtonManager.getInstance().setBuildButtons(false);
+//        ButtonManager.getInstance().setCancelButton(true);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.BUILD_TOWER_1, false);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.CANCEL_BUILDING, true);
         towers[towerNr] = new Tower(towerType);
     }
 
     public void cancelBuild() {
         //show dropped main.tdproject.items
         //show time buttons
-        ButtonManager.getInstance().setBuildButtons(true);
-        ButtonManager.getInstance().setCancelButton(false);
+//        ButtonManager.getInstance().setBuildButtons(true);
+//        ButtonManager.getInstance().setCancelButton(false);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.BUILD_TOWER_1, true);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.CANCEL_BUILDING, false);
         towers[towerNr] = null;
         buildMode = false;
     }
@@ -82,18 +88,20 @@ public class TowerManager {
         if (!checkSquare(square)) {
             return;
         }
-        Game.getInstance().getCollisionMap()[square.getX()][square.getY()] = true;
+        Playing.getInstance().getCollisionMap()[square.getX()][square.getY()] = true;
         if (Pathfinding.getInstance().buildDistanceField() == false) {
             //Can't build tower here
-            Game.getInstance().getCollisionMap()[square.getX()][square.getY()] = false;
+            Playing.getInstance().getCollisionMap()[square.getX()][square.getY()] = false;
             return;
         }
-        Game.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()]);
+        Playing.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()]);
         towers[towerNr].active = true;
         //show dropped main.tdproject.items
         //show time buttons
-        ButtonManager.getInstance().setBuildButtons(true);
-        ButtonManager.getInstance().setCancelButton(false);
+//        ButtonManager.getInstance().setBuildButtons(true);
+//        ButtonManager.getInstance().setCancelButton(false);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.BUILD_TOWER_1, true);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.CANCEL_BUILDING, false);
         buildMode = false;
         towerNr++;
     }
@@ -103,7 +111,7 @@ public class TowerManager {
         int y = square.getY();
         if (x >= 0 && x < X_FIELDS && y >= 0 && y < Y_FIELDS)
         {
-            return !Game.getInstance().getCollisionMap()[x][y];
+            return !Playing.getInstance().getCollisionMap()[x][y];
         }
         return false;
     }

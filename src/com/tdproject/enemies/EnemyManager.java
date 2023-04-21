@@ -1,8 +1,8 @@
 package com.tdproject.enemies;
 
-import com.tdproject.main.Game;
+import com.tdproject.gamestates.Playing;
 import com.tdproject.main.Square;
-import com.tdproject.ui.Buttons;
+import com.tdproject.ui.PlayingButtons;
 import com.tdproject.ui.ButtonManager;
 
 import java.util.LinkedList;
@@ -47,14 +47,14 @@ public class EnemyManager {
 
     public void update(/*int u*/) {
         if (spawning) {
-            spawnTime -= Game.getInstance().getGameSpeed();
+            spawnTime -= Playing.getInstance().getGameSpeed();
             if (spawnTime <= 0) {
                 spawnTime = EnemyParameters.SPAWN_INTERVAL;
                 spawnEnemy();
             }
         }
         else {
-            spawnTime -= Game.getInstance().getGameSpeed();
+            spawnTime -= Playing.getInstance().getGameSpeed();
             if (spawnTime <= 0) {
                 spawnWave();
             }
@@ -76,12 +76,14 @@ public class EnemyManager {
 
     public void waveCompleted() {
         spawning = false;
-        ButtonManager.getInstance().getButtons()[Buttons.SKIP_BUTTON.ordinal()].setActive(true);
+        //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(true);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.SKIP_BUTTON, true);
         spawnTime = EnemyParameters.WAVE_INTERVAL;
     }
 
     public void spawnWave() {
-        ButtonManager.getInstance().getButtons()[Buttons.SKIP_BUTTON.ordinal()].setActive(false);
+        //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(false);
+        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.SKIP_BUTTON, false);
         waveNumber++;
         waveLimit = waveNumber * EnemyParameters.WAVE_GROWTH;
         currentWaveProgress = 0;

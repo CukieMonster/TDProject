@@ -5,9 +5,9 @@ public class Modifiers {
     private Modifiers() {
 
     }
-    private static int droprate = 100;             //in %, will be multiplied with Enemy.value
-    private static int rareDroprate;
-    private static int legendaryDroprate;
+    private static int dropRate = 100;             //in %, will be multiplied with Enemy.value
+    private static int rareDropRate;
+    private static int legendaryDropRate;
     private static int baseHealth;
     private static int startMoney;
 
@@ -39,15 +39,15 @@ public class Modifiers {
     }
 
     // Getters and setters
-    public static int getDroprate() {
-        return droprate;
+    public static int getDropRate() {
+        return dropRate;
     }
 
-    public static int getRareDroprate() {
-        return rareDroprate;
+    public static int getRareDropRate() {
+        return rareDropRate;
     }
 
-    public static int getLegendaryDroprate() {
-        return legendaryDroprate;
+    public static int getLegendaryDropRate() {
+        return legendaryDropRate;
     }
 }
