@@ -42,7 +42,7 @@ public class Tower extends Sprite {
         //this.x = x;
         //this.y = y;
         //this.img = img;
-        loadSprite(Type.TOWER, this.towerType);
+        loadSprite(Type.TOWER, "" + this.towerType);
     }
 
     public void update(int u) {

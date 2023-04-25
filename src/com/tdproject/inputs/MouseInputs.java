@@ -1,9 +1,8 @@
 package com.tdproject.inputs;
 
 import com.tdproject.gamestates.GameState;
+import com.tdproject.gamestates.MainMenu;
 import com.tdproject.gamestates.Playing;
-import com.tdproject.towers.TowerManager;
-import com.tdproject.ui.ButtonManager;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -37,7 +36,8 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         switch (GameState.gameState) {
-            case MENU:
+            case MAIN_MENU:
+                MainMenu.getInstance().mouseReleased(e);
                 break;
             case SETTINGS:
                 break;
@@ -69,7 +69,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     @Override
     public void mouseMoved(MouseEvent e) {
         switch (GameState.gameState) {
-            case MENU:
+            case MAIN_MENU:
                 break;
             case SETTINGS:
                 break;

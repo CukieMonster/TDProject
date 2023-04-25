@@ -1,12 +1,15 @@
 package com.tdproject.ui;
 
+import com.tdproject.gamestates.GameState;
+import com.tdproject.gamestates.Statemethods;
 import com.tdproject.graphics.Sprite;
 
+import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class Button extends Sprite {
 
-    private final PlayingButtons.ButtonID button;
+    private final int id;
     private Consumer action;
     private int value;
     private int xPos, yPos;
@@ -16,18 +19,42 @@ public class Button extends Sprite {
     private Rectangle bounds;
     private boolean active = false;
 
-    public Button(PlayingButtons.ButtonID b) {
-        button = b;
-        action = PlayingButtons.action[button.ordinal()];
-        this.xPos = PlayingButtons.posistion[button.ordinal()][0];
-        this.yPos = PlayingButtons.posistion[button.ordinal()][1];
+    public Button(ButtonTemplate template, int id) {
+        this.id = id;
+//        action = PlayingButtons.action[id];
+//        this.xPos = PlayingButtons.position[id][0];
+//        this.yPos = PlayingButtons.position[id][1];
+        action = template.getAction()[id];
+        xPos = template.getPosition()[id][0];
+        yPos = template.getPosition()[id][1];
+        String suffix;
+        switch (template.getGameState()) {
+            case MAIN_MENU:
+                suffix = ButtonManager.MainMenuButtonID.values()[id].toString();
+                break;
+            case SETTINGS:
+                suffix = ButtonManager.SettingsButtonID.values()[id].toString();
+                break;
+            case INVENTORY:
+                suffix = ButtonManager.InventoryButtonID.values()[id].toString();
+                break;
+            case PLAYING:
+                suffix = ButtonManager.PlayingButtonID.values()[id].toString();
+                break;
+            case PAUSED:
+                suffix = ButtonManager.PausedButtonID.values()[id].toString();
+                break;
+            default:
+                suffix = "";
+        }
+        loadSprite(Type.BUTTON, suffix);
         initBounds();
-        loadSprite(Type.BUTTON, button.ordinal());
-        active = PlayingButtons.defaultState[button.ordinal()];
+//        active = PlayingButtons.defaultState[id];
+        active = template.getDefaultState()[id];
     }
 
     private void initBounds() {
-        bounds = new Rectangle(xPos, yPos, 64, 64);
+        bounds = new Rectangle(xPos, yPos, sprite.getWidth(), sprite.getHeight());
     }
 
 //    private void loadImg() {

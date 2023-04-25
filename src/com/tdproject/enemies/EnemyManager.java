@@ -1,5 +1,6 @@
 package com.tdproject.enemies;
 
+import com.tdproject.gamestates.GameState;
 import com.tdproject.gamestates.Playing;
 import com.tdproject.main.Square;
 import com.tdproject.ui.PlayingButtons;
@@ -26,7 +27,6 @@ public class EnemyManager {
     private boolean skip = false;
     private boolean spawning = false;
     private int spawnTime = 0;
-    private int currentRound = 1;
     //public List<Enemy> firstList = new LinkedList<>();
     //public List<Item> droppedItems = new LinkedList<>();
 
@@ -75,16 +75,23 @@ public class EnemyManager {
     }
 
     public void waveCompleted() {
+        // game finished
+        if (waveNumber >= 10) {
+            GameState.gameState = GameState.MAIN_MENU;
+        }
+
+        // game continues
         spawning = false;
         //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(true);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.SKIP_BUTTON, true);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.SKIP.ordinal(), true);
         spawnTime = EnemyParameters.WAVE_INTERVAL;
     }
 
     public void spawnWave() {
         //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(false);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.SKIP_BUTTON, false);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.SKIP.ordinal(), false);
         waveNumber++;
+        Playing.getInstance().updateRound(waveNumber);
         waveLimit = waveNumber * EnemyParameters.WAVE_GROWTH;
         currentWaveProgress = 0;
         currentWaveSize = 0;
@@ -142,5 +149,9 @@ public class EnemyManager {
     // Getters and setters
     public LinkedList<Enemy> getEnemies() {
         return enemies;
+    }
+
+    public int getWaveNumber() {
+        return waveNumber;
     }
 }

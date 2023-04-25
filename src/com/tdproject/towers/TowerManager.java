@@ -50,8 +50,8 @@ public class TowerManager {
         //hide time buttons
 //        ButtonManager.getInstance().setBuildButtons(false);
 //        ButtonManager.getInstance().setCancelButton(true);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.BUILD_TOWER_1, false);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.CANCEL_BUILDING, true);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.BUILD_TOWER_1.ordinal(), false);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.CANCEL_BUILDING.ordinal(), true);
         towers[towerNr] = new Tower(towerType);
     }
 
@@ -60,8 +60,8 @@ public class TowerManager {
         //show time buttons
 //        ButtonManager.getInstance().setBuildButtons(true);
 //        ButtonManager.getInstance().setCancelButton(false);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.BUILD_TOWER_1, true);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.CANCEL_BUILDING, false);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.BUILD_TOWER_1.ordinal(), true);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.CANCEL_BUILDING.ordinal(), false);
         towers[towerNr] = null;
         buildMode = false;
     }
@@ -100,8 +100,8 @@ public class TowerManager {
         //show time buttons
 //        ButtonManager.getInstance().setBuildButtons(true);
 //        ButtonManager.getInstance().setCancelButton(false);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.BUILD_TOWER_1, true);
-        ButtonManager.getInstance().setButton(PlayingButtons.ButtonID.CANCEL_BUILDING, false);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.BUILD_TOWER_1.ordinal(), true);
+        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.CANCEL_BUILDING.ordinal(), false);
         buildMode = false;
         towerNr++;
     }

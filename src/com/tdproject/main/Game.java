@@ -1,18 +1,8 @@
 package com.tdproject.main;
 
-import com.tdproject.enemies.EnemyManager;
 import com.tdproject.gamestates.GameState;
+import com.tdproject.gamestates.MainMenu;
 import com.tdproject.gamestates.Playing;
-import com.tdproject.graphics.Background;
-import com.tdproject.graphics.Sprite;
-import com.tdproject.items.Item;
-import com.tdproject.towers.TowerManager;
-import com.tdproject.ui.ButtonManager;
-
-import java.util.LinkedList;
-
-import static com.tdproject.main.FieldParameters.X_FIELDS;
-import static com.tdproject.main.FieldParameters.Y_FIELDS;
 
 public class Game {
 
@@ -35,7 +25,7 @@ public class Game {
     public void update(int u) {
         //gamePanel.updateGame();
         switch (GameState.gameState) {
-            case MENU:
+            case MAIN_MENU:
                 break;
             case SETTINGS:
                 break;
@@ -51,7 +41,8 @@ public class Game {
 
     public void render(Object o) {
         switch (GameState.gameState) {
-            case MENU:
+            case MAIN_MENU:
+                MainMenu.getInstance().render(o);
                 break;
             case SETTINGS:
                 break;

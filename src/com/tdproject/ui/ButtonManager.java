@@ -1,24 +1,37 @@
 package com.tdproject.ui;
 
 import com.tdproject.enemies.EnemyManager;
+import com.tdproject.gamestates.GameState;
 import com.tdproject.gamestates.Playing;
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.towers.TowerManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //enum Buttons {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORW_BUTTON, SKIP_BUTTON}
 
 public class ButtonManager {
 
-    private static ButtonManager instance;
+    public enum MainMenuButtonID {PLAY, INVENTORY, SETTINGS, QUIT};
+    public enum SettingsButtonID {};
+    public enum InventoryButtonID {};
+    public enum PlayingButtonID {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORWARD, SKIP};
+    public enum PausedButtonID {};
+
+    //private static ButtonManager instance;
     //private int buttonNr = 4;
+    //private Map<String, Button> buttons = new HashMap<>();
     private List<Button> buttons = new ArrayList<>();
 
-    private ButtonManager() {
-        for (PlayingButtons.ButtonID b : PlayingButtons.ButtonID.values()) {
-            buttons.add(new Button(b));
+    public ButtonManager(ButtonTemplate template) {
+//        for (var entry : PlayingButtons.buttonID.entrySet()) {
+//            buttons.add(new Button(entry.getValue()));
+//        }
+        for (int i = 0; i < template.getDefaultState().length; i++) {
+            buttons.add(new Button(template, i));
         }
 //        buttons[0] = new Button(PlayingButtons.ButtonID.CANCEL_BUILDING, 1800, 900);
 //        buttons[1] = new Button(PlayingButtons.ButtonID.BUILD_TOWER_1, 1800, 100);
@@ -29,12 +42,12 @@ public class ButtonManager {
 //        buttons[2].setActive(true);
     }
 
-    public static ButtonManager getInstance() {
-        if (instance == null) {
-            instance = new ButtonManager();
-        }
-        return instance;
-    }
+//    public static ButtonManager getInstance() {
+//        if (instance == null) {
+//            instance = new ButtonManager();
+//        }
+//        return instance;
+//    }
 
 //    private void buttonAction(PlayingButtons button) {
 //        switch (button) {
@@ -54,8 +67,8 @@ public class ButtonManager {
 //    }
 
 
-    public void setButton(PlayingButtons.ButtonID i, boolean b) {
-        buttons.get(i.ordinal()).setActive(b);
+    public void setButton(int i, boolean b) {
+        buttons.get(i).setActive(b);
     }
 //    public void setCancelButton(boolean b) {
 //        buttons.get(PlayingButtons.ButtonID.CANCEL_BUILDING.ordinal()).setActive(b);

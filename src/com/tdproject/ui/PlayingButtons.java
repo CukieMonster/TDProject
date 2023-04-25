@@ -1,25 +1,38 @@
 package com.tdproject.ui;
 
 import com.tdproject.enemies.EnemyManager;
+import com.tdproject.gamestates.GameState;
 import com.tdproject.gamestates.Playing;
 import com.tdproject.towers.TowerManager;
 
-import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class PlayingButtons {
+public class PlayingButtons extends ButtonTemplate {
 
-    private PlayingButtons() {
+    private static PlayingButtons instance;
 
-    }
-    public enum ButtonID {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORW_BUTTON, SKIP_BUTTON};
+    public static GameState gameState = GameState.PLAYING;
+    //public enum ButtonID {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORWARD, SKIP};
+//    public static Map<String, Integer> buttonID = new HashMap<String, Integer>()
+//    {
+//        {
+//            put("cancelBuilding", 0);
+//            put("buildTower1", 1);
+//            put("fastForward", 2);
+//            put("skip", 3);
+//        }
+//    };
+    //public static final String[] ButtonID = {"cancelBuilding", "buildTower1", "fastForward", "skip"};
     public static boolean[] defaultState = {
             false,
             true,
             true,
             false
     };
-    public static int[][] posistion = {
+
+    public static int[][] position = {
             {1800, 900},
             {1800, 100},
             {1600, 900},
@@ -27,6 +40,7 @@ public class PlayingButtons {
     };
     //public Consumer<Integer>[] action = new Consumer[2];
     //public Consumer<Integer>[] action = (Consumer<Integer>[])Array.newInstance(Consumer.class, 2);
+
     public static Consumer[] action = {
             i -> TowerManager.getInstance().cancelBuild(),
             i -> TowerManager.getInstance().enterBuildMode(0),
@@ -34,4 +48,34 @@ public class PlayingButtons {
             i -> EnemyManager.getInstance().spawnWave()
     };
 
+    private PlayingButtons() {
+
+    }
+
+    public static PlayingButtons getInstance() {
+        if (instance == null) {
+            instance = new PlayingButtons();
+        }
+        return instance;
+    }
+
+    @Override
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    @Override
+    public boolean[] getDefaultState() {
+        return defaultState;
+    }
+
+    @Override
+    public int[][] getPosition() {
+        return position;
+    }
+
+    @Override
+    public Consumer[] getAction() {
+        return action;
+    }
 }

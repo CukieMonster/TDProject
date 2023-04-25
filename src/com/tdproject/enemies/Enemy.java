@@ -42,7 +42,7 @@ public class Enemy extends Sprite {
         distanceToTarget = Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()];
         Vector2d pos = spawn.squareToPosition();
         position = pos;
-        loadSprite(Type.ENEMY, this.enemyType);
+        loadSprite(Type.ENEMY, "" + this.enemyType);
     }
 
     public void update() {
@@ -84,6 +84,7 @@ public class Enemy extends Sprite {
             xAxisLocked = yAxisLocked = false;
             if (Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()] == 1) {
                 //base reached
+                Playing.getInstance().reduceHealth(progress);
                 active = false;
                 return;
             }

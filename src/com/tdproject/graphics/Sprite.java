@@ -1,5 +1,7 @@
 package com.tdproject.graphics;
 
+import com.tdproject.gamestates.GameState;
+import com.tdproject.ui.ButtonManager;
 import com.tdproject.ui.PlayingButtons;
 
 import javax.imageio.ImageIO;
@@ -19,7 +21,7 @@ public abstract class Sprite {
             "/com/tdproject/buttons/",
             "/com/tdproject/items/",
     };
-    private BufferedImage sprite;
+    protected BufferedImage sprite;
 
     public void draw(Object g, int x, int y) {
         ((Graphics)g).drawImage(sprite, x, y, null);
@@ -29,24 +31,20 @@ public abstract class Sprite {
         ((Graphics)g).drawImage(sprite, x - sprite.getWidth() / 2, y - sprite.getHeight() / 2, null);
     }
 
-    public void loadSprite(Type type, int id) {
+    public void loadSprite(Type type, String suffix) {
         InputStream is;
         //InputStream is = getClass().getResourceAsStream(path);
         try {
-            switch (type){
+            switch (type) {
                 case BACKGROUND:
                 case MISSILE:
                     is = getClass().getResourceAsStream(paths[type.ordinal()]);
-                    break;
-                case BUTTON:
-                    is = getClass().getResourceAsStream(paths[type.ordinal()] + PlayingButtons.ButtonID.values()[id] + ".png");
                     break;
                 case ITEM:
                     is = getClass().getResourceAsStream(paths[type.ordinal()] + "all_towers.png");
                     break;
                 default:
-                    is = getClass().getResourceAsStream((paths[type.ordinal()] + id + ".png"));
-                    break;
+                    is = getClass().getResourceAsStream(paths[type.ordinal()] + suffix + ".png");
             }
             sprite = ImageIO.read(is);
         } catch (IOException e) {

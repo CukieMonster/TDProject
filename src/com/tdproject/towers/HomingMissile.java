@@ -23,7 +23,7 @@ public class HomingMissile extends Sprite {
         origin = t;
         speed = s;
         damage = d;
-        loadSprite(Type.MISSILE, 0);
+        loadSprite(Type.MISSILE, "");
     }
 
     public void update() {

@@ -31,7 +31,7 @@ public class Item extends Sprite {
         for (int i = 0; i < modifierValues.length; i++) {
             modifierValues[i] = rerollAttribute(i);
         }
-        loadSprite(Type.ITEM, itemType.ordinal());
+        loadSprite(Type.ITEM, itemType.toString());
         //loadImage();
     }
 
