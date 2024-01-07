@@ -1,9 +1,5 @@
 package com.tdproject.graphics;
 
-import com.tdproject.gamestates.GameState;
-import com.tdproject.ui.ButtonManager;
-import com.tdproject.ui.PlayingButtons;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;

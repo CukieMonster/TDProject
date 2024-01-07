@@ -2,15 +2,46 @@ package com.tdproject.ui;
 
 import com.tdproject.gamestates.GameState;
 import com.tdproject.main.FieldParameters;
-import com.tdproject.towers.TowerManager;
+import com.tdproject.main.Game;
 
 import java.util.function.Consumer;
 
 public class MainMenuButtons extends ButtonTemplate {
 
+    public static final Button[] buttons = {
+            new Button(
+                    true,
+                    FieldParameters.X_RESOLUTION / 2,
+                    300,
+                    "play",
+                    i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING)
+            ),
+            new Button(
+                    true,
+                    FieldParameters.X_RESOLUTION / 2,
+                    400,
+                    "inventory",
+                    i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY)
+            ),
+            new Button(
+                    true,
+                    FieldParameters.X_RESOLUTION / 2,
+                    500,
+                    "settings",
+                    i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS)
+            ),
+            new Button(
+                    true,
+                    FieldParameters.X_RESOLUTION / 2,
+                    600,
+                    "quit",
+                    i -> System.exit(0)
+            )
+    };
+
     private static MainMenuButtons instance;
 
-    private GameState gameState = GameState.MAIN_MENU;
+    private GameState.States gameState = GameState.States.MAIN_MENU;
 
     private boolean[] defaultState = {
             true,
@@ -27,9 +58,9 @@ public class MainMenuButtons extends ButtonTemplate {
     };
 
     private Consumer[] action = {
-            i -> GameState.gameState = GameState.PLAYING,
-            i -> GameState.gameState = GameState.INVENTORY,
-            i -> GameState.gameState = GameState.SETTINGS,
+            i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING),
+            i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY),
+            i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS),
             i -> System.exit(0)
     };
 
@@ -45,7 +76,7 @@ public class MainMenuButtons extends ButtonTemplate {
     }
 
     @Override
-    public GameState getGameState() {
+    public GameState.States getGameState() {
         return gameState;
     }
 

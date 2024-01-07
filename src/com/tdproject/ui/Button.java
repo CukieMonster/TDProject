@@ -1,15 +1,12 @@
 package com.tdproject.ui;
 
-import com.tdproject.gamestates.GameState;
-import com.tdproject.gamestates.Statemethods;
 import com.tdproject.graphics.Sprite;
 
-import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class Button extends Sprite {
 
-    private final int id;
+    private int id;
     private Consumer action;
     private int value;
     private int xPos, yPos;
@@ -18,6 +15,16 @@ public class Button extends Sprite {
     private boolean mouseOver, mousePressed;
     private Rectangle bounds;
     private boolean active = false;
+
+    public Button(boolean defaultState, int xPos, int yPos, String imagePath, Consumer action) {
+        this.active = defaultState;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.action = action;
+
+        loadSprite(Type.BUTTON, imagePath);
+        initBounds();
+    }
 
     public Button(ButtonTemplate template, int id) {
         this.id = id;

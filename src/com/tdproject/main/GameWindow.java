@@ -1,5 +1,6 @@
 package com.tdproject.main;
 
+import java.awt.GraphicsEnvironment;
 import javax.swing.*;
 
 public class GameWindow extends JFrame {
@@ -10,9 +11,12 @@ public class GameWindow extends JFrame {
 
         //setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setUndecorated(true);
         add(GamePanel.getInstance());
-        setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);
         setResizable(false);
+        var device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        device.setFullScreenWindow(this);
         pack();
         setVisible(true);
     }

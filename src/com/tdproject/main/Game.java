@@ -1,8 +1,8 @@
 package com.tdproject.main;
 
-import com.tdproject.gamestates.GameState;
 import com.tdproject.gamestates.MainMenu;
 import com.tdproject.gamestates.Playing;
+import com.tdproject.gamestates.GameState;
 
 public class Game {
 
@@ -10,6 +10,8 @@ public class Game {
 //    private final int FPS_SET = 60;
     private final int UPS_SET = 60;
 //    private int updates;
+
+    private GameState.States currentGameState = GameState.States.MAIN_MENU;
 
     private Game() {
         //background = new Background();
@@ -24,7 +26,7 @@ public class Game {
 
     public void update(int u) {
         //gamePanel.updateGame();
-        switch (GameState.gameState) {
+        switch (currentGameState) {
             case MAIN_MENU:
                 break;
             case SETTINGS:
@@ -40,7 +42,7 @@ public class Game {
     }
 
     public void render(Object o) {
-        switch (GameState.gameState) {
+        switch (currentGameState) {
             case MAIN_MENU:
                 MainMenu.getInstance().render(o);
                 break;
@@ -56,9 +58,16 @@ public class Game {
         }
     }
 
-
-
     public int getUpsSet() {
         return UPS_SET;
     }
+
+    public GameState.States getCurrentGameState() {
+        return currentGameState;
+    }
+
+    public void setCurrentGameState(GameState.States currentGameState) {
+        this.currentGameState = currentGameState;
+    }
+
 }

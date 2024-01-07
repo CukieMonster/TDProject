@@ -6,19 +6,17 @@ import com.tdproject.graphics.Sprite;
 import com.tdproject.graphics.Text;
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.items.Item;
-import com.tdproject.main.FieldParameters;
 import com.tdproject.towers.TowerManager;
 import com.tdproject.ui.ButtonManager;
 import com.tdproject.ui.PlayingButtons;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 
 import static com.tdproject.main.FieldParameters.X_FIELDS;
 import static com.tdproject.main.FieldParameters.Y_FIELDS;
 
-public class Playing implements Statemethods{
+public class Playing extends GameState {
 
     private static Playing instance;
     private ButtonManager buttonManager;

@@ -1,15 +1,8 @@
 package com.tdproject.ui;
 
-import com.tdproject.enemies.EnemyManager;
-import com.tdproject.gamestates.GameState;
-import com.tdproject.gamestates.Playing;
 import com.tdproject.inputs.MyEvent;
-import com.tdproject.towers.TowerManager;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //enum Buttons {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORW_BUTTON, SKIP_BUTTON}
 

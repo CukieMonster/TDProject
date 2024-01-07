@@ -1,18 +1,28 @@
 package com.tdproject.gamestates;
 
+import com.tdproject.graphics.ButtonPanel;
 import com.tdproject.inputs.MyEvent;
+import com.tdproject.main.FieldParameters;
 import com.tdproject.ui.ButtonManager;
 import com.tdproject.ui.MainMenuButtons;
 
 import java.awt.event.MouseEvent;
 
-public class MainMenu implements Statemethods {
+public class MainMenu extends GameState {
 
     private static MainMenu instance;
     private ButtonManager buttonManager;
+    private final ButtonPanel buttonPanel;
 
     private MainMenu() {
         buttonManager = new ButtonManager(MainMenuButtons.getInstance());
+        buttonPanel = new ButtonPanel(
+                FieldParameters.X_RESOLUTION / 2,
+                FieldParameters.Y_RESOLUTION / 2,
+                500,
+                500,
+                MainMenuButtons.buttons
+        );
     }
 
     public static MainMenu getInstance() {
@@ -29,12 +39,14 @@ public class MainMenu implements Statemethods {
 
     @Override
     public void render(Object o) {
-        buttonManager.draw(o);
+        //buttonManager.draw(o);
+        buttonPanel.draw(o);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        buttonManager.mouseReleased(new MyEvent(e));
+        //buttonManager.mouseReleased(new MyEvent(e));
+        buttonPanel.mouseReleased(new MyEvent(e));
     }
 
     @Override

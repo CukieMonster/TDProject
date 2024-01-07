@@ -1,9 +1,9 @@
 package com.tdproject.enemies;
 
-import com.tdproject.gamestates.GameState;
 import com.tdproject.gamestates.Playing;
+import com.tdproject.gamestates.GameState;
+import com.tdproject.main.Game;
 import com.tdproject.main.Square;
-import com.tdproject.ui.PlayingButtons;
 import com.tdproject.ui.ButtonManager;
 
 import java.util.LinkedList;
@@ -77,7 +77,7 @@ public class EnemyManager {
     public void waveCompleted() {
         // game finished
         if (waveNumber >= 10) {
-            GameState.gameState = GameState.MAIN_MENU;
+            Game.getInstance().setCurrentGameState(GameState.States.MAIN_MENU);
         }
 
         // game continues

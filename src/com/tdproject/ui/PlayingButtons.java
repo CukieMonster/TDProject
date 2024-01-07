@@ -1,19 +1,17 @@
 package com.tdproject.ui;
 
 import com.tdproject.enemies.EnemyManager;
-import com.tdproject.gamestates.GameState;
 import com.tdproject.gamestates.Playing;
+import com.tdproject.gamestates.GameState;
 import com.tdproject.towers.TowerManager;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class PlayingButtons extends ButtonTemplate {
 
     private static PlayingButtons instance;
 
-    public static GameState gameState = GameState.PLAYING;
+    public static GameState.States gameState = GameState.States.PLAYING;
     //public enum ButtonID {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORWARD, SKIP};
 //    public static Map<String, Integer> buttonID = new HashMap<String, Integer>()
 //    {
@@ -60,7 +58,7 @@ public class PlayingButtons extends ButtonTemplate {
     }
 
     @Override
-    public GameState getGameState() {
+    public GameState.States getGameState() {
         return gameState;
     }
 

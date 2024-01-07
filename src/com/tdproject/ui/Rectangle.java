@@ -33,4 +33,13 @@ public class Rectangle {
         return ((w < x || w > X) &&
                 (h < y || h > Y));
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
 }

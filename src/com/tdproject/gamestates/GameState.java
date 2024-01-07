@@ -1,7 +1,27 @@
 package com.tdproject.gamestates;
 
-public enum GameState {
-    MAIN_MENU, SETTINGS, INVENTORY, PLAYING, PAUSED;
+import java.awt.event.MouseEvent;
 
-    public static GameState gameState = MAIN_MENU;
+public abstract class GameState {
+
+    abstract void update(int u);
+
+    abstract void render(Object o);
+
+//    void mouseClicked();
+//    void mousedPressed();
+
+    abstract void mouseReleased(MouseEvent e);
+
+    abstract void mouseMoved(MouseEvent e);
+
+//    void keyPressed();
+//    void keyReleased();
+
+    public enum States {
+
+        MAIN_MENU, SETTINGS, INVENTORY, PLAYING, PAUSED;
+
+    }
+
 }
