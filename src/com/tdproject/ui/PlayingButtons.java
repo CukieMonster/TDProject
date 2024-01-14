@@ -9,6 +9,10 @@ import java.util.function.Consumer;
 
 public class PlayingButtons extends ButtonTemplate {
 
+    public static final Button[] buttons = {
+
+    };
+
     private static PlayingButtons instance;
 
     public static GameState.States gameState = GameState.States.PLAYING;

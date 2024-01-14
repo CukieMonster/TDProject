@@ -11,29 +11,21 @@ public class MainMenuButtons extends ButtonTemplate {
     public static final Button[] buttons = {
             new Button(
                     true,
-                    FieldParameters.X_RESOLUTION / 2,
-                    300,
                     "play",
                     i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING)
             ),
             new Button(
                     true,
-                    FieldParameters.X_RESOLUTION / 2,
-                    400,
                     "inventory",
                     i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY)
             ),
             new Button(
                     true,
-                    FieldParameters.X_RESOLUTION / 2,
-                    500,
                     "settings",
                     i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS)
             ),
             new Button(
                     true,
-                    FieldParameters.X_RESOLUTION / 2,
-                    600,
                     "quit",
                     i -> System.exit(0)
             )

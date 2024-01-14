@@ -149,11 +149,11 @@ public class TowerManager {
     public void draw(Object o) {
         for (Tower t : towers) {
             if (t != null && t.visible) {
-                t.draw(o, (int) t.getPosition().x, (int) t.getPosition().y);
+                t.drawCentered(o);
                 //g.drawImage(t.getImg(), (int) t.getPosition().x, (int) t.getPosition().y, null);
                 for (HomingMissile m : t.missiles) {
                     if (m != null) {
-                        m.drawCentered(o, (int) m.getPosition().x + FIELD_SIZE / 2, (int) m.getPosition().y + FIELD_SIZE / 2);
+                        m.drawCentered(o);
                         //g.drawImage(missileImgs[0], (int) m.getPosition().x + FIELD_SIZE / 2 - missileImgs[0].getWidth() / 2, (int) m.getPosition().y + FIELD_SIZE / 2 - missileImgs[0].getHeight() / 2, null);
                     }
                 }

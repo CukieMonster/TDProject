@@ -1,6 +1,7 @@
 package com.tdproject.graphics;
 
 import javax.imageio.ImageIO;
+import javax.vecmath.Vector2d;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -17,14 +18,19 @@ public abstract class Sprite {
             "/com/tdproject/buttons/",
             "/com/tdproject/items/",
     };
+
+    protected Vector2d centerPosition;
     protected BufferedImage sprite;
 
-    public void draw(Object g, int x, int y) {
-        ((Graphics)g).drawImage(sprite, x, y, null);
-    }
+//    public void draw(Object g) {
+//        ((Graphics)g).drawImage(sprite, (int) centerPosition.x, (int) centerPosition.y, null);
+//    }
 
-    public void drawCentered(Object g, int x, int y) {
-        ((Graphics)g).drawImage(sprite, x - sprite.getWidth() / 2, y - sprite.getHeight() / 2, null);
+    public void drawCentered(Object g) {
+        int x = (int) (centerPosition.x - sprite.getWidth() / 2);
+        int y = (int) (centerPosition.y - sprite.getHeight() / 2);
+        System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
+        ((Graphics)g).drawImage(sprite, x, y, null);
     }
 
     public void loadSprite(Type type, String suffix) {

@@ -4,7 +4,6 @@ import com.tdproject.gamestates.Playing;
 import com.tdproject.graphics.Sprite;
 import com.tdproject.items.Item;
 import com.tdproject.items.ItemParameters;
-import com.tdproject.main.Game;
 import com.tdproject.main.Modifiers;
 import com.tdproject.main.Square;
 
@@ -24,12 +23,11 @@ public class Enemy extends Sprite {
 
     private boolean active = true;
     private Square square;
-    private Vector2d position;
     //public int x;
     //public int y;
     private boolean xAxisLocked = false;
     private boolean yAxisLocked = false;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public Enemy(Square spawn, int enemyType) {
         this.enemyType = enemyType;
@@ -40,8 +38,7 @@ public class Enemy extends Sprite {
         progress = EnemyParameters.PROGRESS[enemyType];
         square = spawn;
         distanceToTarget = Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()];
-        Vector2d pos = spawn.squareToPosition();
-        position = pos;
+        centerPosition = spawn.squareToPosition();
         loadSprite(Type.ENEMY, "" + this.enemyType);
     }
 
@@ -78,9 +75,9 @@ public class Enemy extends Sprite {
     }
 
     private void moveInDirection() {
-        square = Square.positionToSquare(position);
+        square = Square.positionToSquare(centerPosition);
         //enemy is in the center of a field
-        if (Math.abs((position.x - X_OFFSET) % FIELD_SIZE) < (speed * Playing.getInstance().getGameSpeed()) && Math.abs((position.y - Y_OFFSET) % FIELD_SIZE) < speed * Playing.getInstance().getGameSpeed()) {
+        if (Math.abs((centerPosition.x - X_OFFSET) % FIELD_SIZE) < (speed * Playing.getInstance().getGameSpeed()) && Math.abs((centerPosition.y - Y_OFFSET) % FIELD_SIZE) < speed * Playing.getInstance().getGameSpeed()) {
             xAxisLocked = yAxisLocked = false;
             if (Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()] == 1) {
                 //base reached
@@ -94,46 +91,46 @@ public class Enemy extends Sprite {
             {
                 roundYValue();
                 yAxisLocked = true;
-                position.x += speed * Playing.getInstance().getGameSpeed();
+                centerPosition.x += speed * Playing.getInstance().getGameSpeed();
             }
             else if (square.getY() + 1 < Y_FIELDS && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() + 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundXValue();
                 xAxisLocked = true;
-                position.y += speed * Playing.getInstance().getGameSpeed();
+                centerPosition.y += speed * Playing.getInstance().getGameSpeed();
             }
             else if (square.getY() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() - 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundXValue();
                 xAxisLocked = true;
-                position.y -= speed * Playing.getInstance().getGameSpeed();
+                centerPosition.y -= speed * Playing.getInstance().getGameSpeed();
             }
             else if (square.getX() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX() - 1][square.getY()] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundYValue();
                 yAxisLocked = true;
-                position.x -= speed * Playing.getInstance().getGameSpeed();
+                centerPosition.x -= speed * Playing.getInstance().getGameSpeed();
             }
         }
         //enemy is moving between two fields
-        else if (position.x % FIELD_SIZE != X_OFFSET || position.y % FIELD_SIZE != Y_OFFSET) {
-            Square[] neighbors = Square.getNeighbors(position);
+        else if (centerPosition.x % FIELD_SIZE != X_OFFSET || centerPosition.y % FIELD_SIZE != Y_OFFSET) {
+            Square[] neighbors = Square.getNeighbors(centerPosition);
             distanceToTarget(neighbors);
             //decide direction
             if (!xAxisLocked) {
                 if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.x += (neighbors[0].getX() - neighbors[1].getX()) * speed * Playing.getInstance().getGameSpeed();
+                    centerPosition.x += (neighbors[0].getX() - neighbors[1].getX()) * speed * Playing.getInstance().getGameSpeed();
                 }
                 else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.x += (neighbors[1].getX() - neighbors[0].getX()) * speed * Playing.getInstance().getGameSpeed();
+                    centerPosition.x += (neighbors[1].getX() - neighbors[0].getX()) * speed * Playing.getInstance().getGameSpeed();
                 }
             }
             if (!yAxisLocked) {
                 if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.y += (neighbors[0].getY() - neighbors[1].getY()) * speed * Playing.getInstance().getGameSpeed();
+                    centerPosition.y += (neighbors[0].getY() - neighbors[1].getY()) * speed * Playing.getInstance().getGameSpeed();
                 }
                 else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.y += (neighbors[1].getY() - neighbors[0].getY()) * speed * Playing.getInstance().getGameSpeed();
+                    centerPosition.y += (neighbors[1].getY() - neighbors[0].getY()) * speed * Playing.getInstance().getGameSpeed();
                 }
             }
         }
@@ -144,35 +141,35 @@ public class Enemy extends Sprite {
 
         if (!xAxisLocked) {
             distanceToTarget = Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()]
-                    * (Math.abs(neighbors[1].getX() * FIELD_SIZE - position.x) / (float)FIELD_SIZE)
+                    * (Math.abs(neighbors[1].getX() * FIELD_SIZE - centerPosition.x) / (float)FIELD_SIZE)
                     + Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]
-                    * (Math.abs(neighbors[0].getX() * FIELD_SIZE - position.x) / (float)FIELD_SIZE);
+                    * (Math.abs(neighbors[0].getX() * FIELD_SIZE - centerPosition.x) / (float)FIELD_SIZE);
         }
         if (!yAxisLocked) {
             distanceToTarget = Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()]
-                    * (Math.abs(neighbors[1].getY() * FIELD_SIZE - position.y) / (float)FIELD_SIZE)
+                    * (Math.abs(neighbors[1].getY() * FIELD_SIZE - centerPosition.y) / (float)FIELD_SIZE)
                     + Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]
-                    * (Math.abs(neighbors[0].getY() * FIELD_SIZE - position.y) / (float)FIELD_SIZE);
+                    * (Math.abs(neighbors[0].getY() * FIELD_SIZE - centerPosition.y) / (float)FIELD_SIZE);
         }
     }
 
     private void roundXValue() {
-        double delta = position.x - (square.getX() * FIELD_SIZE + X_OFFSET);
+        double delta = centerPosition.x - (square.getX() * FIELD_SIZE + X_OFFSET);
         if (delta < FIELD_SIZE / 2) {
-            position.x -= delta;
+            centerPosition.x -= delta;
         }
         else {
-            position.x += FIELD_SIZE - delta;
+            centerPosition.x += FIELD_SIZE - delta;
         }
     }
 
     private void roundYValue() {
-        double delta = position.y - (square.getY() * FIELD_SIZE + Y_OFFSET);
+        double delta = centerPosition.y - (square.getY() * FIELD_SIZE + Y_OFFSET);
         if (delta < FIELD_SIZE / 2) {
-            position.y -= delta;
+            centerPosition.y -= delta;
         }
         else {
-            position.y += FIELD_SIZE - delta;
+            centerPosition.y += FIELD_SIZE - delta;
         }
     }
 
@@ -186,6 +183,6 @@ public class Enemy extends Sprite {
     }
 
     public Vector2d getPosition() {
-        return position;
+        return centerPosition;
     }
 }

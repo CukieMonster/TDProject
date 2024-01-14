@@ -4,6 +4,7 @@ import com.tdproject.gamestates.Playing;
 import com.tdproject.gamestates.GameState;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
+import com.tdproject.ui.Button;
 import com.tdproject.ui.ButtonManager;
 
 import java.util.LinkedList;
@@ -31,6 +32,7 @@ public class EnemyManager {
     //public List<Item> droppedItems = new LinkedList<>();
 
     private Random random = new Random();
+    private final Button skipButton; // TODO inject skip button instead of using int id
 
     private EnemyManager() {
         //GameObjectList.enemyManager = this;
@@ -89,6 +91,7 @@ public class EnemyManager {
 
     public void spawnWave() {
         //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(false);
+        // TODO use ButtonPanel for game control buttons, build tower buttons
         Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.SKIP.ordinal(), false);
         waveNumber++;
         Playing.getInstance().updateRound(waveNumber);
@@ -140,7 +143,7 @@ public class EnemyManager {
     public void draw(Object o) {
         for (Enemy e : enemies) {
             if (e != null) {
-                e.draw(o, (int) e.getPosition().x, (int) e.getPosition().y);
+                e.drawCentered(o);
                 //g.drawImage(enemyImgs[0], (int) e.getPosition().x, (int) e.getPosition().y, null);
             }
         }

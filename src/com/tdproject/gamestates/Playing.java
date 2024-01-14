@@ -9,6 +9,7 @@ import com.tdproject.items.Item;
 import com.tdproject.towers.TowerManager;
 import com.tdproject.ui.ButtonManager;
 import com.tdproject.ui.PlayingButtons;
+import lombok.Getter;
 
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -19,17 +20,21 @@ import static com.tdproject.main.FieldParameters.Y_FIELDS;
 public class Playing extends GameState {
 
     private static Playing instance;
+    @Getter
     private ButtonManager buttonManager;
+    @Getter
     private int gameSpeed = 1;
     private Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: 500", 400, 30)};
     private int money = Integer.MAX_VALUE;
     private int health = 100;
+    @Getter
     private boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
+    @Getter
     private LinkedList<Item> droppedItems = new LinkedList<>();
     private Sprite background;
 
     private Playing() {
-        buttonManager = new ButtonManager(PlayingButtons.getInstance());
+        buttonManager = new ButtonManager(PlayingButtons.buttons);
         background = new Background();
     }
 
@@ -48,7 +53,7 @@ public class Playing extends GameState {
 
     @Override
     public void render(Object o) {
-        background.draw(o, 0,0);
+        background.drawCentered(o);
         drawInfos(o);
         buttonManager.draw(o);
         EnemyManager.getInstance().draw(o);
@@ -102,23 +107,6 @@ public class Playing extends GameState {
         for (Text t : infos) {
             t.draw(o);
         }
-    }
-
-    // Getters and setters
-
-    public ButtonManager getButtonManager() {
-        return buttonManager;
-    }
-    public int getGameSpeed() {
-        return gameSpeed;
-    }
-
-    public boolean[][] getCollisionMap() {
-        return collisionMap;
-    }
-
-    public LinkedList<Item> getDroppedItems() {
-        return droppedItems;
     }
 
 }

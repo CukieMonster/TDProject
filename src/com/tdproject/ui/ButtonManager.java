@@ -2,6 +2,7 @@ package com.tdproject.ui;
 
 import com.tdproject.inputs.MyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //enum Buttons {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORW_BUTTON, SKIP_BUTTON}
@@ -19,13 +20,14 @@ public class ButtonManager {
     //private Map<String, Button> buttons = new HashMap<>();
     private List<Button> buttons = new ArrayList<>();
 
-    public ButtonManager(ButtonTemplate template) {
+    public ButtonManager(Button[] buttons) {
 //        for (var entry : PlayingButtons.buttonID.entrySet()) {
 //            buttons.add(new Button(entry.getValue()));
 //        }
-        for (int i = 0; i < template.getDefaultState().length; i++) {
-            buttons.add(new Button(template, i));
-        }
+        this.buttons.addAll(Arrays.asList(buttons));
+//        for (int i = 0; i < template.getDefaultState().length; i++) {
+//            buttons.add(new Button(template, i));
+//        }
 //        buttons[0] = new Button(PlayingButtons.ButtonID.CANCEL_BUILDING, 1800, 900);
 //        buttons[1] = new Button(PlayingButtons.ButtonID.BUILD_TOWER_1, 1800, 100);
 //        buttons[2] = new Button(PlayingButtons.ButtonID.FAST_FORW_BUTTON, 1600, 900);
@@ -149,7 +151,7 @@ public class ButtonManager {
     public void draw(Object o) {
         for (Button b : buttons) {
             if (b.isActive()) {
-                b.draw(o, b.getxPos(), b.getyPos());
+                b.drawCentered(o);
                 //g.drawImage(b.getImg(), b.getxPos(), b.getyPos(), null);
             }
         }

@@ -3,7 +3,6 @@ package com.tdproject.gamestates;
 import com.tdproject.graphics.ButtonPanel;
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.main.FieldParameters;
-import com.tdproject.ui.ButtonManager;
 import com.tdproject.ui.MainMenuButtons;
 
 import java.awt.event.MouseEvent;
@@ -11,11 +10,9 @@ import java.awt.event.MouseEvent;
 public class MainMenu extends GameState {
 
     private static MainMenu instance;
-    private ButtonManager buttonManager;
     private final ButtonPanel buttonPanel;
 
     private MainMenu() {
-        buttonManager = new ButtonManager(MainMenuButtons.getInstance());
         buttonPanel = new ButtonPanel(
                 FieldParameters.X_RESOLUTION / 2,
                 FieldParameters.Y_RESOLUTION / 2,

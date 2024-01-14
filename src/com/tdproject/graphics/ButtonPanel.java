@@ -2,6 +2,8 @@ package com.tdproject.graphics;
 
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.ui.Button;
+
+import javax.vecmath.Vector2d;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Arrays;
@@ -10,8 +12,7 @@ import java.util.Optional;
 
 public class ButtonPanel {
 
-    private final int xCenterPos;
-    private final int yCenterPos;
+    private final Vector2d centerPosition;
     private final int width;
     private final int height;
     private final Button[] buttons;
@@ -19,13 +20,16 @@ public class ButtonPanel {
     private final int[][] positions;
 
     public ButtonPanel(int xCenterPos, int yCenterPos, int width, int height, Button[] buttons) {
-        this.xCenterPos = xCenterPos;
-        this.yCenterPos = yCenterPos;
+        centerPosition = new Vector2d(xCenterPos, yCenterPos);
         this.width = width;
         this.height = height;
         this.buttons = buttons;
         columns = 1;
         positions = calculateButtonPositions();
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].centerPosition = new Vector2d(positions[i][0], positions[i][1]);
+            buttons[i].initBounds();
+        }
     }
 
     public void mouseReleased(MyEvent e) {
@@ -47,29 +51,46 @@ public class ButtonPanel {
 
         for (Button button : buttons) {
             if (button.isActive()) {
-                button.drawCentered(o, button.getxPos(), button.getyPos());
+                button.drawCentered(o);
             }
         }
     }
 
     private int[][] calculateButtonPositions() {
-        int maxHeight = Arrays.stream(buttons).max(Comparator.comparingInt(b -> b.getBounds().getHeight())).get().getBounds().getHeight();
-        return calculateButtonPositions(buttons.length, columns, 0, maxHeight);
+        int maxWidth = Arrays.stream(buttons).max(Comparator.comparingInt(b -> b.sprite.getWidth())).get().sprite.getWidth();
+        int maxHeight = Arrays.stream(buttons).max(Comparator.comparingInt(b -> b.sprite.getHeight())).get().sprite.getHeight();
+        return calculateButtonPositions(buttons.length, columns, maxWidth, maxHeight);
     }
 
     public int[][] calculateButtonPositions(int buttonsAmount, int columns, int maxWidth, int maxHeight) {
         int[][] result = new int[buttonsAmount][2];
-        int rows = Math.round(buttonsAmount / 2F);
+        int rows = Math.round((float) buttonsAmount / columns);
 
-        int yGap = height - (maxHeight * rows) / (rows + 1);
-        if (yGap > 0) {
+        int xGap = (width - (maxWidth * columns)) / (columns + 1);
+        if (xGap < 0) {
+            xGap = 0;
+        }
+        int currentXPos = (int) centerPosition.x - (width / 2) + (maxWidth / 2);
+        for (int i = 0; i < columns; i++) {
+            currentXPos += xGap;
+            for (int j = i; j < buttonsAmount; j += columns) {
+                result[j][0] = currentXPos;
+            }
+            currentXPos += maxWidth;
+        }
+
+        int yGap = (height - (maxHeight * rows)) / (rows + 1);
+        if (yGap < 0) {
             yGap = 0;
         }
-        int currentYPos = yCenterPos - height / 2;
-        for (int i = 0; i < columns; i++) {
+        int currentYPos = (int) centerPosition.y - (height / 2) + (maxHeight / 2);
+        for (int i = 0; i < buttonsAmount; i+= columns) {
             currentYPos += yGap;
-            for (int j = i; j < buttonsAmount; j+= rows) {
-                result[i][1] = currentYPos;
+            for (int j = i; j < i + columns; j++) {
+                if (j >= buttonsAmount) {
+                    break;
+                }
+                result[j][1] = currentYPos;
             }
             currentYPos += maxHeight;
         }
@@ -77,9 +98,12 @@ public class ButtonPanel {
     }
 
     private void drawCentered(Graphics g) {
+        int x = (int) centerPosition.x - (width / 2);
+        int y = (int) centerPosition.y - (height / 2);
+        System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
         g.fillRect(
-                xCenterPos - (width / 2),
-                yCenterPos - (height / 2),
+                x,
+                y,
                 width,
                 height
         );
