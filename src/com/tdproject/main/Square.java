@@ -54,7 +54,7 @@ public class Square {
                 throw new RuntimeException();
             }
         }
-        System.err.println("Error: getNeighbors 3");
+        System.err.println("Error: getNeighbors 3"); //TODO exception when starting game
         throw new RuntimeException();
     }
 

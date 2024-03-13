@@ -12,22 +12,22 @@ public class MainMenuButtons extends ButtonTemplate {
     public static final Button[] buttons = {
             new Button(
                     true,
-                    Sprite.BUTTONS_PATH + "play.png",
+                    Sprite.BUTTON_MAIN_MENU_PLAY,
                     i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING)
             ),
             new Button(
                     true,
-                    Sprite.BUTTONS_PATH + "inventory.png",
+                    Sprite.BUTTON_MAIN_MENU_INVENTORY,
                     i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY)
             ),
             new Button(
                     true,
-                    Sprite.BUTTONS_PATH + "settings.png",
+                    Sprite.BUTTON_MAIN_MENU_SETTINGS,
                     i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS)
             ),
             new Button(
                     true,
-                    Sprite.BUTTONS_PATH + "quit.png",
+                    Sprite.BUTTON_MAIN_MENU_QUIT,
                     i -> System.exit(0)
             )
     };

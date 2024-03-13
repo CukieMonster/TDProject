@@ -26,7 +26,7 @@ public class ButtonPanel {
         this.columns = 1;
         positions = calculateButtonPositions();
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i].centerPosition = new Vector2d(positions[i][0], positions[i][1]);
+            buttons[i].position = new Vector2d(positions[i][0], positions[i][1]);
             buttons[i].initBounds();
         }
     }
@@ -39,7 +39,7 @@ public class ButtonPanel {
         this.columns = columns;
         positions = calculateButtonPositions();
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i].centerPosition = new Vector2d(positions[i][0], positions[i][1]);
+            buttons[i].position = new Vector2d(positions[i][0], positions[i][1]);
             buttons[i].initBounds();
         }
     }

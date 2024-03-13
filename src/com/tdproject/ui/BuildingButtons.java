@@ -7,7 +7,7 @@ public class BuildingButtons {
 
     public static final Button CANCEL_BUILDING_BUTTON = new Button(
             false,
-            Sprite.BUTTONS_PATH + "cancel_building.png",
+            Sprite.BUTTON_CANCEL_BUILD,
             i -> TowerManager.getInstance().cancelBuild()
     );
 
@@ -15,7 +15,7 @@ public class BuildingButtons {
             CANCEL_BUILDING_BUTTON,
             new Button(
                     true,
-                    Sprite.BUTTONS_PATH + "build_tower_1.png",
+                    Sprite.BUTTON_BUILD_TOWER_1,
                     i -> TowerManager.getInstance().enterBuildMode(0)
             )
     };

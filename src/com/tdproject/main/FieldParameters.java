@@ -15,7 +15,7 @@ public final class FieldParameters {
     public static final int FIELD_SIZE = 64;
     public static final int ENEMY_RADIUS = 20;
 
-    public static final int X_OFFSET = 60;
-    public static final int Y_OFFSET = 60;
+    public static final int X_OFFSET = 92;
+    public static final int Y_OFFSET = 92;
 
 }

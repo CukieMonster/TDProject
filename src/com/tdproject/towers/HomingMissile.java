@@ -3,7 +3,6 @@ package com.tdproject.towers;
 import com.tdproject.enemies.Enemy;
 import com.tdproject.gamestates.Playing;
 import com.tdproject.graphics.Sprite;
-import com.tdproject.main.Game;
 
 import javax.vecmath.Vector2d;
 
@@ -11,7 +10,7 @@ import static com.tdproject.main.FieldParameters.ENEMY_RADIUS;
 
 public class HomingMissile extends Sprite {
 
-    private Vector2d position;
+    //private Vector2d position;
     private Enemy target;
     private Tower origin;
     private int damage;
@@ -48,8 +47,4 @@ public class HomingMissile extends Sprite {
         position.add(direction);
     }
 
-    // Getters and setters
-    public Vector2d getPosition() {
-        return position;
-    }
 }

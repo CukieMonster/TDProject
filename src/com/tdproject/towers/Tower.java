@@ -7,7 +7,6 @@ import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 
 import com.tdproject.ui.Button;
-import javax.vecmath.Vector2d;
 import java.util.*;
 import lombok.Getter;
 
@@ -28,7 +27,7 @@ public class Tower extends Button {
     private int radius;
     private int cost;
     private Square square = new Square(-1, -1);
-    private Vector2d position = new Vector2d(0, 0);
+    //private Vector2d position = new Vector2d(0, 0);
     //public int x;
     //public int y;
 
@@ -49,7 +48,7 @@ public class Tower extends Button {
         //this.x = x;
         //this.y = y;
         //this.img = img;
-        loadSprite(Sprite.TOWERS_PATH + "tower_blue_" +this.towerType);
+        loadSprite(Sprite.TOWER_1);
     }
 
     public void update(int u) {
@@ -121,11 +120,4 @@ public class Tower extends Button {
         this.square = square;
     }
 
-    public Vector2d getPosition() {
-        return position;
-    }
-
-    public void setPosition(Vector2d position) {
-        this.position = position;
-    }
 }

@@ -12,7 +12,7 @@ public class PlayingButtons extends ButtonTemplate {
 
     public static final Button SKIP_BUTTON = new Button(
             false,
-            Sprite.BUTTONS_PATH + "skip.png",
+            Sprite.BUTTON_SKIP,
             i -> EnemyManager.getInstance().spawnWave()
     );
 
@@ -20,7 +20,7 @@ public class PlayingButtons extends ButtonTemplate {
             SKIP_BUTTON,
             new Button(
                     true,
-                    Sprite.BUTTONS_PATH + "fast_forward.png",
+                    Sprite.BUTTON_FAST_FORWARD,
                     i -> Playing.getInstance().changeGameSpeed()
             )
     };

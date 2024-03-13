@@ -3,7 +3,6 @@ package com.tdproject.ui;
 import com.tdproject.graphics.Sprite;
 
 import java.util.function.Consumer;
-import lombok.Setter;
 
 public class Button extends Sprite {
 
@@ -59,7 +58,7 @@ public class Button extends Sprite {
 //    }
 
     public void initBounds() {
-        bounds = new Rectangle((int) centerPosition.x, (int) centerPosition.y, sprite.getWidth(), sprite.getHeight());
+        bounds = new Rectangle((int) position.x - sprite.getWidth() / 2, (int) position.y - sprite.getHeight() / 2, sprite.getWidth(), sprite.getHeight());
     }
 
 //    private void loadImg() {

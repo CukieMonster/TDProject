@@ -38,7 +38,7 @@ public class Playing extends GameState {
 
     private Playing() {
         playingButtons = new ButtonPanel(1600, 900, 300, 100, PlayingButtons.buttons, 2);
-        buildingButtons = new ButtonPanel(1600, 400, 100, 1000, BuildingButtons.buttons);
+        buildingButtons = new ButtonPanel(1800, 400, 100, 1000, BuildingButtons.buttons);
         background = new Background();
     }
 
@@ -60,6 +60,7 @@ public class Playing extends GameState {
         background.drawCentered(o);
         drawInfos(o);
         playingButtons.draw(o);
+        buildingButtons.draw(o);
         EnemyManager.getInstance().draw(o);
         TowerManager.getInstance().draw(o);
         drawDroppedItems(o);
@@ -68,12 +69,14 @@ public class Playing extends GameState {
     @Override
     public void mouseReleased(MouseEvent e) {
         playingButtons.mouseReleased(new MyEvent(e));
+        buildingButtons.mouseReleased(new MyEvent(e));
         TowerManager.getInstance().mouseReleased(new MyEvent(e));
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         playingButtons.mouseMoved(new MyEvent(e));
+        buildingButtons.mouseMoved(new MyEvent(e));
         TowerManager.getInstance().mouseMoved(new MyEvent(e));
     }
 

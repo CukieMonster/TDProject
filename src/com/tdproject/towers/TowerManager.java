@@ -7,7 +7,6 @@ import com.tdproject.inputs.MyEvent;
 import com.tdproject.main.Square;
 import com.tdproject.ui.BuildingButtons;
 import com.tdproject.ui.Button;
-import com.tdproject.ui.ButtonManager;
 
 import javax.vecmath.Vector2d;
 import lombok.Getter;
