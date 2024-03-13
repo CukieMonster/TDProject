@@ -3,14 +3,26 @@ package com.tdproject.ui;
 import com.tdproject.enemies.EnemyManager;
 import com.tdproject.gamestates.Playing;
 import com.tdproject.gamestates.GameState;
+import com.tdproject.graphics.Sprite;
 import com.tdproject.towers.TowerManager;
 
 import java.util.function.Consumer;
 
 public class PlayingButtons extends ButtonTemplate {
 
-    public static final Button[] buttons = {
+    public static final Button SKIP_BUTTON = new Button(
+            false,
+            Sprite.BUTTONS_PATH + "skip.png",
+            i -> EnemyManager.getInstance().spawnWave()
+    );
 
+    public static final Button[] buttons = {
+            SKIP_BUTTON,
+            new Button(
+                    true,
+                    Sprite.BUTTONS_PATH + "fast_forward.png",
+                    i -> Playing.getInstance().changeGameSpeed()
+            )
     };
 
     private static PlayingButtons instance;

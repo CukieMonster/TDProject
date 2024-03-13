@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Optional;
 
 public class ButtonPanel {
 
@@ -24,7 +23,20 @@ public class ButtonPanel {
         this.width = width;
         this.height = height;
         this.buttons = buttons;
-        columns = 1;
+        this.columns = 1;
+        positions = calculateButtonPositions();
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].centerPosition = new Vector2d(positions[i][0], positions[i][1]);
+            buttons[i].initBounds();
+        }
+    }
+
+    public ButtonPanel(int xCenterPos, int yCenterPos, int width, int height, Button[] buttons, int columns) {
+        centerPosition = new Vector2d(xCenterPos, yCenterPos);
+        this.width = width;
+        this.height = height;
+        this.buttons = buttons;
+        this.columns = columns;
         positions = calculateButtonPositions();
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].centerPosition = new Vector2d(positions[i][0], positions[i][1]);
@@ -42,6 +54,20 @@ public class ButtonPanel {
             }
         }
         resetButtons();
+    }
+
+    public void mouseMoved(MyEvent e) {
+        for (Button b : buttons) {
+            b.setMouseOver(false);
+        }
+        for (Button b : buttons) {
+            if (b.isActive()) {
+                if (isIn(e, b)) {
+                    b.setMouseOver(true);
+                    break;
+                }
+            }
+        }
     }
 
     public void draw(Object o) {

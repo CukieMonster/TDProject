@@ -1,6 +1,7 @@
 package com.tdproject.ui;
 
 import com.tdproject.gamestates.GameState;
+import com.tdproject.graphics.Sprite;
 import com.tdproject.main.FieldParameters;
 import com.tdproject.main.Game;
 
@@ -11,22 +12,22 @@ public class MainMenuButtons extends ButtonTemplate {
     public static final Button[] buttons = {
             new Button(
                     true,
-                    "play",
+                    Sprite.BUTTONS_PATH + "play.png",
                     i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING)
             ),
             new Button(
                     true,
-                    "inventory",
+                    Sprite.BUTTONS_PATH + "inventory.png",
                     i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY)
             ),
             new Button(
                     true,
-                    "settings",
+                    Sprite.BUTTONS_PATH + "settings.png",
                     i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS)
             ),
             new Button(
                     true,
-                    "quit",
+                    Sprite.BUTTONS_PATH + "quit.png",
                     i -> System.exit(0)
             )
     };

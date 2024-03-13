@@ -7,6 +7,7 @@ import com.tdproject.main.Square;
 import com.tdproject.ui.Button;
 import com.tdproject.ui.ButtonManager;
 
+import com.tdproject.ui.PlayingButtons;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -32,9 +33,10 @@ public class EnemyManager {
     //public List<Item> droppedItems = new LinkedList<>();
 
     private Random random = new Random();
-    private final Button skipButton; // TODO inject skip button instead of using int id
+    private final Button skipButton;
 
-    private EnemyManager() {
+    private EnemyManager(Button skipButton) {
+        this.skipButton = skipButton;
         //GameObjectList.enemyManager = this;
         //importImg();
         spawnWave();
@@ -42,7 +44,7 @@ public class EnemyManager {
 
     public static EnemyManager getInstance() {
         if (instance == null) {
-            instance = new EnemyManager();
+            instance = new EnemyManager(PlayingButtons.buttons[0]);
         }
         return instance;
     }
@@ -85,14 +87,14 @@ public class EnemyManager {
         // game continues
         spawning = false;
         //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(true);
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.SKIP.ordinal(), true);
+        PlayingButtons.SKIP_BUTTON.setActive(true);
         spawnTime = EnemyParameters.WAVE_INTERVAL;
     }
 
     public void spawnWave() {
         //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(false);
         // TODO use ButtonPanel for game control buttons, build tower buttons
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.SKIP.ordinal(), false);
+        PlayingButtons.SKIP_BUTTON.setActive(false);
         waveNumber++;
         Playing.getInstance().updateRound(waveNumber);
         waveLimit = waveNumber * EnemyParameters.WAVE_GROWTH;

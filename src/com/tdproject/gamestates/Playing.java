@@ -2,12 +2,13 @@ package com.tdproject.gamestates;
 
 import com.tdproject.enemies.EnemyManager;
 import com.tdproject.graphics.Background;
+import com.tdproject.graphics.ButtonPanel;
 import com.tdproject.graphics.Sprite;
 import com.tdproject.graphics.Text;
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.items.Item;
 import com.tdproject.towers.TowerManager;
-import com.tdproject.ui.ButtonManager;
+import com.tdproject.ui.BuildingButtons;
 import com.tdproject.ui.PlayingButtons;
 import lombok.Getter;
 
@@ -21,7 +22,9 @@ public class Playing extends GameState {
 
     private static Playing instance;
     @Getter
-    private ButtonManager buttonManager;
+    private final ButtonPanel playingButtons;
+    @Getter
+    private final ButtonPanel buildingButtons;
     @Getter
     private int gameSpeed = 1;
     private Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: 500", 400, 30)};
@@ -34,7 +37,8 @@ public class Playing extends GameState {
     private Sprite background;
 
     private Playing() {
-        buttonManager = new ButtonManager(PlayingButtons.buttons);
+        playingButtons = new ButtonPanel(1600, 900, 300, 100, PlayingButtons.buttons, 2);
+        buildingButtons = new ButtonPanel(1600, 400, 100, 1000, BuildingButtons.buttons);
         background = new Background();
     }
 
@@ -55,7 +59,7 @@ public class Playing extends GameState {
     public void render(Object o) {
         background.drawCentered(o);
         drawInfos(o);
-        buttonManager.draw(o);
+        playingButtons.draw(o);
         EnemyManager.getInstance().draw(o);
         TowerManager.getInstance().draw(o);
         drawDroppedItems(o);
@@ -63,13 +67,13 @@ public class Playing extends GameState {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        buttonManager.mouseReleased(new MyEvent(e));
+        playingButtons.mouseReleased(new MyEvent(e));
         TowerManager.getInstance().mouseReleased(new MyEvent(e));
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        buttonManager.mouseMoved(new MyEvent(e));
+        playingButtons.mouseMoved(new MyEvent(e));
         TowerManager.getInstance().mouseMoved(new MyEvent(e));
     }
 

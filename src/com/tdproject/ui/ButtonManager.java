@@ -7,6 +7,7 @@ import java.util.List;
 
 //enum Buttons {CANCEL_BUILDING, BUILD_TOWER_1, FAST_FORW_BUTTON, SKIP_BUTTON}
 
+@Deprecated
 public class ButtonManager {
 
     public enum MainMenuButtonID {PLAY, INVENTORY, SETTINGS, QUIT};

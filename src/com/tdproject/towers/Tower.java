@@ -1,21 +1,26 @@
 package com.tdproject.towers;
 
 import com.tdproject.enemies.EnemyManager;
-import com.tdproject.graphics.Sprite;
 import com.tdproject.enemies.Enemy;
+import com.tdproject.graphics.Sprite;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 
+import com.tdproject.ui.Button;
 import javax.vecmath.Vector2d;
 import java.util.*;
+import lombok.Getter;
 
 import static com.tdproject.main.FieldParameters.FIELD_SIZE;
 import static com.tdproject.towers.TowerParameters.*;
 
-public class Tower extends Sprite {
+public class Tower extends Button {
 
     //private BufferedImage img;
     private List<Enemy> enemiesInRange = new LinkedList<>();
+
+    @Getter
+    private final Map<UpgradeType, Integer> upgrades = new EnumMap<>(UpgradeType.class);
     private int towerType;
     private int damage;
     private float attackSpeed;
@@ -33,6 +38,8 @@ public class Tower extends Sprite {
     public boolean visible = false;
 
     public Tower(int towerType) {
+        super(true, "", null);
+        action = b -> TowerManager.getInstance().setSelectedTower(this);
         this.towerType = towerType;
         damage = DAMAGE[towerType];
         attackSpeed = ATTACK_SPEED[towerType];
@@ -42,7 +49,7 @@ public class Tower extends Sprite {
         //this.x = x;
         //this.y = y;
         //this.img = img;
-        loadSprite(Type.TOWER, "" + this.towerType);
+        loadSprite(Sprite.TOWERS_PATH + "tower_blue_" +this.towerType);
     }
 
     public void update(int u) {

@@ -10,6 +10,11 @@ import java.io.InputStream;
 public abstract class Sprite {
 
     public enum Type { BACKGROUND, TOWER, MISSILE, ENEMY, BUTTON, ITEM }
+
+    public final static String BUTTONS_PATH = "/com/tdproject/buttons/";
+    public final static String TOWERS_PATH = "/com/tdproject/towers/";
+    public final static String UPGRADES_PATH = "/com/tdproject/upgrades/";
+    private final static String MISSING_SPRITE = "/com/tdproject/missing_sprite.png";
     private String[] paths = {
             "/com/tdproject/background.png",
             "/com/tdproject/towers/tower_blue_",
@@ -27,12 +32,14 @@ public abstract class Sprite {
 //    }
 
     public void drawCentered(Object g) {
+        // TODO: fix drawing
         int x = (int) (centerPosition.x - sprite.getWidth() / 2);
         int y = (int) (centerPosition.y - sprite.getHeight() / 2);
         System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
         ((Graphics)g).drawImage(sprite, x, y, null);
     }
 
+    @Deprecated
     public void loadSprite(Type type, String suffix) {
         InputStream is;
         //InputStream is = getClass().getResourceAsStream(path);
@@ -48,9 +55,29 @@ public abstract class Sprite {
                 default:
                     is = getClass().getResourceAsStream(paths[type.ordinal()] + suffix + ".png");
             }
+            if (is == null) {
+                System.err.printf("Could not load image: %s, %s", type, suffix);
+                is = getClass().getResourceAsStream(MISSING_SPRITE);
+            }
             sprite = ImageIO.read(is);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    protected void loadSprite(String imagePath) {
+        //InputStream is = getClass().getResourceAsStream(imagePath);
+        System.out.println(imagePath);
+        InputStream is;
+        try {
+            is = getClass().getResourceAsStream(imagePath);
+            if (is == null) {
+                System.err.printf("Could not load image: %s", imagePath);
+                is = getClass().getResourceAsStream(MISSING_SPRITE);
+            }
+            sprite = ImageIO.read(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

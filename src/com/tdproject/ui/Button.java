@@ -2,13 +2,13 @@ package com.tdproject.ui;
 
 import com.tdproject.graphics.Sprite;
 
-import javax.vecmath.Vector2d;
 import java.util.function.Consumer;
+import lombok.Setter;
 
 public class Button extends Sprite {
 
     private int id;
-    private Consumer action;
+    protected Consumer<Button> action;
     private int value;
 
     private int xOffsetCenter;
@@ -17,11 +17,11 @@ public class Button extends Sprite {
     private Rectangle bounds;
     private boolean active = false;
 
-    public Button(boolean defaultState, String imagePath, Consumer action) {
+    public Button(boolean defaultState, String imagePath, Consumer<Button> action) {
         this.active = defaultState;
         this.action = action;
 
-        loadSprite(Type.BUTTON, imagePath);
+        loadSprite(imagePath);
     }
 
 //    public Button(ButtonTemplate template, int id) {

@@ -2,13 +2,16 @@ package com.tdproject.towers;
 
 import com.tdproject.enemies.Pathfinding;
 import com.tdproject.gamestates.Playing;
+import com.tdproject.graphics.ButtonPanel;
 import com.tdproject.inputs.MyEvent;
-import com.tdproject.main.Game;
 import com.tdproject.main.Square;
+import com.tdproject.ui.BuildingButtons;
+import com.tdproject.ui.Button;
 import com.tdproject.ui.ButtonManager;
-import com.tdproject.ui.PlayingButtons;
 
 import javax.vecmath.Vector2d;
+import lombok.Getter;
+import lombok.Setter;
 
 import static com.tdproject.main.FieldParameters.*;
 import static com.tdproject.towers.TowerParameters.COST;
@@ -16,17 +19,32 @@ import static com.tdproject.towers.TowerParameters.COST;
 public class TowerManager {
 
     private static TowerManager instance;
-    private int maxTowers = 50;
+    private final int maxTowers = 50;
     //private BufferedImage[] towerImgs = new BufferedImage[3];
     //private BufferedImage[] missileImgs = new BufferedImage[1];
-    private Tower[] towers = new Tower[maxTowers];
+    private final Tower[] towers = new Tower[maxTowers];
     private int towerNr;
+
+    @Getter
+    @Setter
+    private Tower selectedTower;
     //private JButton cancelButton;
     private boolean buildMode = false;
+    private final ButtonPanel upgradeButtons;
 
     private TowerManager() {
         //loadTowerImgs();
         //cancelButton = new JButton();
+        Button[] buttons = new Button[UpgradeType.values().length];
+        int i = 0;
+        for (UpgradeType upgradeType : UpgradeType.values()) {
+            buttons[i++] = new Button(
+                    true,
+                    upgradeType.imagePath,
+                    u -> upgradeTower(upgradeType)
+            );
+        }
+        upgradeButtons = new ButtonPanel(1600, 400, 100, 1000, buttons);
     }
 
     public static TowerManager getInstance() {
@@ -44,14 +62,19 @@ public class TowerManager {
         }
     }
 
+    public void upgradeTower(UpgradeType upgradeType) {
+        // TODO
+        selectedTower.getUpgrades().computeIfPresent(upgradeType, (ut, i) -> i + 1);
+        selectedTower.getUpgrades().putIfAbsent(upgradeType, 1);
+    }
+
     public void enterBuildMode(int towerType) {
         buildMode = true;
         //hide dropped main.tdproject.items
         //hide time buttons
 //        ButtonManager.getInstance().setBuildButtons(false);
 //        ButtonManager.getInstance().setCancelButton(true);
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.BUILD_TOWER_1.ordinal(), false);
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.CANCEL_BUILDING.ordinal(), true);
+        BuildingButtons.setBuildMode(true);
         towers[towerNr] = new Tower(towerType);
     }
 
@@ -60,8 +83,7 @@ public class TowerManager {
         //show time buttons
 //        ButtonManager.getInstance().setBuildButtons(true);
 //        ButtonManager.getInstance().setCancelButton(false);
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.BUILD_TOWER_1.ordinal(), true);
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.CANCEL_BUILDING.ordinal(), false);
+        BuildingButtons.setBuildMode(false);
         towers[towerNr] = null;
         buildMode = false;
     }
@@ -100,13 +122,15 @@ public class TowerManager {
         //show time buttons
 //        ButtonManager.getInstance().setBuildButtons(true);
 //        ButtonManager.getInstance().setCancelButton(false);
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.BUILD_TOWER_1.ordinal(), true);
-        Playing.getInstance().getButtonManager().setButton(ButtonManager.PlayingButtonID.CANCEL_BUILDING.ordinal(), false);
+        for (Button button : BuildingButtons.buttons) {
+            button.setActive(true);
+        }
+        BuildingButtons.CANCEL_BUILDING_BUTTON.setActive(false);
         buildMode = false;
         towerNr++;
     }
 
-    boolean checkSquare(Square square) {
+    private boolean checkSquare(Square square) {
         int x = square.getX();
         int y = square.getY();
         if (x >= 0 && x < X_FIELDS && y >= 0 && y < Y_FIELDS)
