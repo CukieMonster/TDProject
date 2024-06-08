@@ -23,7 +23,7 @@ public class Square {
     public static Square[] getNeighbors(Vector2d position) {
         Square[] neighbors = new Square[2];
         //moving on x axis
-        if (position.x % FIELD_SIZE == X_OFFSET) {
+        if (position.x % FIELD_SIZE == X_OFFSET % FIELD_SIZE) {
             neighbors[0] = positionToSquare(position);
             if (neighbors[0].squareToPosition().y < position.y) {
                 neighbors[1] = new Square(neighbors[0].x, neighbors[0].y + 1);
@@ -39,7 +39,7 @@ public class Square {
             }
         }
         //moving on y axis
-        else if (position.y % FIELD_SIZE == Y_OFFSET) {
+        else if (position.y % FIELD_SIZE == Y_OFFSET % FIELD_SIZE) {
             neighbors[0] = positionToSquare(position);
             if (neighbors[0].squareToPosition().x < position.x) {
                 neighbors[1] = new Square(neighbors[0].x + 1, neighbors[0].y);
@@ -54,6 +54,7 @@ public class Square {
                 throw new RuntimeException();
             }
         }
+        System.err.println(position);
         System.err.println("Error: getNeighbors 3"); //TODO exception when starting game
         throw new RuntimeException();
     }

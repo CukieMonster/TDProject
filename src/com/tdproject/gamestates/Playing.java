@@ -27,8 +27,9 @@ public class Playing extends GameState {
     private final ButtonPanel buildingButtons;
     @Getter
     private int gameSpeed = 1;
-    private Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: 500", 400, 30)};
+    @Getter
     private int money = Integer.MAX_VALUE;
+    private Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: " + money, 400, 30)};
     private int health = 100;
     @Getter
     private boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];

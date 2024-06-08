@@ -12,6 +12,7 @@ public abstract class Sprite {
 
     public enum Type { BACKGROUND, TOWER, MISSILE, ENEMY, BUTTON, ITEM }
 
+    public final static String BACKGROUND = "/com/tdproject/background.png";
     private final static String BUTTONS_PATH = "/com/tdproject/buttons/";
     public final static String BUTTON_MAIN_MENU_PLAY = BUTTONS_PATH + "play.png";
     public final static String BUTTON_MAIN_MENU_INVENTORY = BUTTONS_PATH + "inventory.png";

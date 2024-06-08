@@ -101,6 +101,8 @@ public class TowerManager {
     }
 
     private void buildTower() {
+        // TODO ghost tower is out of position
+
         //TODO: check if tower can be placed, (no enemy in the way,) impossible path or enemy getting caugth
         Square square = towers[towerNr].getSquare();
         if (square == null) {
@@ -110,9 +112,13 @@ public class TowerManager {
             return;
         }
         Playing.getInstance().getCollisionMap()[square.getX()][square.getY()] = true;
-        if (Pathfinding.getInstance().buildDistanceField() == false) {
+        if (!Pathfinding.getInstance().buildDistanceField()) {
             //Can't build tower here
             Playing.getInstance().getCollisionMap()[square.getX()][square.getY()] = false;
+            return;
+        }
+        if (Playing.getInstance().getMoney() < COST[towers[towerNr].getTowerType()]) {
+            // Not enough money to build tower
             return;
         }
         Playing.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()]);
