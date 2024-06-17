@@ -77,7 +77,7 @@ public class Enemy extends Sprite {
     private void moveInDirection() {
         square = Square.positionToSquare(position);
         //enemy is in the center of a field
-        if (Math.abs((position.x - X_OFFSET) % FIELD_SIZE) < (speed * Playing.getInstance().getGameSpeed()) && Math.abs((position.y - Y_OFFSET) % FIELD_SIZE) < speed * Playing.getInstance().getGameSpeed()) {
+        if (Math.abs((position.x - X_CENTERED_OFFSET) % FIELD_SIZE) < (speed * Playing.getInstance().getGameSpeed()) && Math.abs((position.y - Y_CENTERED_OFFSET) % FIELD_SIZE) < speed * Playing.getInstance().getGameSpeed()) {
             xAxisLocked = yAxisLocked = false;
             if (Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()] == 1) {
                 //base reached
@@ -113,7 +113,7 @@ public class Enemy extends Sprite {
             }
         }
         //enemy is moving between two fields
-        else if (position.x % FIELD_SIZE != X_OFFSET || position.y % FIELD_SIZE != Y_OFFSET) {
+        else if (position.x % FIELD_SIZE != X_CENTERED_OFFSET || position.y % FIELD_SIZE != Y_CENTERED_OFFSET) {
             Square[] neighbors = Square.getNeighbors(position);
             distanceToTarget(neighbors);
             //decide direction
@@ -154,7 +154,7 @@ public class Enemy extends Sprite {
     }
 
     private void roundXValue() {
-        double delta = position.x - (square.getX() * FIELD_SIZE + X_OFFSET);
+        double delta = position.x - (square.getX() * FIELD_SIZE + X_CENTERED_OFFSET);
         if (delta < FIELD_SIZE / 2) {
             position.x -= delta;
         }
@@ -164,7 +164,7 @@ public class Enemy extends Sprite {
     }
 
     private void roundYValue() {
-        double delta = position.y - (square.getY() * FIELD_SIZE + Y_OFFSET);
+        double delta = position.y - (square.getY() * FIELD_SIZE + Y_CENTERED_OFFSET);
         if (delta < FIELD_SIZE / 2) {
             position.y -= delta;
         }

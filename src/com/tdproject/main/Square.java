@@ -1,11 +1,14 @@
 package com.tdproject.main;
 
+import lombok.Getter;
+
 import javax.vecmath.Vector2d;
 
 import java.util.Objects;
 
 import static com.tdproject.main.FieldParameters.*;
 
+@Getter
 public class Square {
 
     //public Vector2d position;
@@ -23,7 +26,7 @@ public class Square {
     public static Square[] getNeighbors(Vector2d position) {
         Square[] neighbors = new Square[2];
         //moving on x axis
-        if (position.x % FIELD_SIZE == X_OFFSET % FIELD_SIZE) {
+        if (position.x % FIELD_SIZE == X_CENTERED_OFFSET % FIELD_SIZE) {
             neighbors[0] = positionToSquare(position);
             if (neighbors[0].squareToPosition().y < position.y) {
                 neighbors[1] = new Square(neighbors[0].x, neighbors[0].y + 1);
@@ -34,12 +37,11 @@ public class Square {
                 return neighbors;
             }
             else {
-                System.err.println("Error: getNeighbors 1");
                 throw new RuntimeException();
             }
         }
         //moving on y axis
-        else if (position.y % FIELD_SIZE == Y_OFFSET % FIELD_SIZE) {
+        else if (position.y % FIELD_SIZE == Y_CENTERED_OFFSET % FIELD_SIZE) {
             neighbors[0] = positionToSquare(position);
             if (neighbors[0].squareToPosition().x < position.x) {
                 neighbors[1] = new Square(neighbors[0].x + 1, neighbors[0].y);
@@ -54,8 +56,6 @@ public class Square {
                 throw new RuntimeException();
             }
         }
-        System.err.println(position);
-        System.err.println("Error: getNeighbors 3"); //TODO exception when starting game
         throw new RuntimeException();
     }
 
@@ -68,16 +68,7 @@ public class Square {
 
     public Vector2d squareToPosition() {
         //return new int[] {(1 + x) * FIELD_SIZE, (1 + y) * FIELD_SIZE};
-        return new Vector2d(x * FIELD_SIZE + X_OFFSET, y * FIELD_SIZE + Y_OFFSET);
-    }
-
-    // Getters and setters
-    public int getX() {
-        return x;
-    }
-    
-    public int getY() {
-        return y;
+        return new Vector2d(x * FIELD_SIZE + X_CENTERED_OFFSET, y * FIELD_SIZE + Y_CENTERED_OFFSET);
     }
 
     @Override

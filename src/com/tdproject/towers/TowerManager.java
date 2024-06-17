@@ -108,6 +108,11 @@ public class TowerManager {
         if (square == null) {
             return;
         }
+        if (Playing.getInstance().getMoney() < COST[towers[towerNr].getTowerType()]) {
+            // Not enough money to build tower
+            // TODO give visual feedback
+            return;
+        }
         if (!checkSquare(square)) {
             return;
         }
@@ -115,10 +120,6 @@ public class TowerManager {
         if (!Pathfinding.getInstance().buildDistanceField()) {
             //Can't build tower here
             Playing.getInstance().getCollisionMap()[square.getX()][square.getY()] = false;
-            return;
-        }
-        if (Playing.getInstance().getMoney() < COST[towers[towerNr].getTowerType()]) {
-            // Not enough money to build tower
             return;
         }
         Playing.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()]);

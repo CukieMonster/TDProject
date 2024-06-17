@@ -56,9 +56,13 @@ public class EnemyManager {
                 spawnTime = EnemyParameters.SPAWN_INTERVAL;
                 spawnEnemy();
             }
+            else if (enemies.isEmpty() && currentWaveProgress >= waveLimit) {
+                waveCompleted();
+            }
         }
         else {
             spawnTime -= Playing.getInstance().getGameSpeed();
+            System.err.println(Playing.getInstance().getGameSpeed());
             if (spawnTime <= 0) {
                 spawnWave();
             }
@@ -66,16 +70,14 @@ public class EnemyManager {
 
         LinkedList<Enemy> toRemove = new LinkedList<>();
         for (Enemy e : enemies) {
-            if (e.isActive()) e.update();
-            else toRemove.add(e);
-            /*if (e != null) {
+            if (e.isActive()) {
                 e.update();
-            }*/
+            }
+            else {
+                toRemove.add(e);
+            }
         }
         enemies.removeAll(toRemove);
-        if (enemies.isEmpty() && currentWaveProgress >= waveLimit) {
-            waveCompleted();
-        }
     }
 
     public void waveCompleted() {
