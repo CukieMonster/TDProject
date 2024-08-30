@@ -5,7 +5,6 @@ import com.tdproject.gamestates.GameState;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 import com.tdproject.ui.Button;
-import com.tdproject.ui.ButtonManager;
 
 import com.tdproject.ui.PlayingButtons;
 import java.util.LinkedList;
@@ -148,6 +147,7 @@ public class EnemyManager {
         for (Enemy e : enemies) {
             if (e != null) {
                 e.drawCentered(o);
+                e.getHealthBar().draw(o, (float) e.getHP() / e.getMaxHP());
                 //g.drawImage(enemyImgs[0], (int) e.getPosition().x, (int) e.getPosition().y, null);
             }
         }

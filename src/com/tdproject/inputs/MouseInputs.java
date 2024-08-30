@@ -7,6 +7,7 @@ import com.tdproject.main.Game;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Observable;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
 

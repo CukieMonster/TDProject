@@ -23,7 +23,11 @@ public class Tower extends Button {
     private int towerType;
     private int damage;
     private float attackSpeed;
-    private int range;
+    //private float range;
+    private int splash;
+    private int slow;
+    private int damageOverTime;
+    private float areaOfEffectMultiplier;
     private int radius;
     private int cost;
     private Square square = new Square(-1, -1);
@@ -37,18 +41,20 @@ public class Tower extends Button {
     public boolean visible = false;
 
     public Tower(int towerType) {
-        super(true, "", null);
-        action = b -> TowerManager.getInstance().setSelectedTower(this);
+        super(true, TOWER_1, null);
+        action = b -> {
+            TowerManager.getInstance().setSelectedTower(this);
+            TowerManager.getInstance().setMode(TowerManagerMode.UPGRADING);
+        };
         this.towerType = towerType;
         damage = DAMAGE[towerType];
         attackSpeed = ATTACK_SPEED[towerType];
-        range = RANGE[towerType];
-        radius = (FIELD_SIZE / 2) + (FIELD_SIZE * range);
+        radius = (FIELD_SIZE / 2) + (FIELD_SIZE * RANGE[towerType]);
         cost = COST[towerType];
         //this.x = x;
         //this.y = y;
         //this.img = img;
-        loadSprite(Sprite.TOWER_1);
+        //loadSprite(Sprite.TOWER_1);
     }
 
     public void update(int u) {
@@ -59,6 +65,25 @@ public class Tower extends Button {
                 m.update();
             }
         }
+    }
+
+    public void upgrade(UpgradeType upgradeType) {
+        // TODO: check if affordable
+        upgrades.computeIfPresent(upgradeType, (ut, i) -> i + 1);
+        upgrades.putIfAbsent(upgradeType, 1);
+        updateStats();
+        cost *= 2;
+    }
+
+    private void updateStats() {
+        damage = DAMAGE[towerType] + upgrades.get(UpgradeType.DAMAGE);
+        attackSpeed = ATTACK_SPEED[towerType] - (0.02F * upgrades.get(UpgradeType.SPEED));
+        float range = RANGE[towerType] + (0.1F * upgrades.get(UpgradeType.RANGE));
+        radius = (FIELD_SIZE / 2) + (int) (FIELD_SIZE * range);
+        splash = upgrades.get(UpgradeType.SPLASH);
+        slow = upgrades.get(UpgradeType.SLOW);
+        damageOverTime = upgrades.get(UpgradeType.DAMAGE_OVER_TIME);
+        areaOfEffectMultiplier = 0.1F * upgrades.get(UpgradeType.AREA_OF_EFFECT);
     }
 
     private void attemptShot(int u) {

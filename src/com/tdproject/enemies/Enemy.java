@@ -10,13 +10,17 @@ import com.tdproject.main.Square;
 import javax.vecmath.Vector2d;
 
 import java.util.Random;
+import lombok.Getter;
 
 import static com.tdproject.main.FieldParameters.*;
 
 public class Enemy extends Sprite {
 
+    @Getter
+    private final HealthBar healthBar;
     private double distanceToTarget;
 
+    @Getter
     private int enemyType, maxHP, HP, value, progress, index;
     private float speed;
 
@@ -40,6 +44,7 @@ public class Enemy extends Sprite {
         distanceToTarget = Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()];
         position = spawn.squareToPosition();
         loadSprite(Type.ENEMY, "" + this.enemyType);
+        healthBar = new HealthBar(this);
     }
 
     public void update() {

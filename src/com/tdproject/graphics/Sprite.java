@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import lombok.Getter;
 import lombok.Setter;
 
 public abstract class Sprite {
@@ -37,7 +38,9 @@ public abstract class Sprite {
     };
 
     @Setter
+    @Getter
     protected Vector2d position;    // position is bottom left for enemy, tower, item, but is the center of button, homing missile, background
+    @Getter
     protected BufferedImage sprite;
 
 //    public void draw(Object g) {
@@ -48,7 +51,7 @@ public abstract class Sprite {
         // TODO: fix drawing
         int x = (int) (position.x - sprite.getWidth() / 2);
         int y = (int) (position.y - sprite.getHeight() / 2);
-        System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
+        //System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
         ((Graphics)g).drawImage(sprite, x, y, null);
     }
 
@@ -73,7 +76,7 @@ public abstract class Sprite {
                     is = getClass().getResourceAsStream(paths[type.ordinal()] + suffix + ".png");
             }
             if (is == null) {
-                System.err.printf("Could not load image: %s, %s%n", type, suffix);
+                //System.err.printf("Could not load image: %s, %s%n", type, suffix);
                 is = getClass().getResourceAsStream(MISSING_SPRITE);
             }
             sprite = ImageIO.read(is);
@@ -89,7 +92,7 @@ public abstract class Sprite {
         try {
             is = getClass().getResourceAsStream(imagePath);
             if (is == null) {
-                System.err.printf("Could not load image: %s%n", imagePath);
+                //System.err.printf("Could not load image: %s%n", imagePath);
                 is = getClass().getResourceAsStream(MISSING_SPRITE);
             }
             sprite = ImageIO.read(is);

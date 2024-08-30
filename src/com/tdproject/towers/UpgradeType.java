@@ -11,6 +11,7 @@ public enum UpgradeType {
     SLOW("slow.png"),
     DAMAGE_OVER_TIME("dot.png"),
     AREA_OF_EFFECT("aoe.png");
+    // MORE_MONEY_PER_KILL ???
 
     final String imagePath;
 

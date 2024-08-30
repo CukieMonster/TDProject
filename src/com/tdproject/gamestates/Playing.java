@@ -8,7 +8,6 @@ import com.tdproject.graphics.Text;
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.items.Item;
 import com.tdproject.towers.TowerManager;
-import com.tdproject.ui.BuildingButtons;
 import com.tdproject.ui.PlayingButtons;
 import lombok.Getter;
 
@@ -24,12 +23,12 @@ public class Playing extends GameState {
     @Getter
     private final ButtonPanel playingButtons;
     @Getter
-    private final ButtonPanel buildingButtons;
-    @Getter
     private int gameSpeed = 1;
     @Getter
     private int money = Integer.MAX_VALUE;
-    private Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: " + money, 400, 30)};
+
+    @Getter
+    private Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: " + money, 400, 30), new Text("Mode: DEFAULT", 800, 30)};
     private int health = 100;
     @Getter
     private boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
@@ -38,8 +37,7 @@ public class Playing extends GameState {
     private Sprite background;
 
     private Playing() {
-        playingButtons = new ButtonPanel(1600, 900, 300, 100, PlayingButtons.buttons, 2);
-        buildingButtons = new ButtonPanel(1800, 400, 100, 1000, BuildingButtons.buttons);
+        playingButtons = new ButtonPanel(1795, 1030, 250, 100, PlayingButtons.buttons, 2);
         background = new Background();
     }
 
@@ -61,7 +59,6 @@ public class Playing extends GameState {
         background.drawCentered(o);
         drawInfos(o);
         playingButtons.draw(o);
-        buildingButtons.draw(o);
         EnemyManager.getInstance().draw(o);
         TowerManager.getInstance().draw(o);
         drawDroppedItems(o);
@@ -70,14 +67,12 @@ public class Playing extends GameState {
     @Override
     public void mouseReleased(MouseEvent e) {
         playingButtons.mouseReleased(new MyEvent(e));
-        buildingButtons.mouseReleased(new MyEvent(e));
         TowerManager.getInstance().mouseReleased(new MyEvent(e));
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         playingButtons.mouseMoved(new MyEvent(e));
-        buildingButtons.mouseMoved(new MyEvent(e));
         TowerManager.getInstance().mouseMoved(new MyEvent(e));
     }
 
@@ -111,7 +106,6 @@ public class Playing extends GameState {
     }
 
     private void drawInfos(Object o) {
-        Text.setFont(o);
         for (Text t : infos) {
             t.draw(o);
         }
