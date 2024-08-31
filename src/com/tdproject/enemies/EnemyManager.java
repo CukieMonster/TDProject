@@ -48,7 +48,7 @@ public class EnemyManager {
         return instance;
     }
 
-    public void update(/*int u*/) {
+    public void update(int u) {
         if (spawning) {
             spawnTime -= Playing.getInstance().getGameSpeed();
             if (spawnTime <= 0) {
@@ -70,7 +70,7 @@ public class EnemyManager {
         LinkedList<Enemy> toRemove = new LinkedList<>();
         for (Enemy e : enemies) {
             if (e.isActive()) {
-                e.update();
+                e.update(u);
             }
             else {
                 toRemove.add(e);
@@ -147,7 +147,7 @@ public class EnemyManager {
         for (Enemy e : enemies) {
             if (e != null) {
                 e.drawCentered(o);
-                e.getHealthBar().draw(o, (float) e.getHP() / e.getMaxHP());
+                e.getHealthBar().draw(o, (double) e.getHP() / e.getMaxHP());
                 //g.drawImage(enemyImgs[0], (int) e.getPosition().x, (int) e.getPosition().y, null);
             }
         }

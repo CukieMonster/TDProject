@@ -57,7 +57,7 @@ public abstract class AbstractPanel<C> {
 
     private int[] calculateItemXPositions(int buttonsAmount, int columns, int maxWidth) {
         int[] result = new int[buttonsAmount];
-        int rows = Math.round((float) buttonsAmount / columns);
+        int rows = Math.round(Math.round((double) buttonsAmount / columns));
 
         int xGap = (width - (maxWidth * columns)) / (columns + 1);
         if (xGap < 0) {
@@ -76,7 +76,7 @@ public abstract class AbstractPanel<C> {
 
     private int[] calculateItemYPositions(int buttonsAmount, int columns, int maxHeight) {
         int[] result = new int[buttonsAmount];
-        int rows = Math.round((float) buttonsAmount / columns);
+        int rows = Math.round(Math.round((double) buttonsAmount / columns));
 
         int yGap = (height - (maxHeight * rows)) / (rows + 1);
         if (yGap < 0) {
@@ -109,7 +109,7 @@ public abstract class AbstractPanel<C> {
     private void drawCentered(Graphics g) {
         int x = (int) centerPosition.x - (width / 2);
         int y = (int) centerPosition.y - (height / 2);
-        System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
+//        System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
         g.fillRect(
                 x,
                 y,

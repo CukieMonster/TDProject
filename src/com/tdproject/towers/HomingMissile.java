@@ -14,9 +14,9 @@ public class HomingMissile extends Sprite {
     private Enemy target;
     private Tower origin;
     private int damage;
-    private float speed;
+    private double speed;
 
-    public HomingMissile(Vector2d pos, Enemy target, Tower t, float s, int d) {
+    public HomingMissile(Vector2d pos, Enemy target, Tower t, double s, int d) {
         position = (Vector2d) pos.clone();
         this.target = target;
         origin = t;
@@ -41,6 +41,8 @@ public class HomingMissile extends Sprite {
         if (direction.length() < ENEMY_RADIUS) { // * Game.getInstance().getGameSpeed()) {
             origin.missiles.remove(this);
             target.damage(damage);
+            target.applySlow(origin.getSlow(), 1);  // TODO: customizable duration
+            target.applyDamageOverTime(origin.getDamageOverTime(), 1);  // TODO: customizable duration
         }
         direction.normalize();
         direction.scale(speed * Playing.getInstance().getGameSpeed());

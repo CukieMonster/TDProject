@@ -13,21 +13,22 @@ import lombok.Getter;
 import static com.tdproject.main.FieldParameters.FIELD_SIZE;
 import static com.tdproject.towers.TowerParameters.*;
 
+
+@Getter
 public class Tower extends Button {
 
     //private BufferedImage img;
     private List<Enemy> enemiesInRange = new LinkedList<>();
 
-    @Getter
     private final Map<UpgradeType, Integer> upgrades = new EnumMap<>(UpgradeType.class);
     private int towerType;
     private int damage;
-    private float attackSpeed;
+    private double attackSpeed;
     //private float range;
     private int splash;
     private int slow;
     private int damageOverTime;
-    private float areaOfEffectMultiplier;
+    private double areaOfEffectMultiplier;
     private int radius;
     private int cost;
     private Square square = new Square(-1, -1);
@@ -76,14 +77,14 @@ public class Tower extends Button {
     }
 
     private void updateStats() {
-        damage = DAMAGE[towerType] + upgrades.get(UpgradeType.DAMAGE);
-        attackSpeed = ATTACK_SPEED[towerType] - (0.02F * upgrades.get(UpgradeType.SPEED));
-        float range = RANGE[towerType] + (0.1F * upgrades.get(UpgradeType.RANGE));
+        damage = DAMAGE[towerType] + upgrades.getOrDefault(UpgradeType.DAMAGE, 0);
+        attackSpeed = ATTACK_SPEED[towerType] - (0.02F * upgrades.getOrDefault(UpgradeType.SPEED, 0));
+        double range = RANGE[towerType] + (0.1F * upgrades.getOrDefault(UpgradeType.RANGE, 0));
         radius = (FIELD_SIZE / 2) + (int) (FIELD_SIZE * range);
-        splash = upgrades.get(UpgradeType.SPLASH);
-        slow = upgrades.get(UpgradeType.SLOW);
-        damageOverTime = upgrades.get(UpgradeType.DAMAGE_OVER_TIME);
-        areaOfEffectMultiplier = 0.1F * upgrades.get(UpgradeType.AREA_OF_EFFECT);
+        splash = upgrades.getOrDefault(UpgradeType.SPLASH, 0);
+        slow = 10 * upgrades.getOrDefault(UpgradeType.SLOW, 0);
+        damageOverTime = upgrades.getOrDefault(UpgradeType.DAMAGE_OVER_TIME, 0);
+        areaOfEffectMultiplier = 0.1F * upgrades.getOrDefault(UpgradeType.AREA_OF_EFFECT, 0);
     }
 
     private void attemptShot(int u) {

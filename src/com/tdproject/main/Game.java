@@ -3,12 +3,17 @@ package com.tdproject.main;
 import com.tdproject.gamestates.MainMenu;
 import com.tdproject.gamestates.Playing;
 import com.tdproject.gamestates.GameState;
+import lombok.AccessLevel;
+import lombok.Getter;
 
+@Getter
 public class Game {
 
+    @Getter(AccessLevel.NONE)
     private static Game instance;
 //    private final int FPS_SET = 60;
     private final int UPS_SET = 60;
+    private int updateCycle;
 //    private int updates;
 
     private GameState.States currentGameState = GameState.States.MAIN_MENU;
@@ -25,6 +30,7 @@ public class Game {
     }
 
     public void update(int u) {
+        updateCycle = u;
         //gamePanel.updateGame();
         switch (currentGameState) {
             case MAIN_MENU:

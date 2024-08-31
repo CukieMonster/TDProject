@@ -50,7 +50,7 @@ public class Playing extends GameState {
 
     @Override
     public void update(int u) {
-        EnemyManager.getInstance().update();
+        EnemyManager.getInstance().update(u);
         TowerManager.getInstance().update(u);
     }
 

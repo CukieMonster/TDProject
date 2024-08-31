@@ -67,7 +67,7 @@ public class Item extends Sprite {
     }
 
     private int getMaxModifierValue(int index, int lv) {
-        return (int)(((float)lv) / ItemParameters.MAX_LEVEL * ItemParameters.MAX_POSSIBLE_MODIFIER_VALUE[attributes[index].ordinal()]);
+        return (int)(((double)lv) / ItemParameters.MAX_LEVEL * ItemParameters.MAX_POSSIBLE_MODIFIER_VALUE[attributes[index].ordinal()]);
     }
 
 //    private void loadImage() {

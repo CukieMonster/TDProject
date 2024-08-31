@@ -15,7 +15,7 @@ public class HealthBar {
         width = enemy.getSprite().getWidth() / 2;
     }
 
-    public void draw(Object o, float healthPercentage) {
+    public void draw(Object o, double healthPercentage) {
         var position = enemy.getPosition();
         Graphics g = (Graphics) o;
         int x = (int) position.x - width / 2;

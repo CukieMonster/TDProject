@@ -11,11 +11,11 @@ public class Modifiers {
     private static int baseHealth;
     private static int startMoney;
 
-    private static float[][] towerModifiers;
-    private static float[] attackBoost;
-    private static float[] attackSpeedBoost;
-    private static float[] attackRangeBoost;
-    private static float[] towerCostReduction;
+    private static double[][] towerModifiers;
+    private static double[] attackBoost;
+    private static double[] attackSpeedBoost;
+    private static double[] attackRangeBoost;
+    private static double[] towerCostReduction;
 
     public static void readSaveFile() {
         //TODO

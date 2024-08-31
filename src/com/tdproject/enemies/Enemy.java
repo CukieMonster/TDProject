@@ -4,6 +4,7 @@ import com.tdproject.gamestates.Playing;
 import com.tdproject.graphics.Sprite;
 import com.tdproject.items.Item;
 import com.tdproject.items.ItemParameters;
+import com.tdproject.main.Game;
 import com.tdproject.main.Modifiers;
 import com.tdproject.main.Square;
 
@@ -14,24 +15,33 @@ import lombok.Getter;
 
 import static com.tdproject.main.FieldParameters.*;
 
+@Getter
 public class Enemy extends Sprite {
 
-    @Getter
     private final HealthBar healthBar;
-    private double distanceToTarget;
 
-    @Getter
-    private int enemyType, maxHP, HP, value, progress, index;
-    private float speed;
+    private final int enemyType;
+    private final int maxHP;
+    private final int value;
+    private final int progress;
+    //    private int index;
+    private final double speed;
 
-
-    private boolean active = true;
+    private int HP;
     private Square square;
+    private double distanceToTarget;
+    private boolean active = true;
+
+    private double slow;
+    private int slowDuration;
+    private int damageOverTime;
+    private int damageOverTimeDuration;
+
     //public int x;
     //public int y;
     private boolean xAxisLocked = false;
     private boolean yAxisLocked = false;
-    private final Random random = new Random();
+    private final Random random = new Random(); // TODO move random outside class
 
     public Enemy(Square spawn, int enemyType) {
         this.enemyType = enemyType;
@@ -47,13 +57,20 @@ public class Enemy extends Sprite {
         healthBar = new HealthBar(this);
     }
 
-    public void update() {
-        moveInDirection();
+    public void update(int u) {
+        if (slowDuration < u) {
+            slow = 1;
+        }
+        if (damageOverTimeDuration < u) {
+            damageOverTime = 0;
+        } else {
+            damage(damageOverTime);
+        }
+        moveInDirection(u);
     }
 
     public void damage(int amount) {
         HP -= amount;
-        //TODO: healthbar
         if (HP <= 0) {
             Playing.getInstance().adjustMoney(value);
             active = false;
@@ -75,14 +92,25 @@ public class Enemy extends Sprite {
         }
     }
 
+    public void applySlow(int slowPercentage, int duration) {
+        slow = 1.0 - (slowPercentage / 100.0);
+        slowDuration = Game.getInstance().getUpdateCycle() + (duration * Game.getInstance().getUPS_SET());
+    }
+
+    public void applyDamageOverTime(int damageOverTime, int duration) {
+        this.damageOverTime = damageOverTime;
+        damageOverTimeDuration = Game.getInstance().getUpdateCycle() + (duration * Game.getInstance().getUPS_SET());
+    }
+
     void dropItem(Item newItem) {
         Playing.getInstance().getDroppedItems().add(newItem);
     }
 
-    private void moveInDirection() {
+    private void moveInDirection(int u) {
         square = Square.positionToSquare(position);
         //enemy is in the center of a field
-        if (Math.abs((position.x - X_CENTERED_OFFSET) % FIELD_SIZE) < (speed * Playing.getInstance().getGameSpeed()) && Math.abs((position.y - Y_CENTERED_OFFSET) % FIELD_SIZE) < speed * Playing.getInstance().getGameSpeed()) {
+        double movementAmount = speed * Playing.getInstance().getGameSpeed() * slow;
+        if (Math.abs((position.x - X_CENTERED_OFFSET) % FIELD_SIZE) < movementAmount && Math.abs((position.y - Y_CENTERED_OFFSET) % FIELD_SIZE) < movementAmount) {
             xAxisLocked = yAxisLocked = false;
             if (Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()] == 1) {
                 //base reached
@@ -96,25 +124,25 @@ public class Enemy extends Sprite {
             {
                 roundYValue();
                 yAxisLocked = true;
-                position.x += speed * Playing.getInstance().getGameSpeed();
+                position.x += movementAmount;
             }
             else if (square.getY() + 1 < Y_FIELDS && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() + 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundXValue();
                 xAxisLocked = true;
-                position.y += speed * Playing.getInstance().getGameSpeed();
+                position.y += movementAmount;
             }
             else if (square.getY() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY() - 1] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundXValue();
                 xAxisLocked = true;
-                position.y -= speed * Playing.getInstance().getGameSpeed();
+                position.y -= movementAmount;
             }
             else if (square.getX() > 0 && Pathfinding.getInstance().getDistanceField()[square.getX() - 1][square.getY()] < Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()])
             {
                 roundYValue();
                 yAxisLocked = true;
-                position.x -= speed * Playing.getInstance().getGameSpeed();
+                position.x -= movementAmount;
             }
         }
         //enemy is moving between two fields
@@ -124,18 +152,18 @@ public class Enemy extends Sprite {
             //decide direction
             if (!xAxisLocked) {
                 if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.x += (neighbors[0].getX() - neighbors[1].getX()) * speed * Playing.getInstance().getGameSpeed();
+                    position.x += (neighbors[0].getX() - neighbors[1].getX()) * movementAmount;
                 }
                 else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.x += (neighbors[1].getX() - neighbors[0].getX()) * speed * Playing.getInstance().getGameSpeed();
+                    position.x += (neighbors[1].getX() - neighbors[0].getX()) * movementAmount;
                 }
             }
             if (!yAxisLocked) {
                 if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] < Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.y += (neighbors[0].getY() - neighbors[1].getY()) * speed * Playing.getInstance().getGameSpeed();
+                    position.y += (neighbors[0].getY() - neighbors[1].getY()) * movementAmount;
                 }
                 else if (Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()] > Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]) {
-                    position.y += (neighbors[1].getY() - neighbors[0].getY()) * speed * Playing.getInstance().getGameSpeed();
+                    position.y += (neighbors[1].getY() - neighbors[0].getY()) * movementAmount;
                 }
             }
         }
@@ -146,21 +174,21 @@ public class Enemy extends Sprite {
 
         if (!xAxisLocked) {
             distanceToTarget = Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()]
-                    * (Math.abs(neighbors[1].getX() * FIELD_SIZE - position.x) / (float)FIELD_SIZE)
+                    * (Math.abs(neighbors[1].getX() * FIELD_SIZE - position.x) / (double)FIELD_SIZE)
                     + Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]
-                    * (Math.abs(neighbors[0].getX() * FIELD_SIZE - position.x) / (float)FIELD_SIZE);
+                    * (Math.abs(neighbors[0].getX() * FIELD_SIZE - position.x) / (double)FIELD_SIZE);
         }
         if (!yAxisLocked) {
             distanceToTarget = Pathfinding.getInstance().getDistanceField()[neighbors[0].getX()][neighbors[0].getY()]
-                    * (Math.abs(neighbors[1].getY() * FIELD_SIZE - position.y) / (float)FIELD_SIZE)
+                    * (Math.abs(neighbors[1].getY() * FIELD_SIZE - position.y) / (double)FIELD_SIZE)
                     + Pathfinding.getInstance().getDistanceField()[neighbors[1].getX()][neighbors[1].getY()]
-                    * (Math.abs(neighbors[0].getY() * FIELD_SIZE - position.y) / (float)FIELD_SIZE);
+                    * (Math.abs(neighbors[0].getY() * FIELD_SIZE - position.y) / (double)FIELD_SIZE);
         }
     }
 
     private void roundXValue() {
         double delta = position.x - (square.getX() * FIELD_SIZE + X_CENTERED_OFFSET);
-        if (delta < FIELD_SIZE / 2) {
+        if (delta < FIELD_SIZE / 2.0) {
             position.x -= delta;
         }
         else {
@@ -170,7 +198,7 @@ public class Enemy extends Sprite {
 
     private void roundYValue() {
         double delta = position.y - (square.getY() * FIELD_SIZE + Y_CENTERED_OFFSET);
-        if (delta < FIELD_SIZE / 2) {
+        if (delta < FIELD_SIZE / 2.0) {
             position.y -= delta;
         }
         else {
@@ -178,16 +206,4 @@ public class Enemy extends Sprite {
         }
     }
 
-    // Setters and getters
-    public double getDistanceToTarget() {
-        return distanceToTarget;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public Vector2d getPosition() {
-        return position;
-    }
 }
