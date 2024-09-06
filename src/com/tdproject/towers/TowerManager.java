@@ -19,7 +19,8 @@ import javax.vecmath.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.tdproject.main.FieldParameters.*;
+import static com.tdproject.main.FieldParameters.X_FIELDS;
+import static com.tdproject.main.FieldParameters.Y_FIELDS;
 import static com.tdproject.towers.TowerParameters.COST;
 
 public class TowerManager {
@@ -31,60 +32,39 @@ public class TowerManager {
     private final ButtonPanel upgradeButtons;
     private final Map<UpgradeType, Text> upgradeLevels = new EnumMap<>(UpgradeType.class);
     private final TextPanel towerInfo;
-
-    //private BufferedImage[] towerImgs = new BufferedImage[3];
-    //private BufferedImage[] missileImgs = new BufferedImage[1];
     private final Tower[] towers = new Tower[maxTowers];
     private int towerNr;
 
     @Getter
     @Setter
     private Tower selectedTower;
-    //private JButton cancelButton;
 
     @Setter
     private TowerManagerMode mode = TowerManagerMode.DEFAULT;
-    //private boolean buildMode = false;
 
     private TowerManager() {
-        //loadTowerImgs();
-        //cancelButton = new JButton();
         buildingButtons = new ButtonPanel(1720, 490, 100, 980, BuildingButtons.buttons);
-        Button[] upgradeButtons = new Button[UpgradeType.values().length];
-        Text[] towerInfo = new Text[UpgradeType.values().length];
-        int i = 0;
-        for (UpgradeType upgradeType : UpgradeType.values()) {
-            upgradeButtons[i] = new Button(
-                    true,
-                    upgradeType.imagePath,
-                    b -> selectedTower.upgrade(upgradeType)
-                    //u -> upgradeTower(upgradeType)
-            );
-            towerInfo[i] = new Text(upgradeType.toString(), 0, 0);
-            i++;
-        }
-        this.upgradeButtons = new ButtonPanel(1720, 490, 100, 980, upgradeButtons);
-        i = 0;
-        for (UpgradeType upgradeType : UpgradeType.values()) {
-            Vector2d position = upgradeButtons[i].getPosition();
-            upgradeLevels.put(upgradeType, new Text(
-                    "0",
-                    15,
-                    Color.RED,
-                    Font.BOLD,
-                    (int) position.x + (upgradeButtons[i].getSprite().getWidth() / 2),
-                    (int) position.y
-            ));
-            i++;
-        }
-        this.towerInfo = new TextPanel(1845, 490, 150, 980, towerInfo);
+        upgradeButtons = new ButtonPanel(1720, 490, 100, 980, createUpgrageButtons());
+        towerInfo = new TextPanel(1845, 490, 150, 980, createTowerInfoText());
+        initializeUpgradeLevelTexts();
     }
 
-    public static TowerManager getInstance() {
-        if (instance == null) {
-            instance = new TowerManager();
+    private Button[] createUpgrageButtons() {
+        Button[] upgradeButtons = new Button[UpgradeType.values().length];
+        int i = 0;
+        for (UpgradeType upgradeType : UpgradeType.values()) {
+            upgradeButtons[i++] = new Button(
+                    upgradeType.imagePath,
+                    b -> selectedTower.upgrade(upgradeType)
+            );
         }
-        return instance;
+        return upgradeButtons;
+    }
+
+    private void upgradeSelectedTower(UpgradeType upgradeType) {
+        int upgradeCost = 1; // TODO
+        Playing.getInstance().adjustMoney(upgradeCost);
+        selectedTower.upgrade(upgradeType);
     }
 
     public void update(int u) {
@@ -93,44 +73,27 @@ public class TowerManager {
         // ---
         if (selectedTower != null) {
             mode = TowerManagerMode.UPGRADING;
+            for (UpgradeType upgradeType : UpgradeType.values()) {
+                int level = Objects.requireNonNullElse(selectedTower.getUpgrades().get(upgradeType), 0);
+                upgradeLevels.get(upgradeType).setString(String.valueOf(level));
+            }
         }
         for (Tower t : towers) {
             if (t != null && t.active) {
                 t.update(u);
             }
         }
-        if (mode == TowerManagerMode.UPGRADING) {
-            for (UpgradeType upgradeType : UpgradeType.values()) {
-                int level = Objects.requireNonNullElse(selectedTower.getUpgrades().get(upgradeType), 0);
-                upgradeLevels.get(upgradeType).setString(String.valueOf(level));
-            }
-        }
-    }
-
-    public void upgradeTower(UpgradeType upgradeType) {
-        // TODO
-        selectedTower.getUpgrades().computeIfPresent(upgradeType, (ut, i) -> i + 1);
-        selectedTower.getUpgrades().putIfAbsent(upgradeType, 1);
     }
 
     public void enterBuildMode(int towerType) {
         mode = TowerManagerMode.BUILDING;
-        //hide dropped main.tdproject.items
-        //hide time buttons
-//        ButtonManager.getInstance().setBuildButtons(false);
-//        ButtonManager.getInstance().setCancelButton(true);
         BuildingButtons.setBuildMode(true);
         towers[towerNr] = new Tower(towerType);
-
     }
 
     public void cancelBuild() {
-        //show dropped main.tdproject.items
-        //show time buttons
-//        ButtonManager.getInstance().setBuildButtons(true);
-//        ButtonManager.getInstance().setCancelButton(false);
-        BuildingButtons.setBuildMode(false);
         towers[towerNr] = null;
+        BuildingButtons.setBuildMode(false);
         mode = TowerManagerMode.DEFAULT;
     }
 
@@ -139,8 +102,6 @@ public class TowerManager {
         if (checkSquare(towers[towerNr].getSquare())) {
             Vector2d pos = towers[towerNr].getSquare().squareToPosition();
             towers[towerNr].setPosition(pos);
-            //main.tdproject.towers[towerNr].position.x = pos[0];
-            //main.tdproject.towers[towerNr].position.y = pos[1];
             towers[towerNr].visible = true;
         } else {
             towers[towerNr].visible = false;
@@ -150,14 +111,9 @@ public class TowerManager {
     private void buildTower() {
         // TODO ghost tower is out of position
 
-        //TODO: check if tower can be placed, (no enemy in the way,) impossible path or enemy getting caugth
+        //TODO: check if tower can be placed, (no enemy in the way,) impossible path or enemy getting caught
         Square square = towers[towerNr].getSquare();
         if (square == null) {
-            return;
-        }
-        if (Playing.getInstance().getMoney() < COST[towers[towerNr].getTowerType()]) {
-            // Not enough money to build tower
-            // TODO give visual feedback
             return;
         }
         if (!checkSquare(square)) {
@@ -169,7 +125,11 @@ public class TowerManager {
             Playing.getInstance().getCollisionMap()[square.getX()][square.getY()] = false;
             return;
         }
-        Playing.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()]);
+        if (!Playing.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()])) {
+            // not enough money
+            // TODO: visual feedback
+            return;
+        }
         towers[towerNr].initBounds();
         towers[towerNr].active = true;
         //show dropped main.tdproject.items
@@ -177,9 +137,9 @@ public class TowerManager {
 //        ButtonManager.getInstance().setBuildButtons(true);
 //        ButtonManager.getInstance().setCancelButton(false);
         for (Button button : BuildingButtons.buttons) {
-            button.setActive(true);
+            button.setVisible(true);
         }
-        BuildingButtons.CANCEL_BUILDING_BUTTON.setActive(false);
+        BuildingButtons.CANCEL_BUILDING_BUTTON.setVisible(false);
         mode = TowerManagerMode.DEFAULT;
         towerNr++;
     }
@@ -199,13 +159,16 @@ public class TowerManager {
             case DEFAULT -> {
                 buildingButtons.mouseReleased(e);
                 for (Tower tower : towers) {
+                    if (tower == null || !tower.isActive()) {
+                        continue;
+                    }
                     tower.mouseReleased(e);
                 }
             }
             case BUILDING -> {
-                buildingButtons.mouseReleased(e);
                 moveTower(new Vector2d(e.getX(), e.getY()));
                 buildTower();
+                buildingButtons.mouseReleased(e);
             }
             case UPGRADING -> {
                 if (!upgradeButtons.mouseReleased(e)) {
@@ -227,31 +190,13 @@ public class TowerManager {
         }
     }
 
-//    private void loadTowerImgs() {
-//        //tower 0
-//        InputStream is = getClass().getResourceAsStream("/main.tdproject.towers/tower_blue_1.png");
-//        try {
-//            towerImgs[0] = ImageIO.read(is);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        is = getClass().getResourceAsStream("/main.tdproject.towers/homing_missile.png");
-//        try {
-//            missileImgs[0] = ImageIO.read(is);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void draw(Object o) {
         for (Tower tower : towers) {
             if (tower != null && tower.visible) {
                 tower.drawCentered(o);
-                //g.drawImage(tower.getImg(), (int) tower.getPosition().x, (int) tower.getPosition().y, null);
                 for (HomingMissile missile : tower.missiles) {
                     if (missile != null) {
                         missile.drawCentered(o);
-                        //g.drawImage(missileImgs[0], (int) missile.getPosition().x + FIELD_SIZE / 2 - missileImgs[0].getWidth() / 2, (int) missile.getPosition().y + FIELD_SIZE / 2 - missileImgs[0].getHeight() / 2, null);
                     }
                 }
             }
@@ -266,4 +211,38 @@ public class TowerManager {
             }
         }
     }
+
+    private Text[] createTowerInfoText() {
+        Text[] towerInfo = new Text[UpgradeType.values().length];
+        int i = 0;
+        for (UpgradeType upgradeType : UpgradeType.values()) {
+            towerInfo[i] = new Text(upgradeType.toString());
+            i++;
+        }
+        return towerInfo;
+    }
+
+    private void initializeUpgradeLevelTexts() {
+        int i = 0;
+        for (UpgradeType upgradeType : UpgradeType.values()) {
+            Button button = upgradeButtons.getContent()[i++];
+            Vector2d position = button.getPosition();
+            upgradeLevels.put(upgradeType, new Text(
+                    "0",
+                    15,
+                    Color.RED,
+                    Font.BOLD,
+                    (int) position.x + (button.getSprite().getWidth() / 2),
+                    (int) position.y
+            ));
+        }
+    }
+
+    public static TowerManager getInstance() {
+        if (instance == null) {
+            instance = new TowerManager();
+        }
+        return instance;
+    }
+
 }

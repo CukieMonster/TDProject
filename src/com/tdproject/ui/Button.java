@@ -3,9 +3,7 @@ package com.tdproject.ui;
 import com.tdproject.graphics.Sprite;
 
 import com.tdproject.inputs.MyEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.EventListener;
+
 import java.util.function.Consumer;
 
 public class Button extends Sprite {
@@ -18,10 +16,15 @@ public class Button extends Sprite {
 //    private BufferedImage img;
     private boolean mouseOver, mousePressed;
     private Rectangle bounds;
-    private boolean active = false;
+    private boolean visible = false;
+    private boolean active = true;
 
-    public Button(boolean defaultState, String imagePath, Consumer<Button> action) {
-        this.active = defaultState;
+    public Button(String imagePath, Consumer<Button> action) {
+        this(imagePath, action, true);
+    }
+
+    public Button(String imagePath, Consumer<Button> action, boolean defaultState) {
+        this.visible = defaultState;
         this.action = action;
 
         loadSprite(imagePath);
@@ -32,7 +35,7 @@ public class Button extends Sprite {
     }
 
     public boolean mouseReleased(MyEvent e) {
-        if (active && isIn(e)) {
+        if (visible && isIn(e)) {
             activate();
             return true;
         }
@@ -48,7 +51,7 @@ public class Button extends Sprite {
     }
 
     public void mouseMoved(MyEvent e) {
-        setMouseOver(active && isIn(e));
+        setMouseOver(visible && isIn(e));
     }
 
     public boolean isMouseOver() {
@@ -77,10 +80,10 @@ public class Button extends Sprite {
     }
 
     public boolean isActive() {
-        return active;
+        return visible;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 }

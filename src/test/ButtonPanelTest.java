@@ -1,17 +1,16 @@
 package test;
 
-import com.tdproject.graphics.ButtonPanel;
 import com.tdproject.ui.Button;
-import java.util.List;
-import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 
 public class ButtonPanelTest {
 
     private final Button[] buttons = new Button[] {
-            new Button(true, "play", null)
+            new Button("play", null)
     };
+
+    // THIS IS NOT ACTIVE B
 //
 //    @Test
 //    public void calculatePositions() {

@@ -21,8 +21,16 @@ public class Text {
 
     private int x, y;
 
+    public Text(String string) {
+        this(string, DEFAULT_FONT_SIZE, DEFAULT_COLOR, DEFAULT_FONT_STYLE, 0, 0);
+    }
+
     public Text(String string, int x, int y) {
         this(string, DEFAULT_FONT_SIZE, DEFAULT_COLOR, DEFAULT_FONT_STYLE, x, y);
+    }
+
+    public Text(String string, int fontSize, Color color, int fontStyle) {
+        this(string, fontSize, color, fontStyle, 0, 0);
     }
 
     public Text(String string, int fontSize, Color color, int fontStyle, int x, int y) {

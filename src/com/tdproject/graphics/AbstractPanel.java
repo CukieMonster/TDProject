@@ -44,11 +44,8 @@ public abstract class AbstractPanel<C> {
     abstract protected void setPosition(C item, int x, int y);
 
     private int[] calculateItemXPositions() {
+        // TODO is this method necessary?
         return calculateItemXPositions(content.length, columns, getMaxWidth());
-    }
-
-    private int[] calculateItemYPositions() {
-        return calculateItemYPositions(content.length, columns, getMaxHeight());
     }
 
     abstract protected int getMaxWidth();
@@ -57,7 +54,6 @@ public abstract class AbstractPanel<C> {
 
     private int[] calculateItemXPositions(int buttonsAmount, int columns, int maxWidth) {
         int[] result = new int[buttonsAmount];
-        int rows = Math.round(Math.round((double) buttonsAmount / columns));
 
         int xGap = (width - (maxWidth * columns)) / (columns + 1);
         if (xGap < 0) {
@@ -74,7 +70,9 @@ public abstract class AbstractPanel<C> {
         return result;
     }
 
-    private int[] calculateItemYPositions(int buttonsAmount, int columns, int maxHeight) {
+    private int[] calculateItemYPositions() {
+        int buttonsAmount = content.length;
+        int maxHeight = getMaxHeight();
         int[] result = new int[buttonsAmount];
         int rows = Math.round(Math.round((double) buttonsAmount / columns));
 
@@ -109,7 +107,6 @@ public abstract class AbstractPanel<C> {
     private void drawCentered(Graphics g) {
         int x = (int) centerPosition.x - (width / 2);
         int y = (int) centerPosition.y - (height / 2);
-//        System.out.printf("Drawing %s at position (%d, %d)\n", this.getClass(), x, y);
         g.fillRect(
                 x,
                 y,

@@ -11,5 +11,5 @@ public final class TowerParameters {
     public static final double SLOW = 0.5F;
     public static final int[] RANGE = { 1, 2, 1 };
     public static final int[] COST = { 10, 15, 15 };
-    public static final double[] MISSILESPEED = { 10, 5 , 0};
+    public static final double[] MISSILE_SPEED = { 10, 5 , 0};
 }

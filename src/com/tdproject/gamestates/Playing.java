@@ -77,9 +77,13 @@ public class Playing extends GameState {
     }
 
 
-    public void adjustMoney(int value) {
+    public boolean adjustMoney(int value) {
+        if (money + value < 0) {
+            return false;
+        }
         money += value;
         infos[2].setString("Gold: " + money);
+        return true;
     }
 
     public void reduceHealth(int value) {

@@ -61,7 +61,6 @@ public class EnemyManager {
         }
         else {
             spawnTime -= Playing.getInstance().getGameSpeed();
-            System.err.println(Playing.getInstance().getGameSpeed());
             if (spawnTime <= 0) {
                 spawnWave();
             }
@@ -88,14 +87,14 @@ public class EnemyManager {
         // game continues
         spawning = false;
         //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(true);
-        PlayingButtons.SKIP_BUTTON.setActive(true);
+        PlayingButtons.SKIP_BUTTON.setVisible(true);
         spawnTime = EnemyParameters.WAVE_INTERVAL;
     }
 
     public void spawnWave() {
         //ButtonManager.getInstance().getButtons()[PlayingButtons.ButtonID.SKIP_BUTTON.ordinal()].setActive(false);
         // TODO use ButtonPanel for game control buttons, build tower buttons
-        PlayingButtons.SKIP_BUTTON.setActive(false);
+        PlayingButtons.SKIP_BUTTON.setVisible(false);
         waveNumber++;
         Playing.getInstance().updateRound(waveNumber);
         waveLimit = waveNumber * EnemyParameters.WAVE_GROWTH;

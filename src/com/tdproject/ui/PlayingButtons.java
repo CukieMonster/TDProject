@@ -11,15 +11,14 @@ import java.util.function.Consumer;
 public class PlayingButtons extends ButtonTemplate {
 
     public static final Button SKIP_BUTTON = new Button(
-            false,
             Sprite.BUTTON_SKIP,
-            i -> EnemyManager.getInstance().spawnWave()
+            i -> EnemyManager.getInstance().spawnWave(),
+            false
     );
 
     public static final Button[] buttons = {
             SKIP_BUTTON,
             new Button(
-                    true,
                     Sprite.BUTTON_FAST_FORWARD,
                     i -> Playing.getInstance().changeGameSpeed()
             )

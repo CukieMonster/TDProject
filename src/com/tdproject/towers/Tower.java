@@ -2,7 +2,6 @@ package com.tdproject.towers;
 
 import com.tdproject.enemies.EnemyManager;
 import com.tdproject.enemies.Enemy;
-import com.tdproject.graphics.Sprite;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 
@@ -18,10 +17,10 @@ import static com.tdproject.towers.TowerParameters.*;
 public class Tower extends Button {
 
     //private BufferedImage img;
-    private List<Enemy> enemiesInRange = new LinkedList<>();
+    private final List<Enemy> enemiesInRange = new LinkedList<>();
 
     private final Map<UpgradeType, Integer> upgrades = new EnumMap<>(UpgradeType.class);
-    private int towerType;
+    private final int towerType;
     private int damage;
     private double attackSpeed;
     //private float range;
@@ -42,7 +41,7 @@ public class Tower extends Button {
     public boolean visible = false;
 
     public Tower(int towerType) {
-        super(true, TOWER_1, null);
+        super(TOWER_1, null);
         action = b -> {
             TowerManager.getInstance().setSelectedTower(this);
             TowerManager.getInstance().setMode(TowerManagerMode.UPGRADING);
@@ -111,7 +110,7 @@ public class Tower extends Button {
 
     private void shoot(Enemy e) {
         //homingMissile
-        missiles.add(new HomingMissile(position, e, this, MISSILESPEED[towerType], damage));
+        missiles.add(new HomingMissile(position, e, this, MISSILE_SPEED[towerType], damage));
     }
 
     private void calculateEnemiesInRange() {

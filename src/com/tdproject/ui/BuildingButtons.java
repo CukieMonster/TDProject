@@ -6,15 +6,14 @@ import com.tdproject.towers.TowerManager;
 public class BuildingButtons {
 
     public static final Button CANCEL_BUILDING_BUTTON = new Button(
-            false,
             Sprite.BUTTON_CANCEL_BUILD,
-            i -> TowerManager.getInstance().cancelBuild()
+            i -> TowerManager.getInstance().cancelBuild(),
+            false
     );
 
     public static final Button[] buttons = {
             CANCEL_BUILDING_BUTTON,
             new Button(
-                    true,
                     Sprite.BUTTON_BUILD_TOWER_1,
                     i -> TowerManager.getInstance().enterBuildMode(0)
             )
@@ -22,9 +21,9 @@ public class BuildingButtons {
 
     public static void setBuildMode(boolean buildMode) {
         for (Button button : buttons) {
-            button.setActive(!buildMode);
+            button.setVisible(!buildMode);
         }
-        CANCEL_BUILDING_BUTTON.setActive(buildMode);
+        CANCEL_BUILDING_BUTTON.setVisible(buildMode);
     }
 
 }
