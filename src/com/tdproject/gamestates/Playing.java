@@ -19,34 +19,35 @@ import static com.tdproject.main.FieldParameters.Y_FIELDS;
 
 public class Playing extends GameState {
 
-    private static Playing instance;
+    @Getter
+    private static final Playing instance = new Playing();
     @Getter
     private final ButtonPanel playingButtons;
     @Getter
     private int gameSpeed = 1;
     @Getter
-    private int money = Integer.MAX_VALUE;
+    private int money = 50;
 
     @Getter
-    private Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: " + money, 400, 30), new Text("Mode: DEFAULT", 800, 30)};
+    private final Text[] infos = {new Text("Round: 0/10", 0, 30), new Text("Health: 100", 200, 30), new Text("Gold: " + money, 400, 30), new Text("Mode: DEFAULT", 800, 30)};
     private int health = 100;
     @Getter
-    private boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
+    private final boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
     @Getter
-    private LinkedList<Item> droppedItems = new LinkedList<>();
-    private Sprite background;
+    private final LinkedList<Item> droppedItems = new LinkedList<>();
+    private final Sprite background;
 
     private Playing() {
         playingButtons = new ButtonPanel(1795, 1030, 250, 100, PlayingButtons.buttons, 2);
         background = new Background();
     }
 
-    public static Playing getInstance() {
-        if (instance == null) {
-            instance = new Playing();
-        }
-        return instance;
-    }
+//    public static Playing getInstance() {
+//        if (instance == null) {
+//            instance = new Playing();
+//        }
+//        return instance;
+//    }
 
     @Override
     public void update(int u) {

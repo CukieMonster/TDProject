@@ -55,16 +55,18 @@ public class TowerManager {
         for (UpgradeType upgradeType : UpgradeType.values()) {
             upgradeButtons[i++] = new Button(
                     upgradeType.imagePath,
-                    b -> selectedTower.upgrade(upgradeType)
+                    b -> upgradeSelectedTower(upgradeType)
             );
         }
         return upgradeButtons;
     }
 
     private void upgradeSelectedTower(UpgradeType upgradeType) {
-        int upgradeCost = 1; // TODO
-        Playing.getInstance().adjustMoney(upgradeCost);
-        selectedTower.upgrade(upgradeType);
+        int currentLevel = selectedTower.getUpgrades().getOrDefault(upgradeType, 0);
+        int upgradeCost = 5 * currentLevel;
+        if (Playing.getInstance().adjustMoney(upgradeCost)) {
+            selectedTower.upgrade(upgradeType);
+        }
     }
 
     public void update(int u) {
@@ -128,6 +130,7 @@ public class TowerManager {
         if (!Playing.getInstance().adjustMoney(-COST[towers[towerNr].getTowerType()])) {
             // not enough money
             // TODO: visual feedback
+            Playing.getInstance().getCollisionMap()[square.getX()][square.getY()] = false;
             return;
         }
         towers[towerNr].initBounds();
