@@ -48,6 +48,6 @@ public class MainMenu extends GameState {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        buttonPanel.mouseMoved(new MyEvent(e));
     }
 }

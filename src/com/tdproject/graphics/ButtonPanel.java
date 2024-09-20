@@ -53,7 +53,7 @@ public class ButtonPanel extends AbstractPanel<Button> {
 
     @Override
     protected void drawContent(Object o, Button button) {
-        if (button.isActive()) {
+        if (button.isVisible()) {
             button.drawCentered(o);
         }
     }

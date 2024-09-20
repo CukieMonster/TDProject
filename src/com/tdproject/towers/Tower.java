@@ -37,8 +37,8 @@ public class Tower extends Button {
 
     public Set<HomingMissile> missiles = new HashSet<>();
     private int lastShot;
-    public boolean active = false;
-    public boolean visible = false;
+    /*public boolean active = false;
+    public boolean visible = false;*/
 
     public Tower(int towerType) {
         super(TOWER_1, null);
@@ -52,6 +52,8 @@ public class Tower extends Button {
         areaOfEffectMultiplier = 1;
         radius = (FIELD_SIZE / 2) + (FIELD_SIZE * RANGE[towerType]);
         cost = COST[towerType];
+        setActive(false);
+        setVisible(false);
         //this.x = x;
         //this.y = y;
         //this.img = img;

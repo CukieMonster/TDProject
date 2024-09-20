@@ -15,20 +15,20 @@ public abstract class Sprite {
 
     public final static String BACKGROUND = "/com/tdproject/background.png";
     private final static String BUTTONS_PATH = "/com/tdproject/buttons/";
-    public final static String BUTTON_MAIN_MENU_PLAY = BUTTONS_PATH + "play.png";
-    public final static String BUTTON_MAIN_MENU_INVENTORY = BUTTONS_PATH + "inventory.png";
-    public final static String BUTTON_MAIN_MENU_SETTINGS = BUTTONS_PATH + "settings.png";
-    public final static String BUTTON_MAIN_MENU_QUIT = BUTTONS_PATH + "quit.png";
-    public final static String BUTTON_FAST_FORWARD = BUTTONS_PATH + "fast_forward.png";
-    public final static String BUTTON_SKIP = BUTTONS_PATH + "skip.png";
-    public final static String BUTTON_CANCEL_BUILD = BUTTONS_PATH + "cancel_building.png";
-    public final static String BUTTON_BUILD_TOWER_1 = BUTTONS_PATH + "build_tower_1.png";
+    public final static String BUTTON_MAIN_MENU_PLAY = BUTTONS_PATH + "play";
+    public final static String BUTTON_MAIN_MENU_INVENTORY = BUTTONS_PATH + "inventory";
+    public final static String BUTTON_MAIN_MENU_SETTINGS = BUTTONS_PATH + "settings";
+    public final static String BUTTON_MAIN_MENU_QUIT = BUTTONS_PATH + "quit";
+    public final static String BUTTON_FAST_FORWARD = BUTTONS_PATH + "fast_forward";
+    public final static String BUTTON_SKIP = BUTTONS_PATH + "skip";
+    public final static String BUTTON_CANCEL_BUILD = BUTTONS_PATH + "cancel_building";
+    public final static String BUTTON_BUILD_TOWER_1 = BUTTONS_PATH + "build_tower_1";
 
     private final static String TOWERS_PATH = "/com/tdproject/towers/";
-    public final static String TOWER_1 = TOWERS_PATH + "tower_blue_0.png";
+    public final static String TOWER_1 = TOWERS_PATH + "tower_blue_0";
     public final static String MISSILE = TOWERS_PATH + "homing_missile.png";
     public final static String UPGRADES_PATH = "/com/tdproject/upgrades/";
-    private final static String MISSING_SPRITE = "/com/tdproject/missing_sprite.png";
+    protected final static String MISSING_SPRITE = "/com/tdproject/missing_sprite.png";
     private String[] paths = {
             "/com/tdproject/background.png",
             "/com/tdproject/towers/tower_blue_",

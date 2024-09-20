@@ -81,7 +81,7 @@ public class TowerManager {
             }
         }
         for (Tower t : towers) {
-            if (t != null && t.active) {
+            if (t != null && t.isActive()) {
                 t.update(u);
             }
         }
@@ -104,9 +104,9 @@ public class TowerManager {
         if (checkSquare(towers[towerNr].getSquare())) {
             Vector2d pos = towers[towerNr].getSquare().squareToPosition();
             towers[towerNr].setPosition(pos);
-            towers[towerNr].visible = true;
+            towers[towerNr].setVisible(true);
         } else {
-            towers[towerNr].visible = false;
+            towers[towerNr].setVisible(false);
         }
     }
 
@@ -134,7 +134,7 @@ public class TowerManager {
             return;
         }
         towers[towerNr].initBounds();
-        towers[towerNr].active = true;
+        towers[towerNr].setActive(true);
         //show dropped main.tdproject.items
         //show time buttons
 //        ButtonManager.getInstance().setBuildButtons(true);
@@ -195,7 +195,7 @@ public class TowerManager {
 
     public void draw(Object o) {
         for (Tower tower : towers) {
-            if (tower != null && tower.visible) {
+            if (tower != null && tower.isVisible()) {
                 tower.drawCentered(o);
                 for (HomingMissile missile : tower.missiles) {
                     if (missile != null) {
