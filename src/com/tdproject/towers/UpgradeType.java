@@ -4,6 +4,7 @@ import com.tdproject.graphics.Sprite;
 
 public enum UpgradeType {
 
+    // TODO: do not allow splash and aoe
     DAMAGE("damage.png"),
     SPEED("speed.png"),
     RANGE("range.png"),

@@ -63,7 +63,7 @@ public class TowerManager {
 
     private void upgradeSelectedTower(UpgradeType upgradeType) {
         int currentLevel = selectedTower.getUpgrades().getOrDefault(upgradeType, 0);
-        int upgradeCost = 5 * currentLevel;
+        int upgradeCost = 5 * (currentLevel + 1);
         if (Playing.getInstance().adjustMoney(upgradeCost)) {
             selectedTower.upgrade(upgradeType);
         }

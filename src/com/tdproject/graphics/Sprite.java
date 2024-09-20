@@ -26,6 +26,7 @@ public abstract class Sprite {
 
     private final static String TOWERS_PATH = "/com/tdproject/towers/";
     public final static String TOWER_1 = TOWERS_PATH + "tower_blue_0.png";
+    public final static String MISSILE = TOWERS_PATH + "homing_missile.png";
     public final static String UPGRADES_PATH = "/com/tdproject/upgrades/";
     private final static String MISSING_SPRITE = "/com/tdproject/missing_sprite.png";
     private String[] paths = {
@@ -87,7 +88,7 @@ public abstract class Sprite {
 
     protected void loadSprite(String imagePath) {
         //InputStream is = getClass().getResourceAsStream(imagePath);
-        System.out.println(imagePath);
+        //System.out.println(imagePath);
         InputStream is;
         try {
             is = getClass().getResourceAsStream(imagePath);

@@ -49,6 +49,7 @@ public class Tower extends Button {
         this.towerType = towerType;
         damage = DAMAGE[towerType];
         attackSpeed = ATTACK_SPEED[towerType];
+        areaOfEffectMultiplier = 1;
         radius = (FIELD_SIZE / 2) + (FIELD_SIZE * RANGE[towerType]);
         cost = COST[towerType];
         //this.x = x;
@@ -68,7 +69,6 @@ public class Tower extends Button {
     }
 
     public void upgrade(UpgradeType upgradeType) {
-        // TODO: check if affordable
         upgrades.computeIfPresent(upgradeType, (ut, i) -> i + 1);
         upgrades.putIfAbsent(upgradeType, 1);
         updateStats();
@@ -76,21 +76,36 @@ public class Tower extends Button {
     }
 
     private void updateStats() {
-        damage = DAMAGE[towerType] + upgrades.getOrDefault(UpgradeType.DAMAGE, 0);
-        attackSpeed = ATTACK_SPEED[towerType] - (0.02F * upgrades.getOrDefault(UpgradeType.SPEED, 0));
-        double range = RANGE[towerType] + (0.1F * upgrades.getOrDefault(UpgradeType.RANGE, 0));
+        areaOfEffectMultiplier = 0.25 * upgrades.getOrDefault(UpgradeType.AREA_OF_EFFECT, 0);
+        if (areaOfEffectMultiplier == 0.0) {
+            areaOfEffectMultiplier = 1;
+        }
+        damage = (int) ((DAMAGE[towerType] + upgrades.getOrDefault(UpgradeType.DAMAGE, 0)) * areaOfEffectMultiplier);
+        attackSpeed = ATTACK_SPEED[towerType] - (0.02 * upgrades.getOrDefault(UpgradeType.SPEED, 0));
+        double range = RANGE[towerType] + (0.1 * upgrades.getOrDefault(UpgradeType.RANGE, 0));
         radius = (FIELD_SIZE / 2) + (int) (FIELD_SIZE * range);
-        splash = upgrades.getOrDefault(UpgradeType.SPLASH, 0);
-        slow = 10 * upgrades.getOrDefault(UpgradeType.SLOW, 0);
-        damageOverTime = upgrades.getOrDefault(UpgradeType.DAMAGE_OVER_TIME, 0);
-        areaOfEffectMultiplier = 0.1F * upgrades.getOrDefault(UpgradeType.AREA_OF_EFFECT, 0);
+        splash = (int) (0.1 * upgrades.getOrDefault(UpgradeType.SPLASH, 0) * radius);
+        slow = (int) ((10 * upgrades.getOrDefault(UpgradeType.SLOW, 0)) * areaOfEffectMultiplier);
+        damageOverTime = (int) ((upgrades.getOrDefault(UpgradeType.DAMAGE_OVER_TIME, 0)) * areaOfEffectMultiplier);
     }
 
     private void attemptShot(int u) {
         if (lastShot + attackSpeed * Game.getInstance().getUpsSet() <= u) {
-            if (findTarget()) {
+            if (upgrades.containsKey(UpgradeType.AREA_OF_EFFECT)) {
+                applyAreaOfEffect();
                 lastShot = u;
             }
+            else if (findTarget()) {
+                lastShot = u;
+            }
+        }
+    }
+
+    private void applyAreaOfEffect() {
+        for (Enemy enemy : enemiesInRange) {
+            enemy.damage(damage);
+            enemy.applySlow(slow, 1);
+            enemy.applyDamageOverTime(damageOverTime, 1);
         }
     }
 
@@ -109,8 +124,7 @@ public class Tower extends Button {
     }
 
     private void shoot(Enemy e) {
-        //homingMissile
-        missiles.add(new HomingMissile(position, e, this, MISSILE_SPEED[towerType], damage));
+        missiles.add(new HomingMissile(position, e, this, MISSILE_SPEED[towerType]));
     }
 
     private void calculateEnemiesInRange() {
