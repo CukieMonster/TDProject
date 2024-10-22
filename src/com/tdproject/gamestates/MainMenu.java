@@ -41,13 +41,13 @@ public class MainMenu extends GameState {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MyEvent e) {
         //buttonManager.mouseReleased(new MyEvent(e));
-        buttonPanel.mouseReleased(new MyEvent(e));
+        buttonPanel.mouseReleased(e);
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
-        buttonPanel.mouseMoved(new MyEvent(e));
+    public void mouseMoved(MyEvent e) {
+        buttonPanel.mouseMoved(e);
     }
 }

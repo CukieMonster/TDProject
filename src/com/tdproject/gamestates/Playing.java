@@ -66,15 +66,15 @@ public class Playing extends GameState {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-        playingButtons.mouseReleased(new MyEvent(e));
-        TowerManager.getInstance().mouseReleased(new MyEvent(e));
+    public void mouseReleased(MyEvent e) {
+        playingButtons.mouseReleased(e);
+        TowerManager.getInstance().mouseReleased(e);
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
-        playingButtons.mouseMoved(new MyEvent(e));
-        TowerManager.getInstance().mouseMoved(new MyEvent(e));
+    public void mouseMoved(MyEvent e) {
+        playingButtons.mouseMoved(e);
+        TowerManager.getInstance().mouseMoved(e);
     }
 
 

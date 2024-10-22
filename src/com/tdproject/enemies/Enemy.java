@@ -53,7 +53,14 @@ public class Enemy extends Sprite {
         square = spawn;
         distanceToTarget = Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()];
         position = spawn.squareToPosition();
-        loadSprite(Type.ENEMY, "" + this.enemyType);
+        loadSprite(switch (enemyType) {
+            case 0 -> ENEMY0;
+            case 1 -> ENEMY1;
+            case 2 -> ENEMY2;
+            case 3 -> ENEMY3;
+            case 4 -> ENEMY4;
+            default -> MISSING_SPRITE;
+        });
         healthBar = new HealthBar(this);
     }
 

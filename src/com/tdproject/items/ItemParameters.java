@@ -6,7 +6,7 @@ public class ItemParameters {
 
     }
     //public static final int NUMBER_OF_TYPES = 5;
-    public enum ItemType { Tower1, Tower2, Tower3, AllTowers, Base };
+    public enum ItemType {Tower, Base, Enemy };
     public static final int MAX_LEVEL = 100;
     public enum Rarity { Common, Rare, Legendary }
     public enum Attribute { Damage, AttackSpeed, Range, Cost, Health };

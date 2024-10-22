@@ -31,7 +31,11 @@ public class Item extends Sprite {
         for (int i = 0; i < modifierValues.length; i++) {
             modifierValues[i] = rerollAttribute(i);
         }
-        loadSprite(Type.ITEM, itemType.toString());
+        loadSprite(switch (itemType) {
+            case Tower -> ITEM_TOWER;
+            case Base -> ITEM_BASE;
+            case Enemy -> ITEM_ENEMY;
+        });
         //loadImage();
     }
 

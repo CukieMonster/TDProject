@@ -1,6 +1,6 @@
 package com.tdproject.gamestates;
 
-import java.awt.event.MouseEvent;
+import com.tdproject.inputs.MyEvent;
 
 public abstract class GameState {
 
@@ -11,9 +11,9 @@ public abstract class GameState {
 //    void mouseClicked();
 //    void mousedPressed();
 
-    abstract void mouseReleased(MouseEvent e);
+    abstract void mouseReleased(MyEvent e);
 
-    abstract void mouseMoved(MouseEvent e);
+    abstract void mouseMoved(MyEvent e);
 
 //    void keyPressed();
 //    void keyReleased();
