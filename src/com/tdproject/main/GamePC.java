@@ -7,21 +7,8 @@ public class GamePC implements Runnable {
     private final int FPS_SET = 60;
     private final int UPS_SET = 60;
     private int updates;
-//    private int gameSpeed = 1;
-//    private int money = Integer.MAX_VALUE;
-//    private boolean[][] collisionMap = new boolean[X_FIELDS][Y_FIELDS];
-//    private LinkedList<Item> droppedItems = new LinkedList<>();
-
-    //private BufferedImage backgroundImg;
 
     private GamePC() {
-//        loadBackgroundImg();
-//        buttonManager = new ButtonManager(this);
-//        pathfinding = new Pathfinding(this);
-//        pathfinding.buildDistanceField();
-//        enemyManager = new EnemyManager();
-//        towerManager = new TowerManager(this);
-//        gamePanel = new GamePanel(this);
         GameWindow.getInstance();
         GamePanel.getInstance().requestFocusInWindow();
     }
@@ -37,20 +24,6 @@ public class GamePC implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
-//    public void update(int u) {
-//        //gamePanel.updateGame();
-//        EnemyManager.getInstance().update();
-//        TowerManager.getInstance().update(u);
-//    }
-
-//    public void render(Graphics g) {
-//        g.drawImage(backgroundImg, 0, 0, null);
-//        ButtonManager.getInstance().draw(g);
-//        EnemyManager.getInstance().draw(g);
-//        TowerManager.getInstance().draw(g);
-//        drawDroppedItems(g);
-//    }
 
     @Override
     public void run() {
@@ -83,46 +56,4 @@ public class GamePC implements Runnable {
         }
     }
 
-//    public void adjustMoney(int value) {
-//        money += value;
-//    }
-
-//    public void changeGamespeed() {
-//        if (gameSpeed == 1) gameSpeed = 2;
-//        else if (gameSpeed == 2) gameSpeed = 1;
-//    }
-
-//    private void drawDroppedItems(Graphics g) {
-//        for (Item i : droppedItems) {
-//            if (i != null){
-//                g.drawImage(i.getSprite(), 0, 0, null);
-//            }
-//        }
-//    }
-
-//    private void loadBackgroundImg() {
-//        InputStream is = getClass().getResourceAsStream("/background.png");
-//        try {
-//            backgroundImg = ImageIO.read(is);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    // Getters and setters
-//    public int getUpsSet() {
-//        return UPS_SET;
-//    }
-//
-//    public int getGameSpeed() {
-//        return gameSpeed;
-//    }
-//
-//    public boolean[][] getCollisionMap() {
-//        return collisionMap;
-//    }
-//
-//    public LinkedList<Item> getDroppedItems() {
-//        return droppedItems;
-//    }
 }
