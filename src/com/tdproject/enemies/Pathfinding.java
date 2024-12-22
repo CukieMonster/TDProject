@@ -1,15 +1,15 @@
 package com.tdproject.enemies;
 
+import static com.tdproject.main.FieldParameters.X_FIELDS;
+import static com.tdproject.main.FieldParameters.Y_FIELDS;
+
 import com.tdproject.gamestates.Playing;
-import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static com.tdproject.main.FieldParameters.*;
 
 public class Pathfinding {
 

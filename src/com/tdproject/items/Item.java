@@ -1,8 +1,8 @@
 package com.tdproject.items;
 
-import java.util.Random;
-
 import com.tdproject.graphics.Sprite;
+
+import java.util.Random;
 
 public class Item extends Sprite {
     private int level;
@@ -32,10 +32,10 @@ public class Item extends Sprite {
             modifierValues[i] = rerollAttribute(i);
         }
         loadSprite(switch (itemType) {
-            case Tower -> ITEM_TOWER;
-            case Base -> ITEM_BASE;
-            case Enemy -> ITEM_ENEMY;
-        });
+            case Tower -> SpriteId.ITEM_TOWER;
+            case Base -> SpriteId.ITEM_BASE;
+            case Enemy -> SpriteId.ITEM_ENEMY;
+        }, Sprite.ITEM_WIDTH, Sprite.ITEM_HEIGHT);
         //loadImage();
     }
 

@@ -1,8 +1,5 @@
 package com.tdproject.graphics;
 
-import com.tdproject.ui.Button;
-import java.awt.Color;
-import java.awt.Graphics;
 import javax.vecmath.Vector2d;
 import lombok.Getter;
 
@@ -94,26 +91,7 @@ public abstract class AbstractPanel<C> {
         return result;
     }
 
-    public void draw(Object o) {
-        Graphics g = (Graphics) o;
-        g.setColor(new Color(0, 0, 0, 100));
-        drawCentered(g);
-
-        for (C item : content) {
-            drawContent(o, item);
-        }
-    }
-
-    private void drawCentered(Graphics g) {
-        int x = (int) centerPosition.x - (width / 2);
-        int y = (int) centerPosition.y - (height / 2);
-        g.fillRect(
-                x,
-                y,
-                width,
-                height
-        );
-    }
+    abstract public void draw(Object o);
 
     abstract protected void drawContent(Object o, C item);
 

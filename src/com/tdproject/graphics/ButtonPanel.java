@@ -3,13 +3,11 @@ package com.tdproject.graphics;
 import com.tdproject.inputs.MyEvent;
 import com.tdproject.ui.Button;
 
-import javax.vecmath.Vector2d;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.Arrays;
 import java.util.Comparator;
+import javax.vecmath.Vector2d;
 
-public class ButtonPanel extends AbstractPanel<Button> {
+public class ButtonPanel extends GeneralPanel<Button> {
 
     //private final int[][] positions;
 

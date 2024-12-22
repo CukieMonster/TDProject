@@ -1,5 +1,9 @@
 package com.tdproject.towers;
 
+import static com.tdproject.main.FieldParameters.X_FIELDS;
+import static com.tdproject.main.FieldParameters.Y_FIELDS;
+import static com.tdproject.towers.TowerParameters.COST;
+
 import com.tdproject.enemies.Pathfinding;
 import com.tdproject.gamestates.Playing;
 import com.tdproject.graphics.ButtonPanel;
@@ -10,18 +14,12 @@ import com.tdproject.main.Square;
 import com.tdproject.ui.BuildingButtons;
 import com.tdproject.ui.Button;
 
-import java.awt.Color;
-import java.awt.Font;
+import lombok.Getter;
+import lombok.Setter;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.vecmath.Vector2d;
-import lombok.Getter;
-import lombok.Setter;
-
-import static com.tdproject.main.FieldParameters.X_FIELDS;
-import static com.tdproject.main.FieldParameters.Y_FIELDS;
-import static com.tdproject.towers.TowerParameters.COST;
 
 public class TowerManager {
 
@@ -54,7 +52,7 @@ public class TowerManager {
         int i = 0;
         for (UpgradeType upgradeType : UpgradeType.values()) {
             upgradeButtons[i++] = new Button(
-                    upgradeType.imagePath,
+                    upgradeType.spriteId,
                     b -> upgradeSelectedTower(upgradeType)
             );
         }
@@ -233,8 +231,7 @@ public class TowerManager {
             upgradeLevels.put(upgradeType, new Text(
                     "0",
                     15,
-                    Color.RED,
-                    Font.BOLD,
+                    Text.Color.RED,
                     (int) position.x + (button.getSprite().getWidth() / 2),
                     (int) position.y
             ));

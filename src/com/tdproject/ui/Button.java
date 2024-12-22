@@ -1,24 +1,18 @@
 package com.tdproject.ui;
 
 import com.tdproject.graphics.Sprite;
-
 import com.tdproject.inputs.MyEvent;
 
+import lombok.Getter;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import javax.imageio.ImageIO;
-import lombok.Getter;
-import lombok.Setter;
 
+// This class has specific PC functionality
 public class Button extends Sprite {
 
     private final Map<ButtonVariant, BufferedImage> sprites = new EnumMap<>(ButtonVariant.class);
-    private BufferedImage hoverSprite;
-    private BufferedImage inactiveSprite;
     protected Consumer<Button> action;
     private boolean mouseOver;
     private boolean mousePressed;
@@ -28,15 +22,23 @@ public class Button extends Sprite {
     @Getter
     private boolean active = true;
 
-    public Button(String imagePath, Consumer<Button> action) {
-        this(imagePath, action, true);
+    public Button(SpriteId spriteId, Consumer<Button> action) {
+        this(spriteId, action, true, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
 
-    public Button(String imagePath, Consumer<Button> action, boolean defaultState) {
+    public Button(SpriteId spriteId, Consumer<Button> action, int width, int height) {
+        this(spriteId, action, true, width, height);
+    }
+
+    public Button(SpriteId spriteId, Consumer<Button> action, boolean defaultState) {
+        this(spriteId, action, defaultState, BUTTON_WIDTH, BUTTON_HEIGHT);
+    }
+
+    public Button(SpriteId spriteId, Consumer<Button> action, boolean defaultState, int width, int height) {
         this.visible = defaultState;
         this.action = action;
 
-        loadSprite(imagePath);
+        loadSprite(spriteId, width, height);
     }
 
     public void initBounds() {
@@ -63,47 +65,27 @@ public class Button extends Sprite {
         boolean mouseOver = visible && isIn(e);
         if (this.mouseOver != mouseOver) {
             this.mouseOver = mouseOver;
-            updateSprite();
+            //updateSprite();
         }
     }
 
-/*    @Override
-    public void drawCentered(Object o) {
-        if (visible && active && mouseOver) {
-            sprite = sprites.get(ButtonVariant.HOVER);
-        } else if (visible && active) {
-            sprite = sprites.get(ButtonVariant.DEFAULT);
-        } else {
-            sprite = sprites.get(ButtonVariant.INACTIVE);
-        }
-        super.drawCentered(o);
-    }*/
-
-    @Override
-    protected void loadSprite(String imagePath) {
-        for (ButtonVariant variant : ButtonVariant.values()) {
-            InputStream is;
-            try {
-                is = getClass().getResourceAsStream(imagePath + variant.path);
-                if (is == null) {
-                    is = getClass().getResourceAsStream(Sprite.MISSING_SPRITE);
-                }
-                sprites.put(variant, ImageIO.read(is));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        sprite = sprites.get(ButtonVariant.DEFAULT);
-    }
+    // TODO implement different sprites for button pressed and hovered
+//    @Override
+//    protected void loadSprite(String imagePath) {
+//        for (ButtonVariant variant : ButtonVariant.values()) {
+//            sprites.put(variant, loadSpriteFromResources(imagePath + variant.path));
+//        }
+//        sprite = sprites.get(ButtonVariant.DEFAULT);
+//    }
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-        updateSprite();
+        //updateSprite();
     }
 
     public void setActive(boolean active) {
         this.active = active;
-        updateSprite();
+        //updateSprite();
     }
 
     private void updateSprite() {

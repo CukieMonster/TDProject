@@ -1,5 +1,6 @@
 package test;
 
+import com.tdproject.graphics.Sprite;
 import com.tdproject.ui.Button;
 
 import static junit.framework.TestCase.assertEquals;
@@ -7,7 +8,7 @@ import static junit.framework.TestCase.assertEquals;
 public class ButtonPanelTest {
 
     private final Button[] buttons = new Button[] {
-            new Button("play", null)
+            new Button(Sprite.SpriteId.BUTTON_MAIN_MENU_PLAY, null)
     };
 
     // THIS IS NOT ACTIVE B

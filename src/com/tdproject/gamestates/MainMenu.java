@@ -5,8 +5,6 @@ import com.tdproject.inputs.MyEvent;
 import com.tdproject.main.FieldParameters;
 import com.tdproject.ui.MainMenuButtons;
 
-import java.awt.event.MouseEvent;
-
 public class MainMenu extends GameState {
 
     private static MainMenu instance;

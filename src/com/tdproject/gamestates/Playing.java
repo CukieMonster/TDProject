@@ -1,5 +1,8 @@
 package com.tdproject.gamestates;
 
+import static com.tdproject.main.FieldParameters.X_FIELDS;
+import static com.tdproject.main.FieldParameters.Y_FIELDS;
+
 import com.tdproject.enemies.EnemyManager;
 import com.tdproject.graphics.Background;
 import com.tdproject.graphics.ButtonPanel;
@@ -9,13 +12,9 @@ import com.tdproject.inputs.MyEvent;
 import com.tdproject.items.Item;
 import com.tdproject.towers.TowerManager;
 import com.tdproject.ui.PlayingButtons;
+
 import lombok.Getter;
-
-import java.awt.event.MouseEvent;
 import java.util.LinkedList;
-
-import static com.tdproject.main.FieldParameters.X_FIELDS;
-import static com.tdproject.main.FieldParameters.Y_FIELDS;
 
 public class Playing extends GameState {
 
@@ -41,13 +40,6 @@ public class Playing extends GameState {
         playingButtons = new ButtonPanel(1795, 1030, 250, 100, PlayingButtons.buttons, 2);
         background = new Background();
     }
-
-//    public static Playing getInstance() {
-//        if (instance == null) {
-//            instance = new Playing();
-//        }
-//        return instance;
-//    }
 
     @Override
     public void update(int u) {

@@ -2,56 +2,38 @@ package com.tdproject.ui;
 
 import com.tdproject.gamestates.GameState;
 import com.tdproject.graphics.Sprite;
-import com.tdproject.main.FieldParameters;
 import com.tdproject.main.Game;
 
-import java.util.function.Consumer;
-
-public class MainMenuButtons extends ButtonTemplate {
+public class MainMenuButtons {
 
     public static final Button[] buttons = {
             new Button(
-                    Sprite.BUTTON_MAIN_MENU_PLAY,
-                    i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING)
+                    Sprite.SpriteId.BUTTON_MAIN_MENU_PLAY,
+                    i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING),
+                    Sprite.MENU_BUTTON_WIDTH,
+                    Sprite.MENU_BUTTON_HEIGHT
             ),
             new Button(
-                    Sprite.BUTTON_MAIN_MENU_INVENTORY,
-                    i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY)
+                    Sprite.SpriteId.BUTTON_MAIN_MENU_INVENTORY,
+                    i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY),
+                    Sprite.MENU_BUTTON_WIDTH,
+                    Sprite.MENU_BUTTON_HEIGHT
             ),
             new Button(
-                    Sprite.BUTTON_MAIN_MENU_SETTINGS,
-                    i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS)
+                    Sprite.SpriteId.BUTTON_MAIN_MENU_SETTINGS,
+                    i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS),
+                    Sprite.MENU_BUTTON_WIDTH,
+                    Sprite.MENU_BUTTON_HEIGHT
             ),
             new Button(
-                    Sprite.BUTTON_MAIN_MENU_QUIT,
-                    i -> System.exit(0)
+                    Sprite.SpriteId.BUTTON_MAIN_MENU_QUIT,
+                    i -> System.exit(0),
+                    Sprite.MENU_BUTTON_WIDTH,
+                    Sprite.MENU_BUTTON_HEIGHT
             )
     };
 
     private static MainMenuButtons instance;
-
-    private GameState.States gameState = GameState.States.MAIN_MENU;
-
-    private boolean[] defaultState = {
-            true,
-            true,
-            true,
-            true
-    };
-
-    private int[][] position = {
-            {FieldParameters.X_RESOLUTION / 2, 300},
-            {FieldParameters.X_RESOLUTION / 2, 400},
-            {FieldParameters.X_RESOLUTION / 2, 500},
-            {FieldParameters.X_RESOLUTION / 2, 600}
-    };
-
-    private Consumer[] action = {
-            i -> Game.getInstance().setCurrentGameState(GameState.States.PLAYING),
-            i -> Game.getInstance().setCurrentGameState(GameState.States.INVENTORY),
-            i -> Game.getInstance().setCurrentGameState(GameState.States.SETTINGS),
-            i -> System.exit(0)
-    };
 
     private MainMenuButtons() {
 
@@ -64,23 +46,4 @@ public class MainMenuButtons extends ButtonTemplate {
         return instance;
     }
 
-    @Override
-    public GameState.States getGameState() {
-        return gameState;
-    }
-
-    @Override
-    public boolean[] getDefaultState() {
-        return defaultState;
-    }
-
-    @Override
-    public int[][] getPosition() {
-        return position;
-    }
-
-    @Override
-    public Consumer[] getAction() {
-        return action;
-    }
 }

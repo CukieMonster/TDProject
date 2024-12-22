@@ -2,7 +2,9 @@ package com.tdproject.inputs;
 
 import java.awt.event.MouseEvent;
 
+// This class has specific PC functionality
 public class MyEvent {
+
     private MouseEvent event;
 
     public MyEvent(MouseEvent event) {

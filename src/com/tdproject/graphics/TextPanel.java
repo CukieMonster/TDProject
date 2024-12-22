@@ -3,7 +3,7 @@ package com.tdproject.graphics;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class TextPanel extends AbstractPanel<Text> {
+public class TextPanel extends GeneralPanel<Text> {
 
     public TextPanel(int xCenterPos, int yCenterPos, int width, int height, Text[] content) {
         super(xCenterPos, yCenterPos, width, height, content);

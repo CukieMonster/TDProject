@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+// This class is specific to PC
 public class GamePanel extends JPanel {
 
     private static GamePanel instance;

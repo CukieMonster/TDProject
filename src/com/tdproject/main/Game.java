@@ -1,10 +1,12 @@
 package com.tdproject.main;
 
+import com.tdproject.gamestates.GameState;
 import com.tdproject.gamestates.MainMenu;
 import com.tdproject.gamestates.Playing;
-import com.tdproject.gamestates.GameState;
+
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class Game {
@@ -16,6 +18,7 @@ public class Game {
     private int updateCycle;
 //    private int updates;
 
+    @Setter
     private GameState.States currentGameState = GameState.States.MAIN_MENU;
 
     private Game() {
@@ -66,14 +69,6 @@ public class Game {
 
     public int getUpsSet() {
         return UPS_SET;
-    }
-
-    public GameState.States getCurrentGameState() {
-        return currentGameState;
-    }
-
-    public void setCurrentGameState(GameState.States currentGameState) {
-        this.currentGameState = currentGameState;
     }
 
 }

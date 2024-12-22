@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Observable;
 
+// This class has specific PC functionality
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
     private static MouseInputs instance;

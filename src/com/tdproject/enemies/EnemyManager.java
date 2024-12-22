@@ -1,12 +1,12 @@
 package com.tdproject.enemies;
 
-import com.tdproject.gamestates.Playing;
 import com.tdproject.gamestates.GameState;
+import com.tdproject.gamestates.Playing;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
 import com.tdproject.ui.Button;
-
 import com.tdproject.ui.PlayingButtons;
+
 import java.util.LinkedList;
 import java.util.Random;
 

@@ -1,12 +1,14 @@
 package com.tdproject.main;
 
+import static com.tdproject.main.FieldParameters.FIELD_SIZE;
+import static com.tdproject.main.FieldParameters.X_CENTERED_OFFSET;
+import static com.tdproject.main.FieldParameters.X_OFFSET;
+import static com.tdproject.main.FieldParameters.Y_CENTERED_OFFSET;
+import static com.tdproject.main.FieldParameters.Y_OFFSET;
+
 import lombok.Getter;
-
-import javax.vecmath.Vector2d;
-
 import java.util.Objects;
-
-import static com.tdproject.main.FieldParameters.*;
+import javax.vecmath.Vector2d;
 
 @Getter
 public class Square {

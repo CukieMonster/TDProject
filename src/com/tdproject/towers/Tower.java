@@ -1,17 +1,25 @@
 package com.tdproject.towers;
 
-import com.tdproject.enemies.EnemyManager;
+import static com.tdproject.main.FieldParameters.FIELD_SIZE;
+import static com.tdproject.towers.TowerParameters.ATTACK_SPEED;
+import static com.tdproject.towers.TowerParameters.COST;
+import static com.tdproject.towers.TowerParameters.DAMAGE;
+import static com.tdproject.towers.TowerParameters.MISSILE_SPEED;
+import static com.tdproject.towers.TowerParameters.RANGE;
+
 import com.tdproject.enemies.Enemy;
+import com.tdproject.enemies.EnemyManager;
 import com.tdproject.main.Game;
 import com.tdproject.main.Square;
-
 import com.tdproject.ui.Button;
-import java.util.*;
+
 import lombok.Getter;
-
-import static com.tdproject.main.FieldParameters.FIELD_SIZE;
-import static com.tdproject.towers.TowerParameters.*;
-
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
 public class Tower extends Button {
@@ -41,7 +49,7 @@ public class Tower extends Button {
     public boolean visible = false;*/
 
     public Tower(int towerType) {
-        super(TOWER_1, null);
+        super(SpriteId.TOWER_1, null, TOWER_WIDTH, TOWER_HEIGHT);
         action = b -> {
             TowerManager.getInstance().setSelectedTower(this);
             TowerManager.getInstance().setMode(TowerManagerMode.UPGRADING);

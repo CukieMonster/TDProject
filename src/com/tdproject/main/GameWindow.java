@@ -3,6 +3,7 @@ package com.tdproject.main;
 import java.awt.GraphicsEnvironment;
 import javax.swing.*;
 
+// This class has specific PC functionality
 public class GameWindow extends JFrame {
 
     private static GameWindow instance;

@@ -1,5 +1,7 @@
 package com.tdproject.towers;
 
+import static com.tdproject.main.FieldParameters.ENEMY_RADIUS;
+
 import com.tdproject.enemies.Enemy;
 import com.tdproject.enemies.EnemyManager;
 import com.tdproject.gamestates.Playing;
@@ -8,8 +10,6 @@ import com.tdproject.graphics.Sprite;
 import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Vector2d;
-
-import static com.tdproject.main.FieldParameters.ENEMY_RADIUS;
 
 public class HomingMissile extends Sprite {
 
@@ -23,7 +23,7 @@ public class HomingMissile extends Sprite {
         this.target = target;
         this.origin = origin;
         this.speed = speed;
-        loadSprite(Sprite.MISSILE);
+        loadSprite(SpriteId.MISSILE, MISSILE_WIDTH, MISSILE_HEIGHT);
     }
 
     public void update() {

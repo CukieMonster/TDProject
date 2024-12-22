@@ -1,5 +1,11 @@
 package com.tdproject.enemies;
 
+import static com.tdproject.main.FieldParameters.FIELD_SIZE;
+import static com.tdproject.main.FieldParameters.X_CENTERED_OFFSET;
+import static com.tdproject.main.FieldParameters.X_FIELDS;
+import static com.tdproject.main.FieldParameters.Y_CENTERED_OFFSET;
+import static com.tdproject.main.FieldParameters.Y_FIELDS;
+
 import com.tdproject.gamestates.Playing;
 import com.tdproject.graphics.Sprite;
 import com.tdproject.items.Item;
@@ -8,12 +14,8 @@ import com.tdproject.main.Game;
 import com.tdproject.main.Modifiers;
 import com.tdproject.main.Square;
 
-import javax.vecmath.Vector2d;
-
 import java.util.Random;
 import lombok.Getter;
-
-import static com.tdproject.main.FieldParameters.*;
 
 @Getter
 public class Enemy extends Sprite {
@@ -24,7 +26,6 @@ public class Enemy extends Sprite {
     private final int maxHP;
     private final int value;
     private final int progress;
-    //    private int index;
     private final double speed;
 
     private int HP;
@@ -37,8 +38,6 @@ public class Enemy extends Sprite {
     private int damageOverTime;
     private int damageOverTimeDuration;
 
-    //public int x;
-    //public int y;
     private boolean xAxisLocked = false;
     private boolean yAxisLocked = false;
     private final Random random = new Random(); // TODO move random outside class
@@ -54,13 +53,13 @@ public class Enemy extends Sprite {
         distanceToTarget = Pathfinding.getInstance().getDistanceField()[square.getX()][square.getY()];
         position = spawn.squareToPosition();
         loadSprite(switch (enemyType) {
-            case 0 -> ENEMY0;
-            case 1 -> ENEMY1;
-            case 2 -> ENEMY2;
-            case 3 -> ENEMY3;
-            case 4 -> ENEMY4;
-            default -> MISSING_SPRITE;
-        });
+            case 0 -> SpriteId.ENEMY_0;
+            case 1 -> SpriteId.ENEMY_1;
+            case 2 -> SpriteId.ENEMY_2;
+            case 3 -> SpriteId.ENEMY_3;
+            case 4 -> SpriteId.ENEMY_4;
+            default -> SpriteId.MISSING_SPRITE;
+        }, Sprite.ENEMY_WIDTH, Sprite.ENEMY_HEIGHT);
         healthBar = new HealthBar(this);
     }
 
