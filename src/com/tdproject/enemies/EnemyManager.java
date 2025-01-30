@@ -47,8 +47,8 @@ public class EnemyManager {
     }
 
     public void update(int u) {
+        spawnTime -= Playing.getInstance().getGameSpeed();
         if (spawning) {
-            spawnTime -= Playing.getInstance().getGameSpeed();
             if (spawnTime <= 0) {
                 spawnTime = EnemyParameters.SPAWN_INTERVAL;
                 spawnEnemy();
@@ -58,7 +58,6 @@ public class EnemyManager {
             }
         }
         else {
-            spawnTime -= Playing.getInstance().getGameSpeed();
             if (spawnTime <= 0) {
                 spawnWave();
             }
@@ -78,7 +77,7 @@ public class EnemyManager {
 
     public void waveCompleted() {
         // game finished
-        if (waveNumber >= 10) {
+        if (waveNumber >= 100) {
             Game.getInstance().setCurrentGameState(GameState.States.MAIN_MENU);
         }
 
@@ -95,7 +94,7 @@ public class EnemyManager {
         PlayingButtons.SKIP_BUTTON.setVisible(false);
         waveNumber++;
         Playing.getInstance().updateRound(waveNumber);
-        waveLimit = waveNumber * EnemyParameters.WAVE_GROWTH;
+        waveLimit = (int) Math.pow(waveNumber, EnemyParameters.WAVE_GROWTH);
         currentWaveProgress = 0;
         currentWaveSize = 0;
         spawnTime = 0;
@@ -109,13 +108,13 @@ public class EnemyManager {
             if (waveNumber <= 3) {
                 highestEnemy = 1;
             }
-            else if (waveNumber <= 5) {
+            else if (waveNumber <= 15) {
                 highestEnemy = 2;
             }
-            else if (waveNumber <= 10) {
+            else if (waveNumber <= 25) {
                 highestEnemy = 3;
             }
-            else if (waveNumber <= 15) {
+            else if (waveNumber <= 35) {
                 highestEnemy = 4;
             }
 
