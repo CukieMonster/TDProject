@@ -47,8 +47,10 @@ public abstract class Sprite {
 
         BUTTON_FAST_FORWARD(BUTTONS_PATH + "fast_forward_default.png", null),
         BUTTON_SKIP(BUTTONS_PATH + "skip_default.png", null),
+        BUTTON_PAUSE(BUTTONS_PATH + "pause_default.png", null),
         BUTTON_CANCEL_BUILD(BUTTONS_PATH + "cancel_building_default.png", null),
         BUTTON_BUILD_TOWER_1(BUTTONS_PATH + "build_tower_1_default.png", null),
+        BUTTON_DELETE_TOWER(BUTTONS_PATH + "delete_default.png", null),
 
         TOWER_1(TOWERS_PATH + "tower_blue_0_default.png", null),
         MISSILE(TOWERS_PATH + "homing_missile.png", null),

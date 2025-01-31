@@ -1,5 +1,7 @@
 package com.tdproject.main;
 
+import com.tdproject.gamestates.Playing;
+
 // This class has specific PC functionality
 public class GamePC implements Runnable {
 
@@ -50,9 +52,12 @@ public class GamePC implements Runnable {
             }
 
             if (deltaU >= 1) {
+                deltaU--;
+                if (Playing.getInstance().getGameSpeed() == 0) {
+                    continue;
+                }
                 Game.getInstance().update(updates);
                 updates++;
-                deltaU--;
             }
         }
     }
